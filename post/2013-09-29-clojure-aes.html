@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>클로저(Clojure)에서 AES 암호화하기</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="canonical" href="http://bakyeono.net/post/2013-09-29-clojure-aes.html" />
+  <link rel="alternate" type="application/rss+xml" title="박연오" href="http://bakyeono.net/feed.xml" />
+  <script type="text/javascript" src="/lib/jquery/jquery-1.11.2.min.js"></script>
+  <script type="text/javascript">
+    "use strict";
+    $(document).ready(function () {
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create','UA-44446622-4','auto');
+      ga('send','pageview');
+    });
+  </script>
+</head>
+
+  <body>
+    <header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="/">박연오</a>
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+      <div class="trigger">
+        
+          
+        
+          
+          <a class="page-link" href="/tag/book-review/">서평</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/tag/fp/">흑마술</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+  </div>
+</header>
+
+    <div class="page-content">
+      <div class="wrapper">
+        
+
+  </span>
+  
+    
+      
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+      
+      
+    
+  
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+      
+      
+    
+  
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+      
+      
+    
+  
+
+<div class="post">
+  <header class="post-header">
+    <h1 class="post-title">클로저(Clojure)에서 AES 암호화하기</h1>
+    <p class="post-meta">2013-09-29 • <i class="fa fa-tags"></i><a href="/tag/fp/">함수형 프로그래밍</a>, <a href="/tag/clojure/">클로저</a>, <a href="/tag/encryption/">암호화</a></p>
+  </header>
+  <article>
+    <div class="post-content">
+      <ul id="markdown-toc">
+  <li><a href="#aes-" id="markdown-toc-aes-">자바에서 AES 암호화하기</a></li>
+  <li><a href="#section" id="markdown-toc-section">클로저에서 자바 암호화 라이브러리 사용하기</a></li>
+  <li><a href="#section-1" id="markdown-toc-section-1">직렬화</a></li>
+  <li><a href="#section-2" id="markdown-toc-section-2">결론</a></li>
+</ul>
+
+<p>구매자 정보를 취급하는 판매 관리 프로그램을 클로저로 만들면서 암호화 기능이 필요했다. 이 때 이용한 방법을 간단히 정리해 남긴다.</p>
+
+<p>양방향(대칭) 암호화 알고리즘으로는 <a href="http://ko.wikipedia.org/wiki/%EA%B3%A0%EA%B8%89_%EC%95%94%ED%98%B8%ED%99%94_%ED%91%9C%EC%A4%80">AES(고급 암호화 표준)</a>가 널리 사용되고 있고 자바에서도 기본 라이브러리로 제공하고 있다. 클로저는 자바 API를 바로 사용할 수 있다.</p>
+
+<h2 id="aes-">자바에서 AES 암호화하기</h2>
+
+<p>자바에서 암호화 처리를 하는 과정은 다음과 같다.</p>
+
+<ol>
+  <li>
+    <p>비밀번호를 128비트 값으로 변환한다.
+AES 암호화 알고리즘은 키로 128비트 값을 사용한다. 물론 사용자가 입력하는 비밀번호는 128비트 값이 아니기 때문에 변환해야 한다. (한 분(익명)의 지적으로 이 단락에서 잘못된 부분을 수정했다. - 2014-09-23) 이를 위한 변환 함수가 굳이 양방향일 필요는 없다. 그러므로 해시 함수를 사용할 수 있을 것이다. 비밀번호를 시드값으로 하여 랜덤값을 생성해도 된다.
+이를 위해 자바는 암호학적 안전성이 있다고 하는 java.security.SecureRandom 클래스를 제공한다.</p>
+  </li>
+  <li>
+    <p>준비한 128비트 값을 AES 암호화 알고리즘에 사용할 키 값에 대응하는 객체로 변환한다. javax.crypto.KeyGenerator 클래스에 1에서 생성한 SecureRandom 객체를 넘기면 된다.</p>
+  </li>
+  <li>
+    <p>키 값의 명세 객체를 생성한다. 앞에서 생성한 보안 키 객체를 javax.crypto.spec.SecretKeySpec 클래스에 넘기면 된다.</p>
+  </li>
+  <li>
+    <p>AES 암호화 객체를 생성한다. javax.crypto.Cipher 클래스에 필요한 암호화 알고리즘을 요청하면 된다. 이 때 3에서 생성한 키 명세 객체가 필요하다.
+그리고 암호화할 것인지 복호화할 것인지도 지정한다. 암호화/복호화 모드 지정 값은 javax.crypto.Cipher 클래스에 ENCRYPT_MODE, ENCRYPT_MODE 상수로 정의되어 있다.</p>
+  </li>
+  <li>
+    <p>생성한 암호화 객체에 데이터를 넘겨 암호화/복호화 처리를 한다. 암호화 객체에 제공할 데이터는 바이트 배열로 직렬화 해두어야 한다.</p>
+  </li>
+</ol>
+
+<p>위 과정들을 자바 코드로 나타내면 다음과 같다.</p>
+
+<p>1번 ~ 2번 과정에 해당하는 코드</p>
+
+<pre><code>// 지정한 시드 문자열로 보안 키를 생성한다.
+public static byte[] generateRawKey(String seed_string) throws Exception {
+  SecureRandom secure_random = SecureRandom.getInstance("SHA1PRNG");
+  secure_random.setSeed(seed_string.getBytes("UTF-8"));
+  KeyGenerator key_generator = KeyGenerator.getInstance("AES");
+  key_generator.init(128, secure_random);
+  return (key_generator.generateKey()).getEncoded();
+}
+</code></pre>
+
+<p>3번 ~ 4번 과정에 해당하는 코드</p>
+
+<pre><code>// 지정한 모드와 시드 문자열로 javax.crypto.Cipher 객체를 초기화해 반환한다.
+public static Cipher getCipher(int mode, String seed_string) throws Exception {
+  SecretKeySpec key_spec = new SecretKeySpec(generateRawKey(seed_string), "AES");
+  Cipher cipher = Cipher.getInstance("AES");
+  cipher.init(mode, key_spec);
+  return cipher;
+}
+</code></pre>
+
+<p>5번 과정에 해당하는 코드</p>
+
+<pre><code>// 바이트 배열을 지정한 키 시드 문자열과 AES 알고리즘으로 암호화한다.
+public static byte[] encrypt(byte[] data, String seed_string) throws Exception {
+  Cipher cipher = getCipher(Cipher.ENCRYPT_MODE, seed_string);
+  return cipher.doFinal(data);
+}
+
+// 바이트 배열을 지정한 키 시드 문자열과 AES 알고리즘으로 복호화한다.
+public static byte[] decrypt(byte[] data, String seed_string) throws Exception {
+  Cipher cipher = getCipher(Cipher.DECRYPT_MODE, seed_string);
+  return cipher.doFinal(data);
+}
+</code></pre>
+
+<p>이렇게 만든 함수에 데이터와 비밀번호(시드 문자열)을 제공하면 암호화/복호화 처리를 할 수 있다.</p>
+
+<h2 id="section">클로저에서 자바 암호화 라이브러리 사용하기</h2>
+
+<p>클로저에서는 자바 코드를 바로 표현할 수 있기 때문에 앞에서 정리한 코드를 어렵지 않게 클로저 코드로 번역할 수 있다. 앞의 자바 코드를 클로저 코드로 표현하면 다음과 같다.</p>
+
+<pre><code>(defn get-raw-key
+  "지정한 시드 문자열로 보안 키를 생성한다."
+  [seed-string]
+  (let [key-generator (javax.crypto.KeyGenerator/getInstance "AES")
+        secure-random (java.security.SecureRandom/getInstance "SHA1PRNG")]
+    (.setSeed secure-random (.getBytes seed-string "UTF-8"))
+    (.init key-generator 128 secure-random)
+    (-&gt; key-generator
+      .generateKey
+      .getEncoded)))
+
+(defn get-cipher
+  "지정한 모드와 시드 문자열로 javax.crypto.Cipher 객체를 초기화해 반환한다."
+  [mode seed-string]
+  (let [key-spec (javax.crypto.spec.SecretKeySpec. (get-raw-key seed-string) "AES")
+        cipher   (javax.crypto.Cipher/getInstance "AES")]
+    (.init cipher mode key-spec)
+    cipher))
+
+(defn encrypt
+  "바이트 배열을 지정한 키 시드 문자열과 AES 알고리즘으로 암호화한다."
+  [array seed-string]
+  (let [cipher (get-cipher javax.crypto.Cipher/ENCRYPT_MODE seed-string)]
+    (.doFinal cipher array)))
+
+(defn decrypt
+  "바이트 배열을 지정한 키 시드 문자열과 AES 알고리즘으로 복호화한다."
+  [array seed-string]
+  (let [cipher (get-cipher javax.crypto.Cipher/DECRYPT_MODE seed-string)]
+    (.doFinal cipher array)))
+</code></pre>
+
+<h2 id="section-1">직렬화</h2>
+
+<p>Cipher 객체가 암호화한 데이터는 바이트 배열로 반환된다. 파일에 저장할 것이라면 바이트 배열을 파일로 바로 쓰면 될 것이다. 온라인 전송시에는 <a href="http://ko.wikipedia.org/wiki/%EB%B2%A0%EC%9D%B4%EC%8A%A464">Base64 인코딩</a>을 많이 사용한다. Base64 변환기는 자바 기본 라이브러리로 제공하지 않는 듯하다. 아파치가 제공하는 라이브러리를 사용해야 한다. 이에 관한 설명은 생략한다.</p>
+
+<p>한편, 클로저에서 데이터를 직렬화하려면 간편하고 성능 좋은 라이브러리가 공개되어 있다. Peter Taoussanis가 만든 <a href="https://github.com/ptaoussanis/nippy">nippy</a> 를 쓰면 된다. 암호화를 위한 직렬화에도 사용할 수 있고 바이너리 파일로 저장할 때도 유용하다.</p>
+
+<h2 id="section-2">결론</h2>
+
+<p>클로저에서는 자바의 라이브러리를 바로 가져다 쓸 수 있기 때문에 이처럼 자바 코드를 클로저 코드로 간단히 옮겨서 쓸 때가 많다. 다만 이 때 클로저의 자바 호출 코드는 클래스 인스턴스 생성법이나 함수 호출 등의 구문이 자바 코드의 구문과 미묘하게 다르기 때문에 주의해야 한다. 리스프에서 자바를 이용하는 것이 이상하게 보일지 모르지만 자바 세계의 방대한 라이브러리를 별도의 과정 없이 호출해 쓸 수 있다는 점이 주류 언어에 비해 라이브러리가 풍부하지 않은 리스프 언어들 가운데 클로저가 갖는 한 가지 장점이다.</p>
+
+
+    </div>
+  </article>
+</div>
+
+      </div>
+    </div>
+    <footer class="site-footer">
+  <div class="wrapper">
+    <h2 class="footer-heading">박연오</h2>
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li><a href="mailto:bakyeono@gmail.com">bakyeono@gmail.com</a></li>
+          <li><p class="rss-subscribe"><a href="http://feeds.feedburner.com/bakyeono">RSS 구독</a></p></li>
+        </ul>
+      </div>
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/bakyeono">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+              <span class="username">bakyeono</span>
+            </a>
+          </li>
+          
+          
+        </ul>
+      </div>
+      <div class="footer-col  footer-col-3">
+        <p class="text">Workers of the world, unite!</p>
+      </div>
+    </div>
+  <div class="copyright">Copyright (c) bakyeono.net All rights reserved</div>
+  </div>
+</footer>
+
+  </body>
+</html>

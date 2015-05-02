@@ -1,0 +1,2829 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>박연오</title>
+    <description>Workers of the world, unite!</description>
+    <link>http://bakyeono.net/</link>
+    <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sat, 02 May 2015 15:06:31 +0900</pubDate>
+    <lastBuildDate>Sat, 02 May 2015 15:06:31 +0900</lastBuildDate>
+    <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>리눅스 쉘 학습 노트</title>
+        <description>&lt;p&gt;리눅스 쉘 학습하면서 남긴 노트다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://bjpublic.tistory.com/145&quot;&gt;《리눅스 커맨드라인 완벽 입문서》 (BJ퍼블릭)&lt;/a&gt;로 학습했기 때문에 주로 이 책에 나오는 내용이 많다. 명령어를 참고하기 위한 용도로 남긴 노트이므로 설명은 대부분 생략했다.&lt;/p&gt;
+
+&lt;p&gt;쉘을 학습하려는 분은 책을 한 번 읽어보는 것이 좋을 것이다. 이 책에는 쉘에 관한 설명 뿐 아니라 리눅스와 해커들의 역사, 쉘에서 유의해야 할 점(압축을 두 번 세 번 씩 하지 말라거나) 등 흥미로운 읽을 거리도 많다. 쉘 입문용으로 매우 좋은 책인 듯하다.&lt;/p&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;주요 경로&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;명령&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;도움말&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;명령어의 종류&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#man-&quot; id=&quot;markdown-toc-man-&quot;&gt;man 페이지&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#apropos---man---&quot; id=&quot;markdown-toc-apropos---man---&quot;&gt;apropos - man 페이지 목록 검색&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#info-----&quot; id=&quot;markdown-toc-info-----&quot;&gt;info - 프로그램 정보 표시&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#alias&quot; id=&quot;markdown-toc-alias&quot;&gt;alias&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-4&quot; id=&quot;markdown-toc-section-4&quot;&gt;파일 시스템&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#inode&quot; id=&quot;markdown-toc-inode&quot;&gt;하드 링크와 아이노드(inode)&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-5&quot; id=&quot;markdown-toc-section-5&quot;&gt;심볼릭 링크&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-6&quot; id=&quot;markdown-toc-section-6&quot;&gt;쉘 사용&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-7&quot; id=&quot;markdown-toc-section-7&quot;&gt;쉘 확장&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-8&quot; id=&quot;markdown-toc-section-8&quot;&gt;히스토리&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#gz--&quot; id=&quot;markdown-toc-gz--&quot;&gt;.gz 파일 보기&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-9&quot; id=&quot;markdown-toc-section-9&quot;&gt;권한&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-10&quot; id=&quot;markdown-toc-section-10&quot;&gt;사용자 / 그룹&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-11&quot; id=&quot;markdown-toc-section-11&quot;&gt;권한&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-12&quot; id=&quot;markdown-toc-section-12&quot;&gt;프로세스&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-13&quot; id=&quot;markdown-toc-section-13&quot;&gt;프로세스 정보&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-14&quot; id=&quot;markdown-toc-section-14&quot;&gt;프로세스 제어&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-15&quot; id=&quot;markdown-toc-section-15&quot;&gt;환경&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-16&quot; id=&quot;markdown-toc-section-16&quot;&gt;환경 변수 조작&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-17&quot; id=&quot;markdown-toc-section-17&quot;&gt;패키지 관리&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-18&quot; id=&quot;markdown-toc-section-18&quot;&gt;미디어&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-19&quot; id=&quot;markdown-toc-section-19&quot;&gt;저장 장치 마운트&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-20&quot; id=&quot;markdown-toc-section-20&quot;&gt;미디어 이미지 복사&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-21&quot; id=&quot;markdown-toc-section-21&quot;&gt;네트워크&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-22&quot; id=&quot;markdown-toc-section-22&quot;&gt;네트워크 관리&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-23&quot; id=&quot;markdown-toc-section-23&quot;&gt;네트워크 사용&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#ftp-&quot; id=&quot;markdown-toc-ftp-&quot;&gt;FTP 명령어&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-24&quot; id=&quot;markdown-toc-section-24&quot;&gt;파일 검색&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#find&quot; id=&quot;markdown-toc-find&quot;&gt;find&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#grep&quot; id=&quot;markdown-toc-grep&quot;&gt;grep&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-25&quot; id=&quot;markdown-toc-section-25&quot;&gt;파일 관리&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-26&quot; id=&quot;markdown-toc-section-26&quot;&gt;파일 압축&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#gzip&quot; id=&quot;markdown-toc-gzip&quot;&gt;gzip&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#bzip2&quot; id=&quot;markdown-toc-bzip2&quot;&gt;bzip2&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#tar&quot; id=&quot;markdown-toc-tar&quot;&gt;tar&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-27&quot; id=&quot;markdown-toc-section-27&quot;&gt;파일 동기화&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-28&quot; id=&quot;markdown-toc-section-28&quot;&gt;텍스트 조작&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#cat&quot; id=&quot;markdown-toc-cat&quot;&gt;cat&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#sort&quot; id=&quot;markdown-toc-sort&quot;&gt;sort&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#uniq&quot; id=&quot;markdown-toc-uniq&quot;&gt;uniq&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#cut&quot; id=&quot;markdown-toc-cut&quot;&gt;cut&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#diff&quot; id=&quot;markdown-toc-diff&quot;&gt;diff&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#tr&quot; id=&quot;markdown-toc-tr&quot;&gt;tr&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#sed-stream-editor&quot; id=&quot;markdown-toc-sed-stream-editor&quot;&gt;sed (stream editor)&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-30&quot; id=&quot;markdown-toc-section-30&quot;&gt;텍스트 출력 포맷&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-31&quot; id=&quot;markdown-toc-section-31&quot;&gt;컴파일&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#c---&quot; id=&quot;markdown-toc-c---&quot;&gt;일반적인 c 프로젝트 컴파일 과정&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#objdump---&quot; id=&quot;markdown-toc-objdump---&quot;&gt;objdump - 디스어셈블&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-32&quot; id=&quot;markdown-toc-section-32&quot;&gt;쉘 스크립트&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-33&quot; id=&quot;markdown-toc-section-33&quot;&gt;쉘 스크립트 작성 과정&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-34&quot; id=&quot;markdown-toc-section-34&quot;&gt;스크립트 파일 헤더&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-35&quot; id=&quot;markdown-toc-section-35&quot;&gt;스크립트 저장 위치&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#here-&quot; id=&quot;markdown-toc-here-&quot;&gt;Here 문서&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-36&quot; id=&quot;markdown-toc-section-36&quot;&gt;쉘 함수&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-37&quot; id=&quot;markdown-toc-section-37&quot;&gt;지역 변수&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#exit-status&quot; id=&quot;markdown-toc-exit-status&quot;&gt;종료 상태 (exit status)&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-38&quot; id=&quot;markdown-toc-section-38&quot;&gt;분기&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-42&quot; id=&quot;markdown-toc-section-42&quot;&gt;현대식 테스트&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#read&quot; id=&quot;markdown-toc-read&quot;&gt;read&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-47&quot; id=&quot;markdown-toc-section-47&quot;&gt;반복&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-48&quot; id=&quot;markdown-toc-section-48&quot;&gt;위치 매개변수&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-52&quot; id=&quot;markdown-toc-section-52&quot;&gt;변수 확장&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-57&quot; id=&quot;markdown-toc-section-57&quot;&gt;산술 연산 확장&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-63&quot; id=&quot;markdown-toc-section-63&quot;&gt;기타 확장&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#bash-&quot; id=&quot;markdown-toc-bash-&quot;&gt;bash 배열&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-74&quot; id=&quot;markdown-toc-section-74&quot;&gt;그룹 명령과 서브쉘&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-75&quot; id=&quot;markdown-toc-section-75&quot;&gt;프로세스 치환&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-76&quot; id=&quot;markdown-toc-section-76&quot;&gt;트랩&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-77&quot; id=&quot;markdown-toc-section-77&quot;&gt;임시 파일&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-78&quot; id=&quot;markdown-toc-section-78&quot;&gt;비동기 실행&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-79&quot; id=&quot;markdown-toc-section-79&quot;&gt;네임드 파이프&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-80&quot; id=&quot;markdown-toc-section-80&quot;&gt;디버깅&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-82&quot; id=&quot;markdown-toc-section-82&quot;&gt;기타&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#date&quot; id=&quot;markdown-toc-date&quot;&gt;date&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;주요 경로&lt;/h2&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;경로&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;루트&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/bin&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;시스템 부팅, 실행 바이너리&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/boot&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;리눅스 커널, 시작 RAM 디스크 이미지, 부트로더&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/dev&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;커널이 인식하는 모든 디바이스 노드&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/etc&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;시스템 전반의 환경설정 파일&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/etc/crontab&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;자동 실행 업무(job) 정의 파일&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/etc/fstab&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;저장장치 테이블과 마운트 정보&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/etc/passwd&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;사용자 계정 정보&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/etc/shadow&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;사용자 비밀번호 정보&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/etc/group&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;사용자 그룹 정보&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/home&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;사용자 홈 디렉토리&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/lib&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;시스템 프로그램이 사용하는 공유 라이브러리&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/lost+found&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;파일시스템에 문제가 생겼을 때 파일이 복구되는 위치&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/media&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;CD-ROM, USB 저장장치 등 휴대용 장치 (자동) 마운트 포인트&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/mnt&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;구식 리눅스 시스템의 휴대용 장치 (수동) 마운트 포인트&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/opt&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;(상업용) 추가 소프트웨어 설치 위치&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/proc&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;커널 정보를 담은 가상 파일 시스템&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/proc/cpuinfo&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;cpu 정보&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/proc/&lt;/code&gt;&lt;em&gt;pid&lt;/em&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;em&gt;pid&lt;/em&gt;에 해당하는 프로세스의 정보&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/root&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;루트 계정의 홈 디렉토리&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/sbin&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;슈퍼유저의 시스템 작업을 위한 시스템 바이너리 파일&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/tmp&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;임시 저장용 디렉토리&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/usr&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;일반 사용자가 사용하는 모든 프로그램과 지원 파일&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/usr/bin&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;리눅스 배포판이 설치한 실행 프로그램들&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/usr/lib&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;/usr/bin&lt;/code&gt;을 위한 공유 라이브러리&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/usr/local&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;시스템 전반에 걸쳐 사용되는 프로그램, 주로 직접 컴파일한 프로그램&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/usr/sbin&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;시스템 관리 프로그램&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/usr/share&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;/usr/bin&lt;/code&gt;의 공유 데이터 저장, 디폴트 설정 파일, 리소스 파일 등&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/usr/share/dict/words&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;사전&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/usr/share/doc&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;패키지 문서 파일&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/var&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;가변 데이터. 데이터베이스, 스풀 파일, 사용자 메일, 로그 파일 등&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/var/log&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;시스템 활동 기록하는 로그 파일&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/var/log/auth.log&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;로그인 기록&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;명령&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;도움말&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;명령어 찾기: &lt;code&gt;whereis&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;명령어 목록: &lt;code&gt;apropos&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;명령어 도움말: &lt;code&gt;help&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;명령어 메뉴얼: &lt;code&gt;man&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;명령어 정보 보기: &lt;code&gt;info&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;명령어 간단 설명: &lt;code&gt;whatis&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;명령어 전체경로 표시: &lt;code&gt;which&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;명령어 종류 확인: &lt;code&gt;type&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;핵심 유틸리티 안내: &lt;code&gt;info coreutils&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;명령어의 종류&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;실행 프로그램 (binary or script)&lt;/li&gt;
+  &lt;li&gt;쉘 내장 명령어&lt;/li&gt;
+  &lt;li&gt;쉘 함수&lt;/li&gt;
+  &lt;li&gt;별칭 (alias)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;type&lt;/code&gt;: 명령어 종류 확인&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;man-&quot;&gt;man 페이지&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;man section search-term&lt;/code&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;사용자 명령어&lt;/li&gt;
+  &lt;li&gt;커널 시스템 콜 API&lt;/li&gt;
+  &lt;li&gt;C 라이브러리 API&lt;/li&gt;
+  &lt;li&gt;장치 노드 및 드라이버와 같은 특수 파일&lt;/li&gt;
+  &lt;li&gt;파일 포맷&lt;/li&gt;
+  &lt;li&gt;스크린세이버, 게임, 미디어 파일&lt;/li&gt;
+  &lt;li&gt;그 외&lt;/li&gt;
+  &lt;li&gt;시스템 관리용 명령어&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;apropos---man---&quot;&gt;apropos - man 페이지 목록 검색&lt;/h3&gt;
+
+&lt;p&gt;명령어 찾기에 사용&lt;/p&gt;
+
+&lt;h3 id=&quot;info-----&quot;&gt;info - 프로그램 정보 표시&lt;/h3&gt;
+
+&lt;p&gt;GNU 프로젝트에서 제공하는, man 페이지의 대안. 하이퍼링크 지원.&lt;/p&gt;
+
+&lt;h3 id=&quot;alias&quot;&gt;alias&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;alias&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;which&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-4&quot;&gt;파일 시스템&lt;/h2&gt;
+
+&lt;h3 id=&quot;inode&quot;&gt;하드 링크와 아이노드(inode)&lt;/h3&gt;
+
+&lt;p&gt;파일을 생성할 할 때,&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;데이터 영역 (inode로 가리킴?)&lt;/li&gt;
+  &lt;li&gt;이름 영역&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;을 나누어 생성한다.&lt;/p&gt;
+
+&lt;p&gt;각 하드 링크는 파일 내용을 담은 각각의 아이노드를 참조한다.&lt;/p&gt;
+
+&lt;h3 id=&quot;section-5&quot;&gt;심볼릭 링크&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;ln -s src dst&lt;/code&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;src는 dst의 위치를 기준으로 해야 함.&lt;/li&gt;
+  &lt;li&gt;src는 절대 경로이어도 됨.&lt;/li&gt;
+  &lt;li&gt;디렉토리도 참조 가능. (하드 링크는 불가능)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-6&quot;&gt;쉘 사용&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-7&quot;&gt;쉘 확장&lt;/h3&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;종류&lt;/th&gt;
+      &lt;th&gt;예&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;경로명 확장&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;*&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;경로내 파일명들로 확장&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;틸드 확장&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;~&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;사용자 홈 디렉토리로 확장&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;산술 확장&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;$((expression))&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;연산 결과로 치환&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;중괄호 확장&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;pre{opt1,opt2,...}post&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;텍스트 조합&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;중괄호 확장&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;pre{range1..range2}post&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;텍스트 조합(범위)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;매개변수 확장&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;$var&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;변수를 평가&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;명령어 치환&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;$(command)&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;명령어를 실행한 출력 결과로 치환&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;명령어 치환&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;`command`&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;명령어를 실행한 출력 결과로 치환&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;쌍 따옴표&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;&quot;command line&quot;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;$&lt;/code&gt;, &lt;code&gt;\&lt;/code&gt;, &lt;code&gt;`&lt;/code&gt; 기호를 제외한 인용&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;따옴표&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;&#39;command line&#39;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;전체 인용&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;이스케이프&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;&quot;\n&quot;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;section-8&quot;&gt;히스토리&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;자동 완성: &lt;code&gt;tab&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;history&lt;/code&gt;: 히스토리 목록&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;!n&lt;/code&gt;: n번 히스토리로 치환&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;C-R&lt;/code&gt;: 히스토리에서 역순 증분 검색&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;C-J&lt;/code&gt;: 증분 검색중 선택&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;C-G&lt;/code&gt;: 증분 검색 종료&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;gz--&quot;&gt;.gz 파일 보기&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;less&lt;/code&gt; 대신 &lt;code&gt;zless&lt;/code&gt;를 사용.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-9&quot;&gt;권한&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-10&quot;&gt;사용자 / 그룹&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;adduser&lt;/code&gt;: 사용자 계정 생성 (대화식)&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;useradd&lt;/code&gt;: 사용자 계정 생성&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;usermod&lt;/code&gt;: 사용자 계정 정보 변경&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;addgroup&lt;/code&gt;: 사용자 그룹 변경 (대화식)&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;groupadd&lt;/code&gt;: 사용자 그룹 변경&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;passwd&lt;/code&gt;: 사용자 비밀번호 변경&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;예)&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;usermod -a -G www-data user-a&lt;/code&gt;: 사용자 user-a를 그룹 www-data에 추가&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-11&quot;&gt;권한&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;chown&lt;/code&gt;: 파일/디렉토리 소유자 변경&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;chmod&lt;/code&gt;: 파일/디렉토리 권한 변경&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-12&quot;&gt;프로세스&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-13&quot;&gt;프로세스 정보&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;ps&lt;/code&gt;: 실행 중인 프로세스 정보&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;ps -ef&lt;/code&gt;: 실행 중인 모든 프로세스 정보 (UNIX 스타일)&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;ps aux&lt;/code&gt;: 실행 중인 모든 프로세스 정보 (BSD 스타일)&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;pstree&lt;/code&gt;: 프로세스 부모/자식 관계 트리&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;vmstat&lt;/code&gt;: 메모리, 스왑, 디스크 I/O 등 시스템 자원 사용 현황&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;xload&lt;/code&gt;: 시스템 부하 그래프 GUI&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;tload&lt;/code&gt;: 시스템 부하 그래프 터미널&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-14&quot;&gt;프로세스 제어&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;jobs&lt;/code&gt;: 작업 프로세스 보기&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;fs %n&lt;/code&gt;: %n번 job을 포어그라운드로 전환&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;bs %n&lt;/code&gt;: %n번 job을 백그라운드로 전환&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;kill pid&lt;/code&gt;: pid 프로세스에 TERM 신호&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;kill -9 pid&lt;/code&gt;: pid 프로세스를 KILL&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-15&quot;&gt;환경&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-16&quot;&gt;환경 변수 조작&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;set&lt;/code&gt;: 쉘 변수와 환경 변수 출력&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;env&lt;/code&gt;: 환경 변수 출력&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;printenv VAR&lt;/code&gt;: 환경 변수 VAR의 값 출력&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;echo $VAR&lt;/code&gt;: 환경 변수 VAR의 값 출력&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;export VAR&lt;/code&gt;: 쉘과 쉘에서 실행되는 프로세스들에 VAR를 정의&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;alias&lt;/code&gt;: 명령어 별칭 목록 / 생성&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-17&quot;&gt;패키지 관리&lt;/h2&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;작업&lt;/th&gt;
+      &lt;th&gt;rpm&lt;/th&gt;
+      &lt;th&gt;dpkg&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;저장소 목록 업데이트&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;apt-get update&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;저장소 패키지 찾기&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;yum search [pkg]&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;apt-cache search [pkg]&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;저장소 패키지 설치&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;yum install [pkg]&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;apt-get install [pkg]&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;패키지 파일 설치&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;rpm -i [file]&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;dpkg --install [file]&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;패키지 삭제&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;yum erase [pkg]&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;apt-get remove [pkg]&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;저장소 패키지 업데이트&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;yum update&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;apt-get upgrade&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;패키지 파일 업데이트&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;rpm -U [file]&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;dpkg --install [pkg]&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;설치된 패키지 목록&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;rpm -qa&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;dpkg --list&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;패키지 설치여부&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;rpm -q [pkg]&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;dpkg --status [pkg]&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;설치된 패키지 정보&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;yum info [pkg]&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;apt-cache show [pkg]&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;파일로 패키지 검색&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;rpm -qf [file]&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;dpkg --search [file]&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;section-18&quot;&gt;미디어&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-19&quot;&gt;저장 장치 마운트&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;cat /etc/fstab&lt;/code&gt;: 부팅 시 마운트된 장치 목록&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;mount&lt;/code&gt;: 현재 마운트된 장치 목록&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;mount src dst&lt;/code&gt;: 장치 마운트&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;mount -t cdrom src dst&lt;/code&gt;: CD-ROM 마운트&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;umount target&lt;/code&gt;: 마운트 해제&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-20&quot;&gt;미디어 이미지 복사&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;dd if=input_file of=output_file [bs=block_size [count=blocks]]&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-21&quot;&gt;네트워크&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-22&quot;&gt;네트워크 관리&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;ping host&lt;/code&gt;: ICMP ECHO_REQUEST 전송 / 확인&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;traceroute host&lt;/code&gt;: 패킷 경로 추적&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;netstat&lt;/code&gt;: 네트워크 설정 및 통계 정보 확인&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;netstat -ie&lt;/code&gt;: 네트워크 인터페이스 정보 확인 (&lt;code&gt;ifconfig&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;netstat -r&lt;/code&gt;: 네트워크 라우팅 테이블 정보 확인&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-23&quot;&gt;네트워크 사용&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;wget url&lt;/code&gt;: 다운로드&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;curl url &amp;gt; dst&lt;/code&gt;: 데이터 다운로드&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;curl url &amp;lt; src&lt;/code&gt;: 데이터 업로드&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;ssh -p port id@host&lt;/code&gt; SSH 접속&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;ssh -p port id@host command&lt;/code&gt; SSH 접속, command 실행결과 반환&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;ssh [-X|-Y] port id@host&lt;/code&gt; SSH 터널링, X 클라이언트로 접속&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;sftp -P port id@host&lt;/code&gt; SSH 활용, FTP 에뮬레이트 접속&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;ftp-&quot;&gt;FTP 명령어&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;cd&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;ls&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;lcd&lt;/code&gt;: (local) cd&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;lls&lt;/code&gt;: (local) ls&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;get [-r] src [dst]&lt;/code&gt;: remote -&amp;gt; local&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;put [-r] src [dst]&lt;/code&gt;: local -&amp;gt; remote&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-24&quot;&gt;파일 검색&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;locate&lt;/code&gt;: 파일 경로 찾기&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;find&lt;/code&gt;: 파일 검색 &amp;amp; 추가 작업&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;xargs&lt;/code&gt;: 표준 입력으로 인자 목록을 만들어 실행&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;grep&lt;/code&gt;: 표준 입력에서 정규표현식으로 검색&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;find&quot;&gt;find&lt;/h3&gt;
+
+&lt;h4 id=&quot;find--&quot;&gt;find 검색 옵션&lt;/h4&gt;
+
+&lt;p&gt;다음 옵션으로 검색할 파일/디렉토리를 지정한다.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;옵션&lt;/th&gt;
+      &lt;th&gt;예&lt;/th&gt;
+      &lt;th&gt;의미&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-type c&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-type c&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;c 형식의 파일 검색 (&lt;code&gt;b&lt;/code&gt;, &lt;code&gt;c&lt;/code&gt;, &lt;code&gt;d&lt;/code&gt;, &lt;code&gt;f&lt;/code&gt;, &lt;code&gt;l&lt;/code&gt;)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-size n&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-size +200k&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;크기가 n과 같음&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-name pattern&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-name foobar&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;이름이 와일드카드 패턴과 일치함&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-iname pattern&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-iname foobar&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;대소문자 구별 없는 -name&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-regex pattern&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-regex &#39;[0-9]+&#39;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;경로명이 정규식 패턴과 일치함&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-inum n&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-inum 1001&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;n번 inode에 해당 (하드 링크 검색)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-samefile name&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-samefile foo&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;이름이 foo인 파일과 inode가 같음&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-empty&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-empty&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;비어 있음&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-mmin n&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-mmin -10&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;n분 전에 내용 변경&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-cmin n&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-cmin +10&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;n분 전에 내용/속성 변경&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-mtime n&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-mtime 3&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;n*24시간 전에 내용 변경&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-ctime n&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-ctime 3&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;n*24시간 전에 내용/속성 변경&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-newer file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-newer foo&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;file보다 나중에 내용 변경&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-cnewer file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-cnewer foo&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;file보다 나중에 내용/속성 변경&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-user name&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-user foo&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;name 사용자에 속함&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-group name&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-group bar&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;name 그룹에 속함&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-nouser&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-nouser&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;유효한 사용자에 속하지 않음 (삭제된 계정 등)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-nogroup&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-nogroup&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;유효한 그룹에 속하지 않음&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-perm mode&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-perm 755&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;권한이 mode와 같음&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;시간을 나타내는 인자에는 &lt;code&gt;+&lt;/code&gt; 또는 &lt;code&gt;-&lt;/code&gt;를 넣어, n 이후 또는 n 이전의 의미를 나타낼 수 있다.&lt;/li&gt;
+  &lt;li&gt;크기를 나타내는 인자에는 &lt;code&gt;+&lt;/code&gt; 또는 &lt;code&gt;-&lt;/code&gt;를 넣어, n 이상 또는 n 이하의 의미를 나타낼 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;find---1&quot;&gt;find 연산자 옵션&lt;/h4&gt;
+
+&lt;p&gt;다음 연산자로 검색 옵션을 조합하는 방법을 지정한다. (lazy 평가)&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;연산자&lt;/th&gt;
+      &lt;th&gt;약어&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-and&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-a&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;and 연산 (기본값이므로 생략 가능)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-or&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-o&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;or 연산&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-not&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-!&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;not 연산&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;\(&lt;/code&gt;, &lt;code&gt;\)&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;우선순위 지정, 조건 그룹화&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;예) &lt;code&gt;find ~ \( -type f -not -perm 0600 \) -o \( -type d -not -perm 0700 \)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;~경로에서 권한이 0600이 아닌 파일 또는 권한이 0700이 아닌 디렉토리 검색&lt;/p&gt;
+
+&lt;h4 id=&quot;find---2&quot;&gt;find 액션 옵션&lt;/h4&gt;
+
+&lt;p&gt;find 액션 옵션으로 다음과 같은 액션을 지정할 수 있다.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;액션&lt;/th&gt;
+      &lt;th&gt;의미&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-print&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;넘겨받은 파일들의 전체 경로명을 표준 출력 (기본 액션)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-ls&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;넘겨받은 파일들을 &lt;code&gt;ls -dils&lt;/code&gt; 표준 출력&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-delete&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;넘겨받은 파일들을 삭제&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-quit&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;넘겨받은 파일이 하나라도 있을 경우 검색 종료&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-exec command &#39;{}&#39; &#39;;&#39;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;넘겨받은 파일들에 command 명령을 실행&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-ok command &#39;{}&#39; &#39;;&#39;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;넘겨받은 파일들에 command 명령을 실행 (실행여부 확인)&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;특정 조건으로 검색된 파일에 대해 액션을 지정하려면 &lt;code&gt;옵션 -and 액션&lt;/code&gt;으로 지정 (&lt;code&gt;-and&lt;/code&gt;는 생략 가능)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;검색된 파일에 명령을 각각 실행하는 것이 아니라, 파일 전체에 한 명령을 넘기려면 다음 중 한 방법을 쓰면 된다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;find 기능&lt;/code&gt;: &lt;code&gt;find [...] -exec command &#39;{}&#39; +&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;xargs&lt;/code&gt;에 표준 출력 전달: &lt;code&gt;find [...] -print | xargs command [params]&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;find---3&quot;&gt;find 기타 옵션&lt;/h4&gt;
+
+&lt;p&gt;find 액션 옵션으로 다음과 같은 액션을 지정할 수 있다.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;액션&lt;/th&gt;
+      &lt;th&gt;의미&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-depth&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;디렉토리보다 디렉토리내 파일에 우선 실행 (&lt;code&gt;-delete&lt;/code&gt;는 자동 적용)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-maxdepth levels&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;최대 탐색 깊이&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-mindepth levels&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;최소 탐색 깊이&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-mount&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;다른 파일시스템에 마운트도된 디렉토리 제외&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-noleaf&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;UNIX용 find 최적화 사용 안함 (DOS/Windows, CD-ROM 등)&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;grep&quot;&gt;grep&lt;/h3&gt;
+
+&lt;p&gt;사용법&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;정규표현식 종류&lt;/th&gt;
+      &lt;th&gt;명령&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Posix 기본 정규표현식&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;grep [options] regex [file...]&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;확장 정규표현식&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;grep [options] -E regex [file...]&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;확장 정규표현식&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;egrep [options] regex [file...]&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h4 id=&quot;grep-&quot;&gt;grep 옵션&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;옵션&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-i&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;대소문자 구별 안함&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-v&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;반전 매치&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-c&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;일치한 행의 수 출력&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-l&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;일치한 행을 포함한 파일의 이름 출력&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-L&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;일치한 행이 없는 파일의 이름 출력&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-n&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;일치한 행 앞에 행 번호 표시&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-h&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;파일명 출력 숨김&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;section-25&quot;&gt;파일 관리&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;touch&lt;/code&gt;: 파일 생성 / 파일 수정시간 갱신&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;stat&lt;/code&gt;: 파일 메타 데이터 출력&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-26&quot;&gt;파일 압축&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;gzip&lt;/code&gt;: &lt;code&gt;.gz&lt;/code&gt; 압축&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;gunzip&lt;/code&gt;: &lt;code&gt;.gz&lt;/code&gt; 압축 해제&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;bzip2&lt;/code&gt;: &lt;code&gt;.bz2&lt;/code&gt; 압축 (블록 단위 고성능 압축)&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;bunzip2&lt;/code&gt;: &lt;code&gt;.bz2&lt;/code&gt; 압축 해제&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;zip&lt;/code&gt;: &lt;code&gt;.zip&lt;/code&gt; 압축 (비 UNIX 파일 압축)&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;unzip&lt;/code&gt;: &lt;code&gt;.zip&lt;/code&gt; 압축 해제&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;tar&lt;/code&gt;: 테이프 아카이브&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;gzip&quot;&gt;gzip&lt;/h3&gt;
+
+&lt;h4 id=&quot;gzip-&quot;&gt;gzip 옵션&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;옵션&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-c&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;압축 결과를 표준 출력에 씀. 원본 파일 유지&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-d&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;압축 해제 (&lt;code&gt;gunzip&lt;/code&gt;과 동일)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-f&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;압축 파일이 이미 존재해도 압축을 실행&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-h&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;도움말&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-l&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;압축 파일별로 압축 정보 표시&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-r&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;디렉토리 내 순환 압축&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-t&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;무결성 검사&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-v&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;압축 과정 자세히 표시&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-1&lt;/code&gt; ~ &lt;code&gt;-9&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;압축률 설정. 기본값은 &lt;code&gt;-6&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;--fast&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-1&lt;/code&gt;와 동일&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;--best&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-9&lt;/code&gt;와 동일&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h4 id=&quot;gzip--&quot;&gt;gzip 관련 유틸리티&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;zcat&lt;/code&gt;: &lt;code&gt;gunzip -c file&lt;/code&gt; (&lt;code&gt;.gz&lt;/code&gt; 압축 해제 결과를 표준 출력으로 보냄)&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;zless&lt;/code&gt;: &lt;code&gt;zcat file | less&lt;/code&gt; (&lt;code&gt;.gz&lt;/code&gt; 압축 해제 결과를 표준 출력으로 보내고 &lt;code&gt;less&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;bzip2&quot;&gt;bzip2&lt;/h3&gt;
+
+&lt;h4 id=&quot;bzip2--&quot;&gt;bzip2 관련 유틸리티&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;bzcat&lt;/code&gt;: &lt;code&gt;bunzip2 -c file&lt;/code&gt; (&lt;code&gt;.bz2&lt;/code&gt; 압축 해제 결과를 표준 출력으로 보냄)&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;bzip2recover&lt;/code&gt;: 손상된 &lt;code&gt;.bz2&lt;/code&gt; 파일 복구&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;tar&quot;&gt;tar&lt;/h3&gt;
+
+&lt;h4 id=&quot;tar-&quot;&gt;tar 옵션&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;옵션&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;f name&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;아카이브 이름 지정&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;c&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;아카이브 생성&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;x&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;아카이브 해제&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;r&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;아카이브 추가&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;t&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;아카이브 내용 보기&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;z&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;gzip으로 압축 (GNU tar 최신버전)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;j&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;bzip2로 압축 (GNU tar 최신버전)&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;code&gt;tar&lt;/code&gt; 옵션에는 &lt;code&gt;-&lt;/code&gt;를 붙이지 않는다.&lt;/p&gt;
+
+&lt;p&gt;예)&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;tar cf files.tar .&lt;/code&gt;: 현재 디렉토리를 files.tar로 묶기&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;tar xf files.tar .&lt;/code&gt;: 현재 디렉토리에 files.tar를 풀기&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;tar tf files.tar&lt;/code&gt;: files.tar 아카이브 내용 보기&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;tar tvf files.tar&lt;/code&gt;: files.tar 아카이브 내용 자세히 보기&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;tar------&quot;&gt;tar 아카이브 생성시 파일 스트림 지정 옵션&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;옵션&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;--files-from=file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;입력 스트림 지정&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;--files-from=-&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;입력 스트림을 표준 입력으로 지정&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;f file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;출력 스트림 지정&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;f -&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;출력 스트림을 표준 출력으로 지정&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;파일 스트림에 &lt;code&gt;-&lt;/code&gt;를 지정하면 표준 입출력으로 지정한다.&lt;/p&gt;
+
+&lt;p&gt;예)&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;find src -name &#39;*.c&#39; | tar czf src.tar.gz -T -&lt;/code&gt;: src 디렉토리의 *.src를 src.tar.gz로 압축&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;find src -name &#39;*.c&#39; | tar cjf src.tar.bz2 -T -&lt;/code&gt;: src 디렉토리의 *.src를 src.tar.bz2로 압축&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-27&quot;&gt;파일 동기화&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;rsync&lt;/code&gt;: 원격 동기화&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-28&quot;&gt;텍스트 조작&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;cat&lt;/code&gt;: 파일과 표준 출력을 연결&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;sort&lt;/code&gt;: 행 단위 정렬&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;uniq&lt;/code&gt;: 중복 행 제거&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;cut&lt;/code&gt;: 각 행의 부분 자르기&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;paste&lt;/code&gt;: 각 행의 부분 합치기&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;join&lt;/code&gt;: 공통 필드로 행 합치기 (RDB 관련 작업)&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;comm&lt;/code&gt;: 두 파일의 유일 행, 공통 행 비교 출력&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;diff&lt;/code&gt;: 두 파일을 행 단위 비교 (Git와 유사)&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;patch&lt;/code&gt;: diff 파일로 원본에 패치 (Git와 유사)&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;tr&lt;/code&gt;: 문자 집합 치환&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;sed&lt;/code&gt;: 텍스트 필터링, 치환 (Vim의 치환과 유사)&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;aspell&lt;/code&gt;: 맞춤법 검사&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;expand&lt;/code&gt;: 탭을 스페이스로 치환&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;unexpand&lt;/code&gt; 스페이스를 탭으로 치환&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;cat&quot;&gt;cat&lt;/h3&gt;
+
+&lt;h4 id=&quot;cat-&quot;&gt;cat 옵션&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;옵션&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-A&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;비출력 문자 표시&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-n&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;줄 번호 표시&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-s&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;공백 줄 제거&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;sort&quot;&gt;sort&lt;/h3&gt;
+
+&lt;h4 id=&quot;sort-&quot;&gt;sort 옵션&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;옵션&lt;/th&gt;
+      &lt;th&gt;Long 옵션&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-b&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;--ignore-leading-blanks&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;행 앞부분의 공백 문자 무시하고 비교&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-f&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;--ignore-case&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;대소문자 구분 무시&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-n&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;--numeric-sort&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;수치를 기준으로 정렬&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-r&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;--reverse&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;역순 정렬&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-k&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;--key= field1[,field2]&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;키 필드로 지정된 field1 ~ field2를 기준으로 정렬&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-m&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;--merge&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;정렬된 파일들을 다시 섞지 않고 묶어서 정렬하여 합침&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-o&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;--output= file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;결과를 표준 출력이 아닌 file로 보냄&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-t&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;--field-separator= char&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;필드 구분 문자 정의 (기본값: 스페이스, 탭)&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h4 id=&quot;sort---&quot;&gt;sort 복수 키 지정&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;정렬을 위한 복수 키를 지정할 수 있다.&lt;/li&gt;
+  &lt;li&gt;정렬 방식을 나타내는 문자 옵션(&lt;code&gt;-b&lt;/code&gt;, &lt;code&gt;-n&lt;/code&gt;, &lt;code&gt;-r&lt;/code&gt; 등)은 키 지정자 끝에 포함될 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;예)&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sort -k 1,1 -k 2n&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;uniq&quot;&gt;uniq&lt;/h3&gt;
+
+&lt;h4 id=&quot;uniq-&quot;&gt;uniq 옵션&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;옵션&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-u&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;유일한 행 출력 (기본값)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-d&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;중복된 행 출력&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-c&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;중복 발생 횟수, 중복 행 목록 출력&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-i&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;대소문자 구별 무시&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-f n&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;각 행에서 n개 필드까지 무시하고 비교 (필드 구분자 지정 불가)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-s n&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;각 행에서 n개 문자까지 무시하고 비교&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;cut&quot;&gt;cut&lt;/h3&gt;
+
+&lt;p&gt;행에서 텍스트 일부를 추출해 표준 출력으로 출력&lt;/p&gt;
+
+&lt;h4 id=&quot;cut-&quot;&gt;cut 옵션&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;옵션&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-c char_list&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;char_list 정의 영역 추출 (콤마로 구분된 숫자 범위)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-f field_list&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;field_list 정의 필드 추출 (필드 또는 콤마로 구분된 필드 범위)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-d delim_char&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;delim_char를 필드 구분자로 사용 (기본값: 탭)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;--complement&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;-c&lt;/code&gt; 또는 &lt;code&gt;-f&lt;/code&gt;로 지정된 영역을 제외한 모든 부분을 추출&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;diff&quot;&gt;diff&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;소스코드 디렉토리에서 변경 사항을 재귀적으로 확인&lt;/li&gt;
+  &lt;li&gt;diff 파일을 만들고 패치를 생성&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;diff-&quot;&gt;diff 옵션&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;방식&lt;/th&gt;
+      &lt;th&gt;옵션&lt;/th&gt;
+      &lt;th&gt;예&lt;/th&gt;
+      &lt;th&gt;추가 / 변경 / 삭제&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;기본&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;diff f1 f2&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;r1ar2&lt;/code&gt; / &lt;code&gt;r1cr2&lt;/code&gt; / &lt;code&gt;r1dr2&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;문백 방식&lt;/td&gt;
+      &lt;td&gt;-c&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;diff -c f1 f2&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;+&lt;/code&gt; / &lt;code&gt;!&lt;/code&gt; / &lt;code&gt;-&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;통합 방식&lt;/td&gt;
+      &lt;td&gt;-u&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;diff -u f1 f2&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;+&lt;/code&gt; / / &lt;code&gt;-&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h4 id=&quot;diff---patch-&quot;&gt;diff 파일 생성하기 (patch 용)&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;생성: &lt;code&gt;diff -Naur old-file new-file &amp;gt; diff-file&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;패치: &lt;code&gt;patch diff-file&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;tr&quot;&gt;tr&lt;/h3&gt;
+
+&lt;h4 id=&quot;rot13&quot;&gt;ROT13&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;tr a-zA-Z n-za-mN-ZA-M&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;section-29&quot;&gt;연속문자 제거&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;tr -s a-z&lt;/code&gt;: 연속되는 a-z를 제거&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;sed-stream-editor&quot;&gt;sed (stream editor)&lt;/h3&gt;
+
+&lt;h4 id=&quot;sed--&quot;&gt;sed 주소 표기법&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;주소&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;n&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;n&lt;/code&gt; 번째 행&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;$&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;마지막 행&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/regexp/&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;POSIX 기본 정규식과 일치하는 행들&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;addr1, addr2&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;aadr&lt;/code&gt; ~ &lt;code&gt;addr2&lt;/code&gt; 범위의 행들&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;first~ step&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;first&lt;/code&gt; 일치 행과 그 후 &lt;code&gt;step&lt;/code&gt; 간격마다 모든 행&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;addr1,+n&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;addr1&lt;/code&gt; 일치 행과 다음 n개의 행&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;addr!&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;addr&lt;/code&gt;을 제외한 모든 행&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h4 id=&quot;sed---&quot;&gt;sed 기본 편집 명령어&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;명령어&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;=&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;현재 행번호 출력&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;a&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;현재 행 뒤에 텍스트 추가&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;d&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;현재 행 삭제&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;i&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;현재 행 앞에 텍스트 삽입&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;p&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;현재 행 출력&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;q&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;더이상 처리할 행이 없으면 종료&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;Q&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;더이상 처리할 행이 없으면 종료&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;s/regexp/replace&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;regexp&lt;/code&gt;와 일치하는 부분을 &lt;code&gt;replace&lt;/code&gt;로 치환&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;y/set1/set2&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;set1&lt;/code&gt;의 문자를 &lt;code&gt;set2&lt;/code&gt;의 문자로 치환&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h4 id=&quot;sed-&quot;&gt;sed 옵션&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;옵션&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;-i&lt;/td&gt;
+      &lt;td&gt;파일 내 수정&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;section-30&quot;&gt;텍스트 출력 포맷&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;nl&lt;/code&gt;: 줄 번호 매기기&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;fold&lt;/code&gt;: 각 줄을 지정된 길이로 나누기&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;fmt&lt;/code&gt;: 포맷 지정&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;pr&lt;/code&gt;: 인쇄용 포맷 지정&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;printf&lt;/code&gt;: 출력 및 포맷 지정&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;groff&lt;/code&gt;: 문서 포맷 시스템&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-31&quot;&gt;컴파일&lt;/h2&gt;
+
+&lt;h3 id=&quot;c---&quot;&gt;일반적인 c 프로젝트 컴파일 과정&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code&gt;./configure&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;make&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;sudo make install&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;objdump---&quot;&gt;objdump - 디스어셈블&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;objdump -d obj&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;section-32&quot;&gt;쉘 스크립트&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-33&quot;&gt;쉘 스크립트 작성 과정&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;스크립트 작성&lt;/li&gt;
+  &lt;li&gt;실행 권한 설정&lt;/li&gt;
+  &lt;li&gt;실행 경로에 저장&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;section-34&quot;&gt;스크립트 파일 헤더&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/bin/bash
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;스크립트를 실행할 인터프리터의 경로를 지정함&lt;/p&gt;
+
+&lt;h3 id=&quot;section-35&quot;&gt;스크립트 저장 위치&lt;/h3&gt;
+
+&lt;p&gt;다음 위치는 적합하다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;~/bin&lt;/code&gt;: 개인 사용자용 실행 파일&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;/usr/local&lt;/code&gt;: 전체 사용자용&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;/usr/local/bin&lt;/code&gt;: 전체 사용자용 실행 파일&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;/usr/local/sbin&lt;/code&gt;: 시스템 관리자용 실행 파일&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;다음 위치는 부적합하다. 리눅스 배포자가 제공하고 관리하는 파일을 저장하는 곳이기 떄문이다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;/bin&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;/usr/bin&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;here-&quot;&gt;Here 문서&lt;/h3&gt;
+
+&lt;p&gt;아래와 같은 형식으로 스크립트 파일의 텍스트 본문을 표준 입력으로 보냄.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/bin/bash
+
+cat &amp;lt;&amp;lt; _EOF_
+Text to
+put into
+stdin
+here.
+_EOF_
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;section-36&quot;&gt;쉘 함수&lt;/h3&gt;
+
+&lt;p&gt;다음과 같은 형식으로 생성&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;function name {
+  commands
+  return
+}
+
+name () {
+  commands
+  return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;두 형식의 결과는 동일하다.&lt;/p&gt;
+
+&lt;h3 id=&quot;section-37&quot;&gt;지역 변수&lt;/h3&gt;
+
+&lt;p&gt;쉘 함수 안에서 다음과 같이 선언한다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;local foo
+foo=1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;exit-status&quot;&gt;종료 상태 (exit status)&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;0 ~ 255 사이의 값.&lt;/li&gt;
+  &lt;li&gt;일반적으로 0은 성공, 그 외의 값은 실패를 나타냄.&lt;/li&gt;
+  &lt;li&gt;프로그램 종료시 쉘 변수 &lt;code&gt;$?&lt;/code&gt;에 저장&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;exit n&lt;/code&gt;: n값을 exit status로 반환하며 스크립트 종료. (&lt;code&gt;n&lt;/code&gt;의 기본값은 0)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;관련 프로그램&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;true&lt;/code&gt;: exit status 0을 반환하는 프로그램&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;false&lt;/code&gt;: exit status 1을 반환하는 프로그램&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;test expression&lt;/code&gt;: &lt;code&gt;expression&lt;/code&gt;이 참이면 0, 거짓이면 1의 종료 상태를 반환하는 프로그램&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-38&quot;&gt;분기&lt;/h3&gt;
+
+&lt;h4 id=&quot;if&quot;&gt;if&lt;/h4&gt;
+
+&lt;p&gt;다음과 같은 구문으로 분기&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;if condition; then
+  commands
+[elif condition; then
+  commands...]
+[else
+  commands]
+fi
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;case&quot;&gt;case&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;case word in
+  [pattern [| pattern]...) commands ;;]...
+esac
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;if--test----&quot;&gt;if 또는 test에서 사용할 수 있는 조건식&lt;/h4&gt;
+
+&lt;h5 id=&quot;section-39&quot;&gt;파일 표현식&lt;/h5&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;표현식&lt;/th&gt;
+      &lt;th&gt;의미&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;file1 -ef file2&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;file1&lt;/code&gt;과 &lt;code&gt;file2&lt;/code&gt;는 동일한 inode 번호를 가진다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;file1 -nt file2&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;file1&lt;/code&gt;은 &lt;code&gt;file2&lt;/code&gt;보다 최신이다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;file1 -ot file2&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;file1&lt;/code&gt;은 &lt;code&gt;file2&lt;/code&gt;보다 오래됐다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-e file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;file&lt;/code&gt;이 존재한다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-f file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;file&lt;/code&gt;이 존재하고, 이 파일은 일반 파일이다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-d file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;file&lt;/code&gt;이 존재하고, 이 파일은 디렉토리다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-L file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;file&lt;/code&gt;이 존재하고, 이 파일은 심볼릭 링크다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-b file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;file&lt;/code&gt;이 존재하고, 이 파일은 블록 특수 파일이다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-c file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;file&lt;/code&gt;이 존재하고, 이 파일은 문자 특수 파일이다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-s file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;file&lt;/code&gt;이 존재하고, 이 파일은 크기가 0보다 크다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-u file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;file&lt;/code&gt;이 존재하고, 이 파일은 setuid가 설정되어 있다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-g file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;file&lt;/code&gt;이 존재하고, 이 파일은 setgid가 설정되어 있다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-G file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;file&lt;/code&gt;이 존재하고, 이 파일은 유효 그룹 ID의 소유다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-r file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;file&lt;/code&gt;이 존재하고, 이 파일은 읽기가 가능하다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-w file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;file&lt;/code&gt;이 존재하고, 이 파일은 쓰기가 가능하다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-x file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;file&lt;/code&gt;이 존재하고, 이 파일은 실행이 가능하다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-k file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;file&lt;/code&gt;이 존재하고, 이 파일은 sticky bit를 가지고 있다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-O file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;file&lt;/code&gt;이 존재하고, 이 파일은 유효 사용자 ID의 소유다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-p file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;file&lt;/code&gt;이 존재하고, 이 파일은 네임드 파이프다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-S file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;file&lt;/code&gt;이 존재하고, 이 파일은 네트워크 소켓이다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-t fd&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;fd&lt;/code&gt;는 터미널이 지정된 파일 디스크립터다. (표준 입력/출력/오류의 재지정 여부 확인)&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h5 id=&quot;section-40&quot;&gt;문자열 표현식&lt;/h5&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;표현식&lt;/th&gt;
+      &lt;th&gt;의미&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;string&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;string&lt;/code&gt;은 &lt;code&gt;null&lt;/code&gt;이 아니다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-n string&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;string&lt;/code&gt;의 길이는 0보다 크다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-z string&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;string&lt;/code&gt;의 길이는 0이다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;string1 == string2&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;string1&lt;/code&gt;과 &lt;code&gt;string2&lt;/code&gt;는 같다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;string1 != string2&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;string1&lt;/code&gt;과 &lt;code&gt;string2&lt;/code&gt;는 다르다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;string1 &amp;lt; string2&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;string1&lt;/code&gt;은 &lt;code&gt;string2&lt;/code&gt;보다 앞에 정렬된다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;string1 &amp;gt; string2&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;string1&lt;/code&gt;은 &lt;code&gt;string2&lt;/code&gt;보다 뒤에 정렬된다.&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h5 id=&quot;section-41&quot;&gt;정수 표현식&lt;/h5&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;표현식&lt;/th&gt;
+      &lt;th&gt;의미&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;int1 -eq int2&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;int1&lt;/code&gt;은 &lt;code&gt;int2&lt;/code&gt;와 같다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;int1 -ne int2&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;int1&lt;/code&gt;은 &lt;code&gt;int2&lt;/code&gt;와 다르다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;int1 -lt int2&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;int1&lt;/code&gt;은 &lt;code&gt;int2&lt;/code&gt;보다 작다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;int1 -le int2&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;int1&lt;/code&gt;은 &lt;code&gt;int2&lt;/code&gt;보다 작거나 같다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;int1 -gt int2&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;int1&lt;/code&gt;은 &lt;code&gt;int2&lt;/code&gt;보다 크다.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;int1 -ge int2&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;int1&lt;/code&gt;은 &lt;code&gt;int2&lt;/code&gt;보다 크거나 같다.&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;section-42&quot;&gt;현대식 테스트&lt;/h3&gt;
+
+&lt;p&gt;bash는 다음과 같은 구문을 지원한다.&lt;/p&gt;
+
+&lt;h4 id=&quot;section-43&quot;&gt;[[ ]]&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;[[ expression ]]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;expression&lt;/code&gt;에는 참/거짓을 판단하는 표현식을 입력한다. &lt;code&gt;[[ ]]&lt;/code&gt;명령식은 &lt;code&gt;test&lt;/code&gt;의 모든 표현식을 지원하고, 다음 문자열 표현식을 추가로 지원한다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;string1 =~ regex
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이 표현식은 &lt;code&gt;string1&lt;/code&gt;이 확장 정규 표현식인 &lt;code&gt;regex&lt;/code&gt;에 부합하면 참을 반환한다.&lt;/p&gt;
+
+&lt;p&gt;예) N이 정수인지 확인&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;if [[ &quot;$N&quot; =~ ^-?[0-9]+$ ]]; then
+  echo &quot;$N is integer.&quot;
+else
+  echo &quot;$N is not integer.&quot;
+fi
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;또, &lt;code&gt;[[ ]]&lt;/code&gt; 명령식은 &lt;code&gt;==&lt;/code&gt; 연산자가 경로명 확장과 같은 방식의 패턴 찾기를 수행하도록 지원한다.&lt;/p&gt;
+
+&lt;h4 id=&quot;section-44&quot;&gt;(( )) - 정수 테스트&lt;/h4&gt;
+
+&lt;p&gt;산술식의 참 여부를 검사함: 산술식의 결과가 0이면 거짓, 0이 아니면 참을 반환.&lt;/p&gt;
+
+&lt;h4 id=&quot;section-45&quot;&gt;표현식 조합&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;논리 연산&lt;/th&gt;
+      &lt;th&gt;test&lt;/th&gt;
+      &lt;th&gt;[[ ]], (( ))&lt;/th&gt;
+      &lt;th&gt; &lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;AND&lt;/td&gt;
+      &lt;td&gt;-a&lt;/td&gt;
+      &lt;td&gt;&amp;amp;&amp;amp;&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;OR&lt;/td&gt;
+      &lt;td&gt;-o&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;NOT&lt;/td&gt;
+      &lt;td&gt;!&lt;/td&gt;
+      &lt;td&gt;!&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;read&quot;&gt;read&lt;/h3&gt;
+
+&lt;p&gt;다음 명령으로 표준 입력에서 값을 읽어온다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;read [-options] [variable...]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;section-46&quot;&gt;매개변수 개수&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;매개변수가 지정되지 않았을 때: REPLY 환경 변수에 값이 저장됨&lt;/li&gt;
+  &lt;li&gt;매개변수보다 많은 개수의 입력이 주어졌을 때: 마지막 매개변수에 나머지 값이 모두 저장됨&lt;/li&gt;
+  &lt;li&gt;매개변수보다 적은 개수의 입력이 주어졌을 때: 나머지 매개변수에는 값이 주어지지 않음&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;read-&quot;&gt;read 옵션&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;옵션&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-a array&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;입력값을 &lt;code&gt;array&lt;/code&gt;에 할당. (인덱스 0부터 시작)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-d delimiter&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;개행 문자 대신 &lt;code&gt;delimiter&lt;/code&gt;를 EOF로 사용&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-e&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;Readline을 이용해 입력을 관리&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-n num&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;입력된 행 전체 대신 &lt;code&gt;num&lt;/code&gt; 개수만큼의 문자만을 읽음&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-p prompt&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;prompt&lt;/code&gt;를 입력 프롬프트로 출력&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-r&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;Raw 모드. &lt;code&gt;\&lt;/code&gt;를 이스케이프로 인식하지 않음&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-s&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;묵음 모드 (패스워드 등)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-t seconds&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;입력 시간 제한. 시간 초과시 0이 아닌 종료 상태 반환&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-u fd&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;표준 입력 대신 fd 디스크립터를 입력으로 사용&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h4 id=&quot;ifs----&quot;&gt;IFS(입력 필드 구분자) 변경 기법&lt;/h4&gt;
+
+&lt;p&gt;&lt;code&gt;IFS&lt;/code&gt;는 입력 필드 구분자를 설정하는 환경 변수.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;IFS=&quot;:&quot; read
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;쉘은 명령어가 처리되기 직전에 하나 이상의 변수 할당을 허용한다. 이 할당은 뒤이어 나오는 명령어에 대한 환경을 변화시킨다. 이 변화는 일시적이고 명령어의 지속 시간 동안만 환경을 변경하는 것이다. 위 스크립트의 결과는 아래의 스크립트의 결과와 같다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;OLD_IFS=&quot;$IFS&quot;
+IFS=&quot;:&quot;
+read
+IFS=&quot;$OLD_IFS&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;read--1&quot;&gt;read와 파이프라인&lt;/h4&gt;
+
+&lt;p&gt;아래와 같이 파이프라인을 통해 read에 표준 입력을 전달할 수는 없다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;echo &quot;foo&quot; | read
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;파이프라인은 서브쉘을 생성하며&lt;/li&gt;
+  &lt;li&gt;서브쉘은 부모 프로세스의 환경을 변경하지 않는다.&lt;/li&gt;
+  &lt;li&gt;read가 읽어들인 값은 서브쉘 안에서만 존재한다.&lt;/li&gt;
+  &lt;li&gt;read 종료시점에서 REPLY 값은 존재하지 않게 된다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;따라서, 아래와 같이 해야 한다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;read &amp;lt;&amp;lt;&amp;lt; foo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;&amp;lt;&amp;lt;&amp;lt; [text...]&lt;/code&gt;는 here 문자열이다.&lt;/p&gt;
+
+&lt;h3 id=&quot;section-47&quot;&gt;반복&lt;/h3&gt;
+
+&lt;h4 id=&quot;for&quot;&gt;for&lt;/h4&gt;
+
+&lt;p&gt;쉘 형식&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;for variable [in words]; do
+  commands
+done
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;in words가 생략될 경우, 위치 매개변수를 words로 사용한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;C 형식&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;for (( expression1; expression2; expression3 )); do
+  commands
+done
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;while&quot;&gt;while&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;while condition; do
+  [commands...]
+done
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;until&quot;&gt;until&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;until condition; do
+  [commands...]
+done
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;break&quot;&gt;break&lt;/h4&gt;
+
+&lt;h4 id=&quot;continue&quot;&gt;continue&lt;/h4&gt;
+
+&lt;h3 id=&quot;section-48&quot;&gt;위치 매개변수&lt;/h3&gt;
+
+&lt;p&gt;커맨드라인 명령어에서 제공된 매개변수를 참조하는 방법.&lt;/p&gt;
+
+&lt;h4 id=&quot;section-49&quot;&gt;변수 참조&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;변수&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;$0&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;실행 프로그램 경로명&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;$i&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;i번째 인자의 값 (i는 0~9)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;${i}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;i번째 인자의 값 (i는 자연수)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;$#&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;인자의 개수&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;basename &lt;/code&gt;: 경로명의 앞 부분을 제거하고 파일의 기본 이름만을 추출&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;shift&quot;&gt;shift&lt;/h4&gt;
+
+&lt;p&gt;실행될 때마다 매개변수가 하나씩 다음으로 이동함.&lt;/p&gt;
+
+&lt;p&gt;예) 모든 인자값 출력&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;while [[ #$ -gt 0 ]]; do
+  echo &quot;Argument $i = &quot;
+  i=$((i + 1))
+  shift
+done
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;section-50&quot;&gt;쉘 함수에서의 위치 매개변수&lt;/h4&gt;
+
+&lt;p&gt;쉘 함수에 인자를 넘겨 호출할 수 있다.
+- &lt;code&gt;$1&lt;/code&gt; ~ &lt;code&gt;$n&lt;/code&gt;은 함수에 넘겨진 인자의 값을 참조
+- &lt;code&gt;$0&lt;/code&gt;은 쉘 함수명이 아닌 프로그램명을 참조
+- 쉘 함수명 참조: &lt;code&gt;$FUNCNAME&lt;/code&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;section-51&quot;&gt;위치 매개변수 전체 전달&lt;/h4&gt;
+
+&lt;p&gt;네 가지 방법이 있다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;$*&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;$@&lt;/code&gt;: i번째 매개변수가 &lt;code&gt;$i&lt;/code&gt;로 각각 바인딩된다. 이걸 써라.&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;&quot;$*&quot;&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;&quot;$@&quot;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-52&quot;&gt;변수 확장&lt;/h3&gt;
+
+&lt;h4 id=&quot;section-53&quot;&gt;기본&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;구문&lt;/th&gt;
+      &lt;th&gt;예&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;$v&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;$foo&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;v&lt;/code&gt;의 값&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;${v}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;${foo}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;v&lt;/code&gt;의 값&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;$n&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;$1&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;n번째 매개변수의 값&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;${n}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;${32}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;n번째 매개변수의 값&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h4 id=&quot;section-54&quot;&gt;빈 변수 관련&lt;/h4&gt;
+
+&lt;p&gt;변수가 비었는지 아닌지에 따라 처리&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;구문&lt;/th&gt;
+      &lt;th&gt;&lt;code&gt;$v&lt;/code&gt; empty&lt;/th&gt;
+      &lt;th&gt;&lt;code&gt;$v&lt;/code&gt; value&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;{$v:-word}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;$v&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;word&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;v&lt;/code&gt;의 값이 없으면 &lt;code&gt;word&lt;/code&gt; 반환&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;{$v:+word}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;word&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;v&lt;/code&gt;의 값이 있으면 &lt;code&gt;word&lt;/code&gt; 반환&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;{$v:=word}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;$v&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;$v=word; word&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;v&lt;/code&gt;의 값이 없으면 &lt;code&gt;word&lt;/code&gt; 대입하고 반환&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;{$v:?error-msg}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;error-msg&lt;/code&gt;, error&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;$v&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;v&lt;/code&gt;의 값이 없으면 오류, &lt;code&gt;error-msg&lt;/code&gt; 출력&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h4 id=&quot;section-55&quot;&gt;변수명으로 확장&lt;/h4&gt;
+
+&lt;p&gt;변수명을 조사, 반환하는 확장&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;구문&lt;/th&gt;
+      &lt;th&gt;예&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;${!prefix*}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;${!BASH*}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;이름이 &lt;code&gt;prefix&lt;/code&gt;로 시작하는 모든 변수&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;${!prefix@}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;${!BASH@}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;이름이 &lt;code&gt;prefix&lt;/code&gt;로 시작하는 모든 변수&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;위의 두 구문은 동일하게 동작한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;section-56&quot;&gt;문자열 연산&lt;/h4&gt;
+
+&lt;p&gt;변수에 저장된 문자열을 조작&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;구문&lt;/th&gt;
+      &lt;th&gt;예&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;${#v}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;${#HOME}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;문자열 &lt;code&gt;$v&lt;/code&gt;의 길이&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;${v:offset}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;${HOME:6}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;문자열 &lt;code&gt;$v&lt;/code&gt;의 &lt;code&gt;offset&lt;/code&gt; 이후 추출&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;${v:offset:length}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;${HOME:6:3}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;문자열 &lt;code&gt;$v&lt;/code&gt;의 &lt;code&gt;offset&lt;/code&gt; 이후부터 &lt;code&gt;length&lt;/code&gt; 길이 추출&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;${v#pattern}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;${HOME#*/}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;문자열 &lt;code&gt;$v&lt;/code&gt;의 &lt;code&gt;pattern&lt;/code&gt; 패턴 이후 추출 (게으름 모드)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;${v##pattern}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;${HOME##*/}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;문자열 &lt;code&gt;$v&lt;/code&gt;의 &lt;code&gt;pattern&lt;/code&gt; 패턴 이후 추출 (탐욕 모드)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;${v%pattern}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;${HOME%/*}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;문자열 &lt;code&gt;$v&lt;/code&gt;의 &lt;code&gt;pattern&lt;/code&gt; 패턴 이전 추출 (게으름 모드)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;${v%%pattern}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;${HOME%%/*}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;문자열 &lt;code&gt;$v&lt;/code&gt;의 &lt;code&gt;pattern&lt;/code&gt; 패턴 이전 추출 (탐욕 모드)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;${v/pattern/s}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;${HOME/home/u}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;문자열 &lt;code&gt;$v&lt;/code&gt;의 첫번째 &lt;code&gt;pattern&lt;/code&gt; 일치 항목을 &lt;code&gt;s&lt;/code&gt;로 치환&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;${v//pattern/s}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;${HOME/home/u}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;문자열 &lt;code&gt;$v&lt;/code&gt;의 모든 &lt;code&gt;pattern&lt;/code&gt; 일치 항목을 &lt;code&gt;s&lt;/code&gt;로 치환&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;${v/#pattern/s}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;${HOME/#\/home/\~}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;문자열 &lt;code&gt;$v&lt;/code&gt;의 시작점의 &lt;code&gt;pattern&lt;/code&gt; 일치 항목을 &lt;code&gt;s&lt;/code&gt;로 치환&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;${v/%pattern/s}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;${HOME/%foo\bar}&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;문자열 &lt;code&gt;$v&lt;/code&gt;의 종료점의 &lt;code&gt;pattern&lt;/code&gt; 일치 항목을 &lt;code&gt;s&lt;/code&gt;로 치환&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;${v:offset}&lt;/code&gt;, &lt;code&gt;${v:offset:length}&lt;/code&gt;에서 &lt;code&gt;offset&lt;/code&gt;이 음수이면, 문자열의 뒤에서부터 시작한다. 이 떄, &lt;code&gt;offset&lt;/code&gt; 앞에 빈칸을 한 칸 두어야 한다.&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;${v/pattern/s}&lt;/code&gt;, &lt;code&gt;${v//pattern/s}&lt;/code&gt;, &lt;code&gt;${v/#pattern/s}&lt;/code&gt;, &lt;code&gt;${v/%pattern/s}&lt;/code&gt;에서 &lt;code&gt;s&lt;/code&gt;를 생략하면, 해당 &lt;code&gt;pattern&lt;/code&gt; 일치 항목을 삭제한다.&lt;/li&gt;
+  &lt;li&gt;문자열 조작 확장은 &lt;code&gt;sed&lt;/code&gt;, &lt;code&gt;cut&lt;/code&gt; 등의 외부 프로그램보다 처리성능이 좋다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-57&quot;&gt;산술 연산 확장&lt;/h3&gt;
+
+&lt;p&gt;아래 구문에 표현식을 넣어 확장한다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$((expression))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;section-58&quot;&gt;기수&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;표현&lt;/th&gt;
+      &lt;th&gt;예&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;n&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;99&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;10진법 표현&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;0n&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;0777&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;8진법 표현&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;0xn&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;0xff&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;16진법 표현&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;base#n&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;2#1111&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;base&lt;/code&gt;진법 표현&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h4 id=&quot;section-59&quot;&gt;단항 연산자&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;연산자&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;+&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;덧셈&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;-&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;뺄셈&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;*&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;곱셈&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;/&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;정수 나눗셈&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;**&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;거듭제곱&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;%&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;나머지&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h4 id=&quot;section-60&quot;&gt;대입&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;연산자&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;v = value&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;p&lt;/code&gt;에 &lt;code&gt;v&lt;/code&gt;대입. &lt;code&gt;[[ a = b ]]&lt;/code&gt; 와 혼동 주의&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;v += value&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;덧셈 대입&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;v -= value&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;뺄셈 대입&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;v *= value&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;곱셈 대입&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;v /= value&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;나눗셈 대입&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;v++&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;후치 증가&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;v--&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;후치 감소&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;++v&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;전치 증가&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;--v&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;전치 감소&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h4 id=&quot;section-61&quot;&gt;비트 연산&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;연산자&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;~&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;비트 NOT. 모든 비트에 부정 연산&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;&amp;lt;&amp;lt;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;비트 시프트. 모든 비트를 좌로 이동&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;&amp;gt;&amp;gt;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;비트 시프트. 모든 비트를 우로 이동&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;&amp;amp;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;비트 AND. 둘 모두가 참&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;|&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;비트 OR. 둘 중 하나 이상이 참&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;^&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;비트 XOR. 둘 중 하나만 참&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;~&lt;/code&gt;을 제외한 모든 비트 연산은 그에 상응하는 대입 연산자가 있음. (예: &lt;code&gt;&amp;lt;&amp;lt;=&lt;/code&gt;, &lt;code&gt;&amp;amp;=&lt;/code&gt; 등)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;section-62&quot;&gt;산술 논리 연산&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;연산자&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;&amp;lt;=&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;보다 작거나 같다&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;&amp;gt;=&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;보다 크거나 같다&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;&amp;lt;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;보다 작다&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;&amp;gt;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;보다 크다&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;==&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;같다&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;!=&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;다르다&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;&amp;amp;&amp;amp;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;논리 AND&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;||&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;논리 OR&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;c? a:b&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;c&lt;/code&gt;가 참이면 &lt;code&gt;a&lt;/code&gt;, 거짓이면 &lt;code&gt;b&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;산술 논리식에서는 0은 거짓, 다른 수는 참이다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-63&quot;&gt;기타 확장&lt;/h3&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;표현&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;$$&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;프로세스 ID (PID)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;$!&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;마지막으로 백그라운드에 실행된 작업의 PID&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;$RANDOM&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;1 ~ 32767 사이의 난수&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;bash-&quot;&gt;bash 배열&lt;/h3&gt;
+
+&lt;h4 id=&quot;section-64&quot;&gt;배열 도움말 보기&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;$ man bash -g Arrays
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;section-65&quot;&gt;배열 생성&lt;/h4&gt;
+
+&lt;p&gt;배열 첨자 사용, 대입시 생성&lt;/p&gt;
+
+&lt;p&gt;예)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;foo[1]=bar
+echo ${foo[1]}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;declare -a&lt;/code&gt;로도 생성 가능&lt;/p&gt;
+
+&lt;p&gt;예)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;declare -a foo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;section-66&quot;&gt;배열에 값 할당&lt;/h4&gt;
+
+&lt;p&gt;단일 값 할당&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;name[subscript]=value
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;복수 값 할당&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;name=( value1 value2 ... )
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;첨자 사용 할당&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nane=([i1]=value1 [i2]=value2 ...)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;section-67&quot;&gt;배열 연산&lt;/h4&gt;
+
+&lt;h5 id=&quot;section-68&quot;&gt;모든 내용 출력&lt;/h5&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;첨자 &lt;code&gt;*&lt;/code&gt;: 배열의 전체 내용을 한 행의 문자열로 반환&lt;/li&gt;
+  &lt;li&gt;첨자 &lt;code&gt;@&lt;/code&gt;: 배열의 전체 내용을 각각의 행의 문자열로 반환 (추천)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;예)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;arr=(&quot;a cat&quot; &quot;a dog&quot; &quot;a tiger&quot;)
+for e in ${arr[*]}; do
+  echo $e
+done
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h5 id=&quot;section-69&quot;&gt;배열 원소 수 확인&lt;/h5&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;${#arr[*]}&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;${#arr[@]}&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5 id=&quot;section-70&quot;&gt;배열에 할당된 첨자 검색&lt;/h5&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;${!array[*]}&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;${!array[@]}&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5 id=&quot;section-71&quot;&gt;배열 끝에 원소 추가&lt;/h5&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;+=&lt;/code&gt; 할당 연산자를 배열에 사용&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;예)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;arr=(a b c)
+arr+=(d e f)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h5 id=&quot;section-72&quot;&gt;배열 정렬&lt;/h5&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;bash는 지원 안함. 직접 구현할 것.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;예)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;arr=(e f a c b d)
+sorted_arr=($(for e in &quot;${arr[@]}&quot;; do echo $e; done | sort))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h5 id=&quot;section-73&quot;&gt;배열 삭제&lt;/h5&gt;
+
+&lt;p&gt;&lt;code&gt;unset&lt;/code&gt; 사용.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;배열 전체 삭제: &lt;code&gt;unset arr&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;배열 원소 삭제: &lt;code&gt;unset arr[subscript]&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-74&quot;&gt;그룹 명령과 서브쉘&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;그룹 명령: &lt;code&gt;{ command1; command2; [ command3; ...] }&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;서브쉘: &lt;code&gt;(command1; command2; [ command3;...])&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;그룹 명령은 현재 쉘에서, 서브쉘은 자식 쉘에서 실행됨. 따라서 그룹 명령이 선호됨.&lt;/p&gt;
+
+&lt;p&gt;주로 리다이렉션을 조절하기 위해 사용됨.&lt;/p&gt;
+
+&lt;p&gt;예)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{ ls -al; ps -ef; } &amp;gt; output1.txt
+(ls -al; ps -ef) &amp;gt; output2.txt
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;section-75&quot;&gt;프로세스 치환&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;표준 출력 생성 프로세스: &lt;code&gt;&amp;lt;(command_list)&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;표준 입력 생성 프로세스: &lt;code&gt;&amp;gt;(command_list)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;예)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;read &amp;lt; &amp;lt;(echo &quot;foo&quot;)
+echo $REPLY
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;section-76&quot;&gt;트랩&lt;/h3&gt;
+
+&lt;p&gt;시그널 처리 등록&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;trap command signal [signal...]&lt;/code&gt;: &lt;code&gt;signal&lt;/code&gt; 신호를 받았을 때 &lt;code&gt;command&lt;/code&gt;를 실행하도록 등록.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-77&quot;&gt;임시 파일&lt;/h3&gt;
+
+&lt;p&gt;위치&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;기본적으로 &lt;code&gt;/tep&lt;/code&gt; 디렉토리에 생성.&lt;/li&gt;
+  &lt;li&gt;일반 사용자 실행 스크립트의 경우 &lt;code&gt;/tmp&lt;/code&gt; 디렉토리보다 &lt;code&gt;$Home/tmp&lt;/code&gt; 추천.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;예) $HOME/tmp가 없으면 생성.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[[ -d $HOME/tmp ]] || mkdir $HOME/tmp
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;temp race attack을 방지하려면, 예측할 수 없는 이름을 만들어야 함.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;temp=/tmp/$(basename $0).$$.$RANDOM&lt;/code&gt;: /tmp/프로그램명.PID.난수로 생성. 안전성 불충분.&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;temp=$(mktemp /tmp/$(basename $0).$$.XXXXXXXX)&lt;/code&gt;: &lt;code&gt;mktemp&lt;/code&gt; 프로그램 이용. &lt;code&gt;X&lt;/code&gt;의 개수만큼 랜덤 문자 추가.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-78&quot;&gt;비동기 실행&lt;/h3&gt;
+
+&lt;h4 id=&quot;wait&quot;&gt;wait&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;wait pid
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;비동기 실행중인 프로세스가 종료될 때까지 대기함.&lt;/p&gt;
+
+&lt;p&gt;예)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;async-child-process &amp;amp;
+pid=$!
+wait $pid
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;$!&lt;/code&gt;: 마지막으로 백그라운드에 진입한 프로세스 ID&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-79&quot;&gt;네임드 파이프&lt;/h3&gt;
+
+&lt;p&gt;프로스세간 통신 수단&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;네임드 파이프 생성: &lt;code&gt;mkfifo named_pipe&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;보내기: &lt;code&gt;sending_process &amp;gt; named_pipe&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;받기: &lt;code&gt;recieving_process &amp;lt; named_pipe&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;예)&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;터미널 1:&lt;/p&gt;
+
+    &lt;p&gt;mkfifo pipe1
+  ls -l &amp;gt; pipe1&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;터미널 2:&lt;/p&gt;
+
+    &lt;p&gt;cat &amp;lt; pipe1&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-80&quot;&gt;디버깅&lt;/h3&gt;
+
+&lt;h4 id=&quot;section-81&quot;&gt;에러 출력&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;echo &quot;error&quot; &amp;gt;&amp;amp;2 # DEBUG
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;tracing&quot;&gt;트레이싱 (tracing)&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code&gt;/bin/bash -x&lt;/code&gt;: &lt;code&gt;bash&lt;/code&gt;에 &lt;code&gt;-x-&lt;/code&gt; 옵션을 주어 트레이싱&lt;/p&gt;
+
+    &lt;p&gt;#!/bin/bash -x
+  …&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code&gt;set -x&lt;/code&gt; ~ &lt;code&gt;set +x&lt;/code&gt;: 선택 영역 트레이싱&lt;/p&gt;
+
+    &lt;p&gt;#!/bin/bash
+  …
+  set -x # turn on tracing
+  …
+  set +x # turn off tracing&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-82&quot;&gt;기타&lt;/h2&gt;
+
+&lt;h3 id=&quot;date&quot;&gt;date&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;date +&quot;format&quot;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;section-83&quot;&gt;자주 쓰는 포맷&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;포맷&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;%F&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;날짜, YYYY-MM-DD&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;%T&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;시각, HH:MM:SS&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;%R&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;시각, HH:MM&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;%H&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;시, 00 ~ 23&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;%I&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;시, 00 ~ 12&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;%M&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;분, 00 ~ 59&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;%S&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;초, 00 ~ 60&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;%N&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;나노초&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;%Z&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;시간 구역 약어&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;%a&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;요일 약어&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code&gt;%A&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;요일&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+</description>
+        <pubDate>Mon, 19 May 2014 12:48:00 +0900</pubDate>
+        <link>http://bakyeono.net/post/2014-05-19-linux-shell-study-note.html</link>
+        <guid isPermaLink="true">http://bakyeono.net/post/2014-05-19-linux-shell-study-note.html</guid>
+        
+        <category>linux</category>
+        
+        <category>bash</category>
+        
+        
+      </item>
+    
+  </channel>
+</rss>
