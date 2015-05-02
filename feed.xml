@@ -5,8 +5,8 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 02 May 2015 20:23:08 +0900</pubDate>
-    <lastBuildDate>Sat, 02 May 2015 20:23:08 +0900</lastBuildDate>
+    <pubDate>Sat, 02 May 2015 20:26:52 +0900</pubDate>
+    <lastBuildDate>Sat, 02 May 2015 20:26:52 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -36,6 +36,7 @@
 &lt;p&gt;코너 케이스는 오류가 발생하는 상황을 재현하기가 쉽지 않아 디버그와 테스트가 어렵다.&lt;/p&gt;
 
 </description>
+        <author>박연오</author>
         <pubDate>Sat, 02 May 2015 19:13:00 +0900</pubDate>
         <link>http://bakyeono.net/post/2015-05-02-edge-case-corner-case.html</link>
         <guid isPermaLink="true">http://bakyeono.net/post/2015-05-02-edge-case-corner-case.html</guid>
