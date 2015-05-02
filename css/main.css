@@ -351,6 +351,14 @@ th, td {
     padding-right: 20px; }
 
 /**
+ * Footnotes
+ */
+.footnotes {
+  font-size: 14px;
+  border-top: solid 1px #aaa;
+  margin-top: 32px; }
+
+/**
  * Copyright
  */
 .copyright {
