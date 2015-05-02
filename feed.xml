@@ -5,41 +5,28 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 02 May 2015 17:33:52 +0900</pubDate>
-    <lastBuildDate>Sat, 02 May 2015 17:33:52 +0900</lastBuildDate>
+    <pubDate>Sat, 02 May 2015 19:42:33 +0900</pubDate>
+    <lastBuildDate>Sat, 02 May 2015 19:42:33 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
-        <title>《건강한 프로그래머》 서평</title>
-        <description>&lt;p&gt;부산대학교에 놀러갔다가 서점 구석에서 &lt;a href=&quot;http://freelec.co.kr/book/catalogue_view.asp?UID=155&quot;&gt;《건강한 프로그래머》&lt;/a&gt;라는 책을 발견했다. 형용모순처럼 보이는 제목이지만 저자는 그렇기 때문에 프로그래머들이 더 건강에 신경을 써야한다고 말하는 듯하다.&lt;/p&gt;
+        <title>엣지 케이스(edge case)와 코너 케이스(corner case)</title>
+        <description>&lt;p&gt;책을 보다 헷갈려서 위키백과에서 찾아보고 의미를 구분했다.&lt;/p&gt;
 
-&lt;p&gt;‘건강 부트스트랩’, ‘애자일 다이어트’, ‘체력 리팩토링’ 같은 프로그래머들에게 친숙한(?) 용어를 쓰며 건강관리 방법을 설명하는 책이다.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://en.wikipedia.org/wiki/Edge_case&quot;&gt;엣지 케이스(edge case)&lt;/a&gt;와 &lt;a href=&quot;http://en.wikipedia.org/wiki/Corner_case&quot;&gt;코너 케이스(corner case)&lt;/a&gt;는 프로그래밍, 디버깅, 단위 테스트 등에서 사용되는 비슷하지만 다른 용어다.&lt;/p&gt;
 
-&lt;p&gt;나는 눈 아픔과 두통을 지병으로 갖고 있고&lt;sup id=&quot;fnref:eye-headache&quot;&gt;&lt;a href=&quot;#fn:eye-headache&quot; class=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt; 손목 통증, 그리고 뱃살(…)에도 관심이 있는데 이 책은 그런 내용들도 다루고 있다.&lt;/p&gt;
+&lt;p&gt;엣지 케이스란 특정한 데이터의 값이 일정한 양을 넘을 경우 발생하는 문제를 가리킨다. 예를 들면 fixnum이라는 변수의 값이 -128 ~ 127의 범위를 넘는 순간 문제가 발생하는 경우가 있을 수 있다. 따라서 엣지 케이스는 알고리즘의 특성에 따라 개발자가 면밀히 검토하여 예상할 수 있는 문제다. 이런 문제는 디버그가 쉽기도 하고 테스트를 통해 미리 방지하기도 쉽다. 비슷한 상황을 가리키는 용어로 &lt;a href=&quot;http://en.wikipedia.org/wiki/Boundary_case&quot;&gt;경계 케이스(boundary case)&lt;/a&gt;가 있다.&lt;/p&gt;
 
-&lt;p&gt;이 책은 프로그래머들이 할 수 있는 수준의 실천을 강조한다. 무리한 운동이나 다이어트는 시키지 않는다. 그리고 프로그래머들이 머리로 받아들이지 않으면 몸이 움직이지 않을 거라는 걸 아는듯, 각 운동방법이나 건강 지식에 관한 근거와 논문들을 매번 밝히고 있다. 효과가 검증되지 않은 것은 효과가 검증되지 않았다고 말한다.&lt;/p&gt;
+&lt;p&gt;코너 케이스는 여러 가지 변수와 환경의 복합적인 상호작용으로 발생하는 문제다. 예를 들어 fixnum이라는 변수의 값으로 128이 입력되었을 때 A 기계에서 테스트했을 때는 정상작동하지만 B기계에서는 오류가 발생한다면 코너 케이스라고 할 수 있다. 같은 장치에서라도 시간이나 다른 환경에 따라 오류가 발생하기도 하고 정상작동 하기도 한다면 이것도 코너 케이스다. 특히 멀티코어 프로그래밍에서 만나기 쉬운 오류일 것이다. 코너 케이스는 오류가 발생하는 상황을 재현하기가 쉽지 않아 디버그와 테스트가 어렵다.&lt;/p&gt;
 
-&lt;p&gt;저자는 건강관리를 체계적으로 꾸준히 실천할 것을 권한다. 책의 초반부부터 건강관리를 위해 매일·2주마다 점검할 체크리스트, 건강을 위해 한 일에 관한 평가와 계획 등을 제시한다. 각 장마다 실천 체크리스트 항목이 늘어난다. 그 중에는 바로 할 수 있는 간단한 것, 계속 신경써서 고쳐야 할 자세, 힘든 근력 운동과 지구력 운동, 돈이 꽤 드는 것 등 다양하다. 지속적인 실천과 평가를 위해 건강 로그를 쓰고 그것을 온라인에 공개하라고 조언한다. 온라인 공개는 효과는 있겠지만 사생활·개인정보 노출 우려가 있어서 좀 심하다고 생각된다. 독자가 알아서 판단할 일이다.&lt;/p&gt;
-
-&lt;p&gt;식단 관리·운동·습관 개선 같은 주관적인 실천만이 아니라 주변환경을 개선하는 것도 필요하다고 한다. 책상과 의자의 높이, 서서 일할 때와 앉아서 일할 때의 장단점과 절충안, 모니터와 작업실의 밝기를 조절하라는 것 등이 나온다. 높이 조절 가능한 책상·의자 또는 입식 책상과 제도의자·스툴은 괜찮아 보이지만 국내에서 구입하기가 만만치는 않아 보였다. 인터넷으로 찾아보니 종류가 많지 않고 너무 비싸다.&lt;/p&gt;
-
-&lt;p&gt;프로그램이 잘 풀리지 않을 때 달리기 운동을 하거나 샤워를 하면 도움이 된다는 조언도 있던데 맞는 말이다.&lt;/p&gt;
-
-&lt;p&gt;책을 읽은 지 두 달이 지났다. 큰 변화는 없다. 책에서 시킨 것 중에 몇 가지는 하루 이틀정도 하다 말았지만 몇 가지는 비교적 꾸준히 하고 있다. 매달 2일마다 보건소에 가서 인바디검사를 하고 있고 저녁시간과 쉬는 날에 걷기/달리기 운동도 조금씩 하고 있다. 나로서는 이 정도만 해도 큰 발전이다.&lt;/p&gt;
-
-&lt;div class=&quot;footnotes&quot;&gt;
-  &lt;ol&gt;
-    &lt;li id=&quot;fn:eye-headache&quot;&gt;
-      &lt;p&gt;눈과 두통은 연관돼 있다고 한다. &lt;a href=&quot;#fnref:eye-headache&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
-    &lt;/li&gt;
-  &lt;/ol&gt;
-&lt;/div&gt;
 </description>
-        <pubDate>Sat, 02 May 2015 15:10:00 +0900</pubDate>
-        <link>http://bakyeono.net/post/2015-05-02-healthy-programmer-book-review.html</link>
-        <guid isPermaLink="true">http://bakyeono.net/post/2015-05-02-healthy-programmer-book-review.html</guid>
+        <pubDate>Sat, 02 May 2015 19:13:00 +0900</pubDate>
+        <link>http://bakyeono.net/post/2015-05-02-edge-case-corner-case.html</link>
+        <guid isPermaLink="true">http://bakyeono.net/post/2015-05-02-edge-case-corner-case.html</guid>
         
-        <category>book-review</category>
+        <category>terminology</category>
+        
+        <category>debug</category>
         
         
       </item>
