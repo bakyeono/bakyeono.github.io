@@ -5,21 +5,21 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 02 May 2015 20:30:44 +0900</pubDate>
-    <lastBuildDate>Sat, 02 May 2015 20:30:44 +0900</lastBuildDate>
+    <pubDate>Sun, 03 May 2015 12:04:07 +0900</pubDate>
+    <lastBuildDate>Sun, 03 May 2015 12:04:07 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
         <title>엣지 케이스(edge case)와 코너 케이스(corner case)</title>
-        <description>&lt;p&gt;책을 보다 헷갈려서 위키백과에서 찾아보고 의미를 구분했다.&lt;/p&gt;
+        <description>&lt;p&gt;&lt;a href=&quot;http://en.wikipedia.org/wiki/Edge_case&quot;&gt;엣지 케이스(edge case)&lt;/a&gt;와 &lt;a href=&quot;http://en.wikipedia.org/wiki/Corner_case&quot;&gt;코너 케이스(corner case)&lt;/a&gt;는 프로그래밍, 디버깅, 단위 테스트 등에서 사용되는 비슷하지만 다른 용어다.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;http://en.wikipedia.org/wiki/Edge_case&quot;&gt;엣지 케이스(edge case)&lt;/a&gt;와 &lt;a href=&quot;http://en.wikipedia.org/wiki/Corner_case&quot;&gt;코너 케이스(corner case)&lt;/a&gt;는 프로그래밍, 디버깅, 단위 테스트 등에서 사용되는 비슷하지만 다른 용어다.&lt;/p&gt;
+&lt;p&gt;책을 보다 헷갈려서 위키백과에서 찾아보고 의미를 구분해 봤다.&lt;/p&gt;
 
 &lt;h2 id=&quot;section&quot;&gt;엣지 케이스&lt;/h2&gt;
 
-&lt;p&gt;엣지 케이스란 특정한 데이터의 값이 일정한 양을 넘을 경우 발생하는 문제를 가리킨다.&lt;/p&gt;
+&lt;p&gt;엣지 케이스란 알고리즘이 처리하는 데이터의 값이 알고리즘의 특성에 따른 일정한 범위를 넘을 경우에 발생하는 문제를 가리킨다.&lt;/p&gt;
 
-&lt;p&gt;예를 들면 fixnum이라는 변수의 값이 -128 ~ 127의 범위를 넘는 순간 문제가 발생하는 경우가 있을 수 있다.&lt;/p&gt;
+&lt;p&gt;예를 들면 fixnum이라는 변수의 값이 -128 ~ 127의 범위를 넘는 순간 문제가 발생하는 경우가 있을 수 있다. 꼭 범위에 관한 문제로 한정하는 것이 아니라 데이터의 특정값에 대해 발생하는 문제를 일반적으로 표현할 수 있다면 그것도 엣지 케이스라고 봐야 할 것 같다. 어떤 알고리즘에서 숫자를 나누는 부분이 있다면 분모가 0이 되는 상황이 엣지 케이스인 것이다.&lt;/p&gt;
 
 &lt;p&gt;엣지 케이스는 알고리즘의 특성에 따라 개발자가 면밀히 검토하여 예상할 수 있는 문제다. 이런 문제는 디버그가 쉽기도 하고 테스트를 통해 미리 방지하기도 쉽다.&lt;/p&gt;
 
