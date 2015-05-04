@@ -5,8 +5,8 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 03 May 2015 14:36:10 +0900</pubDate>
-    <lastBuildDate>Sun, 03 May 2015 14:36:10 +0900</lastBuildDate>
+    <pubDate>Mon, 04 May 2015 23:19:12 +0900</pubDate>
+    <lastBuildDate>Mon, 04 May 2015 23:19:12 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -41,9 +41,7 @@
         <link>http://bakyeono.net/post/2015-05-02-edge-case-corner-case.html</link>
         <guid isPermaLink="true">http://bakyeono.net/post/2015-05-02-edge-case-corner-case.html</guid>
         
-        <category>terminology</category>
-        
-        <category>debug</category>
+        <category>용어</category>
         
         
       </item>
