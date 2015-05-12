@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>한글 | 박연오</title>
-  <meta name="description" content="Workers of the world, unite!">
+  <title>ncurses 라이브러리에서 한글(utf-8) 출력하기 | 박연오</title>
+  <meta name="description" content="">
   <link rel="stylesheet" href="/css/main.css" />
-  <link rel="canonical" href="http://bakyeono.net/tag/%ED%95%9C%EA%B8%80.html" />
+  <link rel="canonical" href="http://bakyeono.net/post/2015-05-12-ncurses-korean-utf-8.html" />
   <link rel="alternate" type="application/rss+xml" title="박연오" href="http://bakyeono.net/feed.xml" />
   <script type="text/javascript" src="/lib/jquery/jquery-1.11.2.min.js"></script>
   <script type="text/javascript">
@@ -41,23 +41,77 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="tag">
-  <h1 class="page-heading">태그: 한글</h1>
-  
-    <ul class="post-list">
-      
-        <li>
-          <span class="post-meta">2015-05-12</span>
-          <h2><a class="post-link" href="/post/2015-05-12-ncurses-korean-utf-8.html">ncurses 라이브러리에서 한글(utf-8) 출력하기</a></h2>
-        </li>
-      
-        <li>
-          <span class="post-meta">2013-12-03</span>
-          <h2><a class="post-link" href="/post/2013-12-03-clojure-hangul-bitmap-font.html">한글 비트맵 폰트 출력</a></h2>
-        </li>
-      
+        
+<div class="post">
+  <header class="post-header">
+    <h1 class="post-title">ncurses 라이브러리에서 한글(utf-8) 출력하기</h1>
+    <p class="post-meta">
+      <span class="post-date">2015-05-12</span>
+       • <span class="post-author">박연오(bakyeono@gmail.com)</span>
+       • <span class="post-tags">태그: <a class="post-tag" href="/tag/c.html">c</a> <a class="post-tag" href="/tag/%EB%A6%AC%EB%88%85%EC%8A%A4.html">리눅스</a> <a class="post-tag" href="/tag/%EC%9C%A0%EB%8B%88%EC%BD%94%EB%93%9C.html">유니코드</a> <a class="post-tag" href="/tag/%ED%95%9C%EA%B8%80.html">한글</a></span>
+    </p>
+  </header>
+  <article>
+    <div class="post-content">
+      <ul id="markdown-toc">
+  <li><a href="#ncurses----" id="markdown-toc-ncurses----">ncurses 라이브러리에서 한글이 깨질 때</a></li>
+  <li><a href="#section" id="markdown-toc-section">유니코드를 지원하는 버전</a>    <ul>
+      <li><a href="#section-1" id="markdown-toc-section-1">설치</a></li>
+      <li><a href="#section-2" id="markdown-toc-section-2">헤더 인클루드</a></li>
+      <li><a href="#section-3" id="markdown-toc-section-3">링크</a></li>
     </ul>
-  
+  </li>
+</ul>
+
+<h2 id="ncurses----">ncurses 라이브러리에서 한글이 깨질 때</h2>
+
+<p>ncurses 라이브러리를 쓸 때, 로케일 설정을 올바로 했는데도 한글이 깨지는 문제가 있다.</p>
+
+<pre><code>#include &lt;locale.h&gt;
+#include &lt;curses.h&gt;
+
+int main() {
+  setlocale(LC_CTYPE, "ko_KR.utf-8"); /* 로케일 설정을 했는데도 */
+  initscr();
+  printw("%s", "ABCDEFGHIJKLMNOPQRSTUVWXYZ\n");
+  printw("%s", "가나다라마바사아자차카타파하\n");
+  refresh();
+  sleep(1);
+  endwin();
+  return 0;
+}
+</code></pre>
+
+<p>이 코드를 컴파일해 실행하면 한글이 깨져서 출력된다. ncurses 라이브러리가 유니코드를 지원하지 않기 떄문이다.</p>
+
+<h2 id="section">유니코드를 지원하는 버전</h2>
+
+<p>ncurses 라이브러리 배포판 중에 데비안 패키지인 <code>libncurses5-dev</code>는 유니코드를 지원하지 않는다. 한글을 제대로 출력하려면 유니코드를 지원하는 버전인 <code>libncursesw5-dev</code>를 사용해야 한다.</p>
+
+<h3 id="section-1">설치</h3>
+
+<pre><code>$ sudo apt-get install libncursesw5-dev
+</code></pre>
+
+<h3 id="section-2">헤더 인클루드</h3>
+
+<p><code>ncurses.h</code> 대신 <code>ncursesw/curses.h</code>를 인클루드해야 한다. 위 예제 코드의 경우 두 번째 줄을 아래와 같이 고친다.</p>
+
+<pre><code>#include &lt;ncursesw/curses.h&gt;
+</code></pre>
+
+<h3 id="section-3">링크</h3>
+
+<p><code>-lncurses</code> 대신 <code>-lncursesw</code> 옵션으로 링크하면 된다.</p>
+
+<pre><code>$gcc SOURCE.c -o APP -lncursesw
+</code></pre>
+
+<p>결과물을 실행해 보면 이제 ncurses에서 한글이 잘 출력된다는 것을 알 수 있다.</p>
+
+
+    </div>
+  </article>
 </div>
 
       </div>
