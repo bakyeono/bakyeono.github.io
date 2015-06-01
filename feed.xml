@@ -5,85 +5,183 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 12 May 2015 21:35:44 +0900</pubDate>
-    <lastBuildDate>Tue, 12 May 2015 21:35:44 +0900</lastBuildDate>
+    <pubDate>Mon, 01 Jun 2015 11:13:49 +0900</pubDate>
+    <lastBuildDate>Mon, 01 Jun 2015 11:13:49 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
-        <title>ncurses 라이브러리에서 한글(utf-8) 출력하기</title>
+        <title>xmllint --xpath 로 XML 문서 파싱하기</title>
         <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#ncurses----&quot; id=&quot;markdown-toc-ncurses----&quot;&gt;ncurses 라이브러리에서 한글이 깨질 때&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;유니코드를 지원하는 버전&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;설치&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;헤더 인클루드&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;링크&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#xmllint-&quot; id=&quot;markdown-toc-xmllint-&quot;&gt;xmllint 사용법&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;설치&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;사용&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#xpath-xml-path-language&quot; id=&quot;markdown-toc-xpath-xml-path-language&quot;&gt;XPath (XML Path Language)&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;몇 가지 기능&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;예제&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;ncurses----&quot;&gt;ncurses 라이브러리에서 한글이 깨질 때&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;libxml2&lt;/code&gt; 패키지에 포함된 &lt;code&gt;xmllint&lt;/code&gt;를 이용하면 리눅스 커맨드라인에서 XML 문서를 쉽게 파싱할 수 있다.&lt;/p&gt;
 
-&lt;p&gt;ncurses 라이브러리를 쓸 때, 로케일 설정을 올바로 했는데도 한글이 깨지는 문제가 있다.&lt;/p&gt;
+&lt;h2 id=&quot;xmllint-&quot;&gt;xmllint 사용법&lt;/h2&gt;
 
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;locale.h&amp;gt;
-#include &amp;lt;curses.h&amp;gt;
+&lt;h3 id=&quot;section&quot;&gt;설치&lt;/h3&gt;
 
-int main() {
-  setlocale(LC_CTYPE, &quot;ko_KR.utf-8&quot;); /* 로케일 설정을 했는데도 */
-  initscr();
-  printw(&quot;%s&quot;, &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ\n&quot;);
-  printw(&quot;%s&quot;, &quot;가나다라마바사아자차카타파하\n&quot;);
-  refresh();
-  sleep(1);
-  endwin();
-  return 0;
-}
+&lt;p&gt;apt&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ sudo apt-get install libxml2-utils
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;이 코드를 컴파일해 실행하면 한글이 깨져서 출력된다. ncurses 라이브러리가 유니코드를 지원하지 않기 떄문이다.&lt;/p&gt;
+&lt;p&gt;yum&lt;/p&gt;
 
-&lt;h2 id=&quot;section&quot;&gt;유니코드를 지원하는 버전&lt;/h2&gt;
-
-&lt;p&gt;ncurses 라이브러리 배포판 중에 데비안 패키지인 &lt;code&gt;libncurses5-dev&lt;/code&gt;는 유니코드를 지원하지 않는다. 한글을 제대로 출력하려면 유니코드를 지원하는 버전인 &lt;code&gt;libncursesw5-dev&lt;/code&gt;를 사용해야 한다.&lt;/p&gt;
-
-&lt;h3 id=&quot;section-1&quot;&gt;설치&lt;/h3&gt;
-
-&lt;p&gt;데비안 기반 배포판인 경우 아래와 같이 설치한다.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ sudo apt-get install libncursesw5-dev
+&lt;pre&gt;&lt;code&gt;$ sudo yum install libxml2
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&quot;section-2&quot;&gt;헤더 인클루드&lt;/h3&gt;
+&lt;h3 id=&quot;section-1&quot;&gt;사용&lt;/h3&gt;
 
-&lt;p&gt;다른 라이브러리를 쓰는 것이므로 &lt;code&gt;curses.h&lt;/code&gt; 대신 &lt;code&gt;ncursesw/curses.h&lt;/code&gt;를 인클루드해야 한다. 위의 예제 코드를 예로 들면 두 번째 줄을 아래와 같이 고쳐야 한다.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;ncursesw/curses.h&amp;gt;
+&lt;pre&gt;&lt;code&gt;$ xmllint --xpath &#39;XPath표현식&#39; 파일경로
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&quot;section-3&quot;&gt;링크&lt;/h3&gt;
+&lt;p&gt;XPath표현식이 무엇인지 모른다면 아래 내용을 읽어보라.&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;-lncurses&lt;/code&gt; 대신 &lt;code&gt;-lncursesw&lt;/code&gt; 옵션으로 링크하면 된다.&lt;/p&gt;
+&lt;h2 id=&quot;xpath-xml-path-language&quot;&gt;XPath (XML Path Language)&lt;/h2&gt;
 
-&lt;pre&gt;&lt;code&gt;$gcc SOURCE.c -o APP -lncursesw
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://ko.wikipedia.org/wiki/XPath&quot;&gt;위키백과의 설명&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.w3.org/TR/xpath&quot;&gt;W3C 공식 문서&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;공식 문서는 조금 복잡하지만 XML 문서에서 필요한 정보를 읽어오는 데는 몇 가지만 알면 된다.&lt;/p&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;몇 가지 기능&lt;/h3&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;기능&lt;/th&gt;
+      &lt;th&gt;표현식 예&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;노드 선택&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;/root/node/node/node&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;노드 바로 선택&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;//node&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;n번째 노드 선택&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;/root/node[n]&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;속성 선택&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;/root/node/@attribute&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;텍스트 읽기&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;/root/node/text()&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;노드 수 세기&lt;/td&gt;
+      &lt;td&gt;&lt;code&gt;count(/root/node)&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;예제&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;breakfast_menu&amp;gt;
+  &amp;lt;food&amp;gt;
+    &amp;lt;name&amp;gt;Belgian Waffles&amp;lt;/name&amp;gt;
+    &amp;lt;price&amp;gt;$5.95&amp;lt;/price&amp;gt;
+    &amp;lt;description&amp;gt;Two of our famous Belgian Waffles with plenty of real maple
+        syrup&amp;lt;/description&amp;gt;
+    &amp;lt;calories&amp;gt;650&amp;lt;/calories&amp;gt;
+  &amp;lt;/food&amp;gt;
+  &amp;lt;food&amp;gt;
+    &amp;lt;name&amp;gt;Strawberry Belgian Waffles&amp;lt;/name&amp;gt;
+    &amp;lt;price&amp;gt;$7.95&amp;lt;/price&amp;gt;
+    &amp;lt;description&amp;gt;Light Belgian waffles covered with strawberries and whipped
+        cream&amp;lt;/description&amp;gt;
+    &amp;lt;calories&amp;gt;900&amp;lt;/calories&amp;gt;
+  &amp;lt;/food&amp;gt;
+  &amp;lt;food&amp;gt;
+    &amp;lt;name&amp;gt;Berry-Berry Belgian Waffles&amp;lt;/name&amp;gt;
+    &amp;lt;price&amp;gt;$8.95&amp;lt;/price&amp;gt;
+    &amp;lt;description&amp;gt;Light Belgian waffles covered with an assortment of fresh
+        berries and whipped cream&amp;lt;/description&amp;gt;
+    &amp;lt;calories&amp;gt;900&amp;lt;/calories&amp;gt;
+  &amp;lt;/food&amp;gt;
+  &amp;lt;!-- 중략 --&amp;gt;
+&amp;lt;/breakfast_menu&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;결과물을 실행해 보면 이제 ncurses에서 한글이 잘 출력된다는 것을 알 수 있다.&lt;/p&gt;
+&lt;p&gt;위 문서는 w3schools.com에 올라와 있는 XML 예제다.(&lt;a href=&quot;http://www.w3schools.com/xml/simple.xml&quot;&gt;출처&lt;/a&gt;) xmllint를 써보기 위해 문서를 다운로드한다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl http://www.w3schools.com/xml/simple.xml &amp;gt; simple.xml
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;다음은 이 문서에서 노드와 데이터를 읽기 위한 XPath 표현식이다.&lt;/p&gt;
+
+&lt;p&gt;모든 food 태그 선택: &lt;code&gt;/breakfast_menu/food&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ xmllint --xpath &#39;/breakfast_menu/food&#39; simple.xml
+&amp;lt;food&amp;gt;
+  &amp;lt;name&amp;gt;Belgian Waffles&amp;lt;/name&amp;gt;
+  &amp;lt;price&amp;gt;$5.95&amp;lt;/price&amp;gt;
+  &amp;lt;description&amp;gt;Two of our famous Belgian Waffles with plenty of real maple
+      syrup&amp;lt;/description&amp;gt;
+  &amp;lt;calories&amp;gt;650&amp;lt;/calories&amp;gt;
+&amp;lt;/food&amp;gt;
+&amp;lt;food&amp;gt;
+  &amp;lt;name&amp;gt;Strawberry Belgian Waffles&amp;lt;/name&amp;gt;
+(중략)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;첫번째 food 태그 선택: &lt;code&gt;/breakfast_menu/food[1]&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ xmllint --xpath &#39;/breakfast_menu/food[1]&#39; simple.xml
+&amp;lt;food&amp;gt;
+  &amp;lt;name&amp;gt;Belgian Waffles&amp;lt;/name&amp;gt;
+  &amp;lt;price&amp;gt;$5.95&amp;lt;/price&amp;gt;
+  &amp;lt;description&amp;gt;Two of our famous Belgian Waffles with plenty of real maple
+      syrup&amp;lt;/description&amp;gt;
+  &amp;lt;calories&amp;gt;650&amp;lt;/calories&amp;gt;
+&amp;lt;/food&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;첫번째 food/price 태그의 텍스트 읽기: &lt;code&gt;/breakfast_menu/food[1]/price/text()&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ xmllint --xpath &#39;/breakfast_menu/food[1]/price/text()&#39; simple.xml
+5.95$
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;food 태그가 몇 개인지 세기: &lt;code&gt;count(/breakfast_menu/food)&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ xmllint --xpath &#39;count(/breakfast_menu/food)&#39; simple.xml
+5
+&lt;/code&gt;&lt;/pre&gt;
 
 </description>
         <author>박연오(bakyeono@gmail.com)</author>
-        <pubDate>Tue, 12 May 2015 21:12:00 +0900</pubDate>
-        <link>http://bakyeono.net/post/2015-05-12-ncurses-korean-utf-8.html</link>
-        <guid isPermaLink="true">http://bakyeono.net/post/2015-05-12-ncurses-korean-utf-8.html</guid>
+        <pubDate>Mon, 01 Jun 2015 10:10:00 +0900</pubDate>
+        <link>http://bakyeono.net/post/2015-06-01-parse-xml-with-xmllint.html</link>
+        <guid isPermaLink="true">http://bakyeono.net/post/2015-06-01-parse-xml-with-xmllint.html</guid>
         
-        <category>c</category>
+        <category>xml</category>
         
-        <category>리눅스</category>
+        <category>xmllint</category>
         
-        <category>유니코드</category>
+        <category>xpath</category>
         
-        <category>한글</category>
+        <category>linux</category>
         
-        <category>curses</category>
+        <category>bash</category>
         
         
       </item>
