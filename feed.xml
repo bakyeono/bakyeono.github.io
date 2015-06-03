@@ -5,183 +5,112 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 01 Jun 2015 15:05:30 +0900</pubDate>
-    <lastBuildDate>Mon, 01 Jun 2015 15:05:30 +0900</lastBuildDate>
+    <pubDate>Wed, 03 Jun 2015 13:03:34 +0900</pubDate>
+    <lastBuildDate>Wed, 03 Jun 2015 13:03:34 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
-        <title>xmllint --xpath 로 XML 문서 탐색하기</title>
+        <title>telegram-cli 여러 세션을 동시에 실행하기</title>
         <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#xmllint--&quot; id=&quot;markdown-toc-xmllint--&quot;&gt;xmllint 초간단 사용법&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;설치&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;사용&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#xpath-xml-path-language&quot; id=&quot;markdown-toc-xpath-xml-path-language&quot;&gt;XPath (XML Path Language)&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;몇 가지 기능&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;예제&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;문제&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;우회법&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;예&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;code&gt;libxml2&lt;/code&gt; 패키지에 포함된 &lt;code&gt;xmllint&lt;/code&gt;를 이용하면 리눅스 커맨드라인에서 XML 문서를 쉽게 탐색할 수 있다.&lt;/p&gt;
+&lt;p&gt;이 글은 커맨드라인 텔레그램 클라이언트인 &lt;a href=&quot;https://github.com/vysheng/tg&quot;&gt;telegram-cli(unofficial)&lt;/a&gt;로 여러 세션을 동시에 실행하는 방법이다.&lt;/p&gt;
 
-&lt;h2 id=&quot;xmllint--&quot;&gt;xmllint 초간단 사용법&lt;/h2&gt;
+&lt;h2 id=&quot;section&quot;&gt;문제&lt;/h2&gt;
 
-&lt;h3 id=&quot;section&quot;&gt;설치&lt;/h3&gt;
+&lt;p&gt;텔레그램은 하나의 인증(authorization)에 하나의 접속만을 허용한다. 같은 인증으로 새로운 세션이 생성되면 기존의 세션은 종료된다. telegram-cli로 자동 스크립트를 실행하는 도중에 직접 메시지를 보내기 위해 telegram-cli를 새로 실행하면 원래 실행되고 있던 스크립트는 멈추게 된다. 스크립트를 여러 개 함께 실행하는 것도 안 된다.&lt;/p&gt;
 
-&lt;p&gt;apt&lt;/p&gt;
+&lt;p&gt;telegram-cli의 &lt;a href=&quot;https://github.com/vysheng/tg/issues/341&quot;&gt;341번 이슈&lt;/a&gt;에 이 문제가 언급돼 있다. 이 이슈 페이지에는 세션마다 다른 프로파일을 지정해서 문제를 해결하라고 한다. 하지만 환경에 따라 안 되는 경우가 있는 것 같다. 나는 프로파일 기능이 잘 작동하지 않아서 다른 방법으로 문제를 해결했다.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;$ sudo apt-get install libxml2-utils
+&lt;h2 id=&quot;section-1&quot;&gt;우회법&lt;/h2&gt;
+
+&lt;p&gt;가장 직관적인 방법은 물리적으로 또는 가상화 기술로 분리된 다른 기계로 telegram-cli를 실행하는 것이다. 하지만 리눅스는 다중 사용자 환경이므로 그렇게까지 할 필요가 없다. 그냥 각 세션마다 별도의 리눅스 사용자 계정을 줘 실행하면 된다.&lt;/p&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;예&lt;/h3&gt;
+
+&lt;p&gt;현재 사용자가 bakyeono라고 할 때, tg-daemon 이라는 사용자를 만들어 telegram-cli 스크립트를 실행한다고 해 보자. 데비안 기반 리눅스를 기준으로 했다.&lt;/p&gt;
+
+&lt;p&gt;먼저 사용자를 만든다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ adduser tg-daemon
+Adding user `tg-daemon&#39; ...
+Adding new group `tg-daemon&#39; (1006) ...
+Adding new user `tg-daemon&#39; (1003) with group `tg-daemon&#39; ...
+Creating home directory `/home/tg-daemon&#39; ...
+Copying files from `/etc/skel&#39; ...
+Enter new UNIX password:
+Retype new UNIX password:
+passwd: password updated successfully
+Changing the user information for tg-daemon
+Enter the new value, or press ENTER for the default
+        Full Name []:
+        Room Number []:
+        Work Phone []:
+        Home Phone []:
+        Other []:
+Is the information correct? [Y/n]
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;yum&lt;/p&gt;
+&lt;p&gt;telegram-cli 바이너리가 &lt;code&gt;/home/bakyeono/telegram-cli&lt;/code&gt;에 있고, 실행할 스크립트는 &lt;code&gt;/home/bakyeono/telegram-cli-script&lt;/code&gt;에 있다고 하자. tg-daemon 사용자 계정으로 접속해 이들에 대한 링크를 걸어 준다. 로그인은 간단히 ssh로 하면 된다.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;$ sudo yum install libxml2
+&lt;pre&gt;&lt;code&gt;$ ssh tg-daemon@localhost
+tg-daemon@localhost&#39;s password:
+Linux antares-pi2 3.18.11-v7+ #781 SMP PREEMPT Tue Apr 21 18:07:59 BST 2015 armv7l
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Wed Jun  3 10:53:34 2015 from localhost
+
+$ ln -s /home/bakyeono/telegram-cli
+$ ln -s /home/bakyeono/telegram-cli-script
+$ logout
+Connection to localhost closed.
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&quot;section-1&quot;&gt;사용&lt;/h3&gt;
+&lt;p&gt;tg-daemon 사용자가 이 경로들에 접근할 수 있도록 이 경로의 소속 그룹(bakyeono)에 포함시킨다.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;$ xmllint --xpath &#39;XPath표현식&#39; 파일경로
+&lt;pre&gt;&lt;code&gt;$ sudo addgroup tg-daemon bakyeono
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;XPath표현식이 무엇인지 모른다면 아래 내용을 읽어보라.&lt;/p&gt;
+&lt;p&gt;같은 그룹 구성원이 작업을 할 수도록 권한을 주는 것도 잊지 말자.&lt;/p&gt;
 
-&lt;h2 id=&quot;xpath-xml-path-language&quot;&gt;XPath (XML Path Language)&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://ko.wikipedia.org/wiki/XPath&quot;&gt;위키백과의 설명&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.w3.org/TR/xpath&quot;&gt;W3C 공식 문서&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;공식 문서는 조금 복잡하지만 XML 문서에서 필요한 정보를 읽어오는 데는 몇 가지만 알면 된다.&lt;/p&gt;
-
-&lt;h3 id=&quot;section-2&quot;&gt;몇 가지 기능&lt;/h3&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;기능&lt;/th&gt;
-      &lt;th&gt;표현식 예&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;노드 선택&lt;/td&gt;
-      &lt;td&gt;&lt;code&gt;/root/node/node/node&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;노드 바로 선택&lt;/td&gt;
-      &lt;td&gt;&lt;code&gt;//node&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;n번째 노드 선택&lt;/td&gt;
-      &lt;td&gt;&lt;code&gt;/root/node[n]&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;속성 선택&lt;/td&gt;
-      &lt;td&gt;&lt;code&gt;/root/node/@attribute&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;텍스트 읽기&lt;/td&gt;
-      &lt;td&gt;&lt;code&gt;/root/node/text()&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;노드 수 세기&lt;/td&gt;
-      &lt;td&gt;&lt;code&gt;count(/root/node)&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h3 id=&quot;section-3&quot;&gt;예제&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;breakfast_menu&amp;gt;
-  &amp;lt;food&amp;gt;
-    &amp;lt;name&amp;gt;Belgian Waffles&amp;lt;/name&amp;gt;
-    &amp;lt;price&amp;gt;$5.95&amp;lt;/price&amp;gt;
-    &amp;lt;description&amp;gt;Two of our famous Belgian Waffles with plenty of real maple
-        syrup&amp;lt;/description&amp;gt;
-    &amp;lt;calories&amp;gt;650&amp;lt;/calories&amp;gt;
-  &amp;lt;/food&amp;gt;
-  &amp;lt;food&amp;gt;
-    &amp;lt;name&amp;gt;Strawberry Belgian Waffles&amp;lt;/name&amp;gt;
-    &amp;lt;price&amp;gt;$7.95&amp;lt;/price&amp;gt;
-    &amp;lt;description&amp;gt;Light Belgian waffles covered with strawberries and whipped
-        cream&amp;lt;/description&amp;gt;
-    &amp;lt;calories&amp;gt;900&amp;lt;/calories&amp;gt;
-  &amp;lt;/food&amp;gt;
-  &amp;lt;food&amp;gt;
-    &amp;lt;name&amp;gt;Berry-Berry Belgian Waffles&amp;lt;/name&amp;gt;
-    &amp;lt;price&amp;gt;$8.95&amp;lt;/price&amp;gt;
-    &amp;lt;description&amp;gt;Light Belgian waffles covered with an assortment of fresh
-        berries and whipped cream&amp;lt;/description&amp;gt;
-    &amp;lt;calories&amp;gt;900&amp;lt;/calories&amp;gt;
-  &amp;lt;/food&amp;gt;
-  &amp;lt;!-- 중략 --&amp;gt;
-&amp;lt;/breakfast_menu&amp;gt;
+&lt;pre&gt;&lt;code&gt;$ chmod -R 775 /home/bakyeono/telegram-cli /home/bakyeono/telegram-cli-script
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;위 문서는 w3schools.com에 올라와 있는 XML 예제다.(&lt;a href=&quot;http://www.w3schools.com/xml/simple.xml&quot;&gt;출처&lt;/a&gt;) xmllint를 써보기 위해 문서를 다운로드한다.&lt;/p&gt;
+&lt;p&gt;이제 tg-daemon 사용자가 telegram-cli와 스크립트에 접근하고 실행할 수 있다. 하지만 매번 tg-daemon 사용자 계정으로 로그인해서 실행하는 것은 번거롭다. 이럴 때 &lt;code&gt;sudo&lt;/code&gt;를 쓰면 된다. &lt;code&gt;sudo&lt;/code&gt;는 root 계정으로 작업할 때만 쓰이는 게 아니다. &lt;code&gt;-u&lt;/code&gt; 옵션으로 root 외에 다른 사용자로도 작업할 수 있다.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;$ curl http://www.w3schools.com/xml/simple.xml &amp;gt; simple.xml
+&lt;p&gt;tg-daemon 계정으로 telegram-cli 를 실행하려면 이렇게 한다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ sudo -u tg-daemon /home/tg-daemon/telegram-cli/telegram-cli
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;다음은 이 문서에서 노드와 데이터를 읽기 위한 XPath 표현식이다.&lt;/p&gt;
+&lt;p&gt;tg-daemon 계정으로는 처음 실행하는 것이므로 안내 메시지에 따라 인증 절차를 거쳐야 한다. 인증을 거친 후 자유롭게 사용할 수 있다.&lt;/p&gt;
 
-&lt;p&gt;모든 food 태그 선택: &lt;code&gt;/breakfast_menu/food&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;백그라운드에서 telegram cli 스크립트가 실행되도록 하려면 다음과 같이 한다.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;$ xmllint --xpath &#39;/breakfast_menu/food&#39; simple.xml
-&amp;lt;food&amp;gt;
-  &amp;lt;name&amp;gt;Belgian Waffles&amp;lt;/name&amp;gt;
-  &amp;lt;price&amp;gt;$5.95&amp;lt;/price&amp;gt;
-  &amp;lt;description&amp;gt;Two of our famous Belgian Waffles with plenty of real maple
-      syrup&amp;lt;/description&amp;gt;
-  &amp;lt;calories&amp;gt;650&amp;lt;/calories&amp;gt;
-&amp;lt;/food&amp;gt;
-&amp;lt;food&amp;gt;
-  &amp;lt;name&amp;gt;Strawberry Belgian Waffles&amp;lt;/name&amp;gt;
-(중략)
+&lt;pre&gt;&lt;code&gt;$ sudo -u tg-daemon nohup /home/tg-daemon/telegram-cli/telegram-cli -s &amp;amp;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;첫번째 food 태그 선택: &lt;code&gt;/breakfast_menu/food[1]&lt;/code&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ xmllint --xpath &#39;/breakfast_menu/food[1]&#39; simple.xml
-&amp;lt;food&amp;gt;
-  &amp;lt;name&amp;gt;Belgian Waffles&amp;lt;/name&amp;gt;
-  &amp;lt;price&amp;gt;$5.95&amp;lt;/price&amp;gt;
-  &amp;lt;description&amp;gt;Two of our famous Belgian Waffles with plenty of real maple
-      syrup&amp;lt;/description&amp;gt;
-  &amp;lt;calories&amp;gt;650&amp;lt;/calories&amp;gt;
-&amp;lt;/food&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;첫번째 food/price 태그의 텍스트 읽기: &lt;code&gt;/breakfast_menu/food[1]/price/text()&lt;/code&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ xmllint --xpath &#39;/breakfast_menu/food[1]/price/text()&#39; simple.xml
-5.95$
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;food 태그가 몇 개인지 세기: &lt;code&gt;count(/breakfast_menu/food)&lt;/code&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ xmllint --xpath &#39;count(/breakfast_menu/food)&#39; simple.xml
-5
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;이제 원래의 사용자 계정인 bakyeono 계정으로 telegram-cli를 실행해도 tg-daemon이 접속한 세션이 종료되지 않는다.&lt;/p&gt;
 
 </description>
         <author>박연오(bakyeono@gmail.com)</author>
-        <pubDate>Mon, 01 Jun 2015 10:10:00 +0900</pubDate>
-        <link>http://bakyeono.net/post/2015-06-01-parse-xml-with-xmllint.html</link>
-        <guid isPermaLink="true">http://bakyeono.net/post/2015-06-01-parse-xml-with-xmllint.html</guid>
+        <pubDate>Wed, 03 Jun 2015 10:56:00 +0900</pubDate>
+        <link>http://bakyeono.net/post/2015-06-03-running-multiple-telegram-cli-sessions.html</link>
+        <guid isPermaLink="true">http://bakyeono.net/post/2015-06-03-running-multiple-telegram-cli-sessions.html</guid>
         
-        <category>xml</category>
+        <category>telegram</category>
         
-        <category>xmllint</category>
-        
-        <category>xpath</category>
-        
-        <category>linux</category>
-        
-        <category>bash</category>
+        <category>sudo</category>
         
         
       </item>
