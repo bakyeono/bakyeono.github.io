@@ -5,8 +5,8 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 03 Jun 2015 13:03:34 +0900</pubDate>
-    <lastBuildDate>Wed, 03 Jun 2015 13:03:34 +0900</lastBuildDate>
+    <pubDate>Wed, 03 Jun 2015 13:08:34 +0900</pubDate>
+    <lastBuildDate>Wed, 03 Jun 2015 13:08:34 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -83,7 +83,7 @@ Connection to localhost closed.
 
 &lt;p&gt;같은 그룹 구성원이 작업을 할 수도록 권한을 주는 것도 잊지 말자.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;$ chmod -R 775 /home/bakyeono/telegram-cli /home/bakyeono/telegram-cli-script
+&lt;pre&gt;&lt;code&gt;$ chmod -R 774 /home/bakyeono/telegram-cli /home/bakyeono/telegram-cli-script
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;이제 tg-daemon 사용자가 telegram-cli와 스크립트에 접근하고 실행할 수 있다. 하지만 매번 tg-daemon 사용자 계정으로 로그인해서 실행하는 것은 번거롭다. 이럴 때 &lt;code&gt;sudo&lt;/code&gt;를 쓰면 된다. &lt;code&gt;sudo&lt;/code&gt;는 root 계정으로 작업할 때만 쓰이는 게 아니다. &lt;code&gt;-u&lt;/code&gt; 옵션으로 root 외에 다른 사용자로도 작업할 수 있다.&lt;/p&gt;
