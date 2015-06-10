@@ -125,7 +125,7 @@ Connection to localhost closed.
 
 <p>같은 그룹 구성원이 작업을 할 수도록 권한을 주는 것도 잊지 말자.</p>
 
-<pre><code>$ chmod -R 774 /home/bakyeono/telegram-cli /home/bakyeono/telegram-cli-script
+<pre><code>$ chmod -R g+w /home/bakyeono/telegram-cli /home/bakyeono/telegram-cli-script
 </code></pre>
 
 <p>이제 tg-daemon 사용자가 telegram-cli와 스크립트에 접근하고 실행할 수 있다. 하지만 매번 tg-daemon 사용자 계정으로 로그인해서 실행하는 것은 번거롭다. 이럴 때 <code>sudo</code>를 쓰면 된다. <code>sudo</code>는 root 계정으로 작업할 때만 쓰이는 게 아니다. <code>-u</code> 옵션으로 root 외에 다른 사용자로도 작업할 수 있다.</p>
