@@ -2,6 +2,15 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
     <url>
+      <loc>http://bakyeono.net/post/2015-06-11-parse-html-on-bash.html</loc>
+      
+        <lastmod>2015-06-11T14:50:00+09:00</lastmod>
+      
+      <changefreq>weekly</changefreq>
+      <priority>1.0</priority>
+    </url>
+  
+    <url>
       <loc>http://bakyeono.net/post/2015-06-03-running-multiple-telegram-cli-sessions.html</loc>
       
         <lastmod>2015-06-03T10:56:00+09:00</lastmod>
@@ -154,6 +163,8 @@
       <priority>1.0</priority>
     </url>
   
+  
+    
   
     
   

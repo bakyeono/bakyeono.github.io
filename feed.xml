@@ -5,112 +5,128 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 10 Jun 2015 20:16:10 +0900</pubDate>
-    <lastBuildDate>Wed, 10 Jun 2015 20:16:10 +0900</lastBuildDate>
+    <pubDate>Thu, 11 Jun 2015 17:38:01 +0900</pubDate>
+    <lastBuildDate>Thu, 11 Jun 2015 17:38:01 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
-        <title>telegram-cli 여러 세션을 동시에 실행하기</title>
+        <title>html-xml-utils - 커맨드라인에서 HTML 문서 탐색하기</title>
         <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;문제&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;우회법&lt;/a&gt;    &lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;설치&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;사용&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#hxnormalize--x&quot; id=&quot;markdown-toc-hxnormalize--x&quot;&gt;hxnormalize -x&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#hxselect&quot; id=&quot;markdown-toc-hxselect&quot;&gt;hxselect&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;예&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;이 글은 커맨드라인 텔레그램 클라이언트인 &lt;a href=&quot;https://github.com/vysheng/tg&quot;&gt;telegram-cli(unofficial)&lt;/a&gt;로 여러 세션을 동시에 실행하는 방법이다.&lt;/p&gt;
+&lt;p&gt;스택 오버플로의 &lt;a href=&quot;http://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags/1732454#1732454&quot;&gt;이 글&lt;/a&gt;에 따르면 정규표현식으로 HTML 문서를 파싱하면 좋지 않다고 한다. 프로그래밍 환경에서 제공되는 적절한 HTML(XML) 문서 탐색기를 이용하는 것이 바람직하다. 리눅스 커맨드라인에서는 어떻게 해야 할까? html-xml-utils를 사용하면 CSS 선택자로 HTML 문서를 탐색할 수 있다.&lt;/p&gt;
 
-&lt;h2 id=&quot;section&quot;&gt;문제&lt;/h2&gt;
+&lt;h2 id=&quot;section&quot;&gt;설치&lt;/h2&gt;
 
-&lt;p&gt;텔레그램은 하나의 인증(authorization)에 하나의 접속만을 허용한다. 같은 인증으로 새로운 세션이 생성되면 기존의 세션은 종료된다. telegram-cli로 자동 스크립트를 실행하는 도중에 직접 메시지를 보내기 위해 telegram-cli를 새로 실행하면 원래 실행되고 있던 스크립트는 멈추게 된다. 스크립트를 여러 개 함께 실행하는 것도 안 된다.&lt;/p&gt;
+&lt;p&gt;데비안 기반 리눅스:&lt;/p&gt;
 
-&lt;p&gt;telegram-cli의 &lt;a href=&quot;https://github.com/vysheng/tg/issues/341&quot;&gt;341번 이슈&lt;/a&gt;에 이 문제가 언급돼 있다. 이 이슈 페이지에는 세션마다 다른 프로파일을 지정해서 문제를 해결하라고 한다. 하지만 환경에 따라 안 되는 경우가 있는 것 같다. 나는 프로파일 기능이 잘 작동하지 않아서 다른 방법으로 문제를 해결했다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo apt-get install html-xml-utils
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&quot;section-1&quot;&gt;우회법&lt;/h2&gt;
+&lt;p&gt;레드햇 기반 리눅스:&lt;/p&gt;
 
-&lt;p&gt;가장 직관적인 방법은 물리적으로 또는 가상화 기술로 분리된 다른 기계로 telegram-cli를 실행하는 것이다. 하지만 리눅스는 다중 사용자 환경이므로 그렇게까지 할 필요가 없다. 그냥 각 세션마다 별도의 리눅스 사용자 계정을 줘 실행하면 된다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo yum install html-xml-utils
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;패키지 직접 다운로드: &lt;a href=&quot;http://www.w3.org/Tools/HTML-XML-utils&quot;&gt;w3.org&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;사용&lt;/h2&gt;
+
+&lt;h3 id=&quot;hxnormalize--x&quot;&gt;hxnormalize -x&lt;/h3&gt;
+
+&lt;p&gt;HTML 문서를 탐색하기 전에 먼저 HTML 문서를 Well-formed XML 양식으로 변환해야 한다. HTML 정의는 XML보다 약간 느슨하기 때문에 Well-formed XML 문서가 아닌 HTML 문서가 거의 대부분이다. 이를 수행하는 프로그램은 &lt;code&gt;hxnormalize -x&lt;/code&gt; 다. &lt;code&gt;hxnormalize&lt;/code&gt;는 HTML 문서 출력기이며 &lt;code&gt;-x&lt;/code&gt; 옵션을 주면 문서를 닫는 태그(&lt;code&gt;&amp;lt;img /&amp;gt;&lt;/code&gt;, &lt;code&gt;&amp;lt;/li&amp;gt;&lt;/code&gt; 등)가 없는 노드에 닫는 태그를 추가해 Well-formed XML 문서로 만들어준다.&lt;/p&gt;
+
+&lt;p&gt;아쉽게도 HTML 문서 내용에 따라 이것이 불가능한 경우도 있다. 이 때는 이 유틸리티만으로 탐색하는 것은 안되는 듯하다.&lt;/p&gt;
+
+&lt;p&gt;변환 명령은 다음과 같다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hxnormalize -x 원본파일명 &amp;gt; 출력파일명
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;물론, 출력파일 스트림을 지정하지 않으면 STDOUT(콘솔)으로 출력한다.&lt;/p&gt;
+
+&lt;h3 id=&quot;hxselect&quot;&gt;hxselect&lt;/h3&gt;
+
+&lt;p&gt;HTML 문서를 Well-formed XML 양식으로 변환했으면 &lt;code&gt;hxselect&lt;/code&gt; 명령으로 원하는 노드를 탐색할 수 있다.&lt;/p&gt;
+
+&lt;p&gt;명령은 다음과 같다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hxselect &#39;CSS선택자&#39; &amp;lt; 파일명
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;선택한 노드 자체는 빼고 노드가 포함한 내용물만 추출하고 싶다면 &lt;code&gt;-c&lt;/code&gt; 옵션을 준다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hxselect -c &#39;CSS선택자&#39; &amp;lt; 파일명
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;선택자로 여러 개의 노드가 선택되는 경우에, 각 노드 사이에 구분자를 출력하고 싶다면 &lt;code&gt;-s&lt;/code&gt; 옵션으로 구분자를 지정한다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hxselect -s &#39;구분자&#39; &#39;CSS선택자&#39; &amp;lt; 파일명
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&quot;section-2&quot;&gt;예&lt;/h3&gt;
 
-&lt;p&gt;현재 사용자가 bakyeono라고 할 때, tg-daemon 이라는 사용자를 만들어 telegram-cli 스크립트를 실행한다고 해 보자. 데비안 기반 리눅스를 기준으로 했다.&lt;/p&gt;
+&lt;p&gt;위키피디아의 한 문서를 탐색해 보자.&lt;/p&gt;
 
-&lt;p&gt;먼저 사용자를 만든다.&lt;/p&gt;
+&lt;p&gt;문서 다운로드&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;$ adduser tg-daemon
-Adding user `tg-daemon&#39; ...
-Adding new group `tg-daemon&#39; (1006) ...
-Adding new user `tg-daemon&#39; (1003) with group `tg-daemon&#39; ...
-Creating home directory `/home/tg-daemon&#39; ...
-Copying files from `/etc/skel&#39; ...
-Enter new UNIX password:
-Retype new UNIX password:
-passwd: password updated successfully
-Changing the user information for tg-daemon
-Enter the new value, or press ENTER for the default
-        Full Name []:
-        Room Number []:
-        Work Phone []:
-        Home Phone []:
-        Other []:
-Is the information correct? [Y/n]
+&lt;pre&gt;&lt;code&gt;$ curl &quot;https://en.wikipedia.org/wiki/Lisp&quot; &amp;gt; source.html
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 53551    0 53551    0     0  58206      0 --:--:-- --:--:-- --:--:-- 69909
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;telegram-cli 바이너리가 &lt;code&gt;/home/bakyeono/telegram-cli&lt;/code&gt;에 있고, 실행할 스크립트는 &lt;code&gt;/home/bakyeono/telegram-cli-script&lt;/code&gt;에 있다고 하자. tg-daemon 사용자 계정으로 접속해 이들에 대한 링크를 걸어 준다. 로그인은 간단히 ssh로 하면 된다.&lt;/p&gt;
+&lt;p&gt;Well-formed XML 문서로 변환&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;$ ssh tg-daemon@localhost
-tg-daemon@localhost&#39;s password:
-Linux antares-pi2 3.18.11-v7+ #781 SMP PREEMPT Tue Apr 21 18:07:59 BST 2015 armv7l
-
-The programs included with the Debian GNU/Linux system are free software;
-the exact distribution terms for each program are described in the
-individual files in /usr/share/doc/*/copyright.
-
-Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
-permitted by applicable law.
-Last login: Wed Jun  3 10:53:34 2015 from localhost
-
-$ ln -s /home/bakyeono/telegram-cli
-$ ln -s /home/bakyeono/telegram-cli-script
-$ logout
-Connection to localhost closed.
+&lt;pre&gt;&lt;code&gt;$ hxnormalize -x source.html &amp;gt; normalized.html
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;tg-daemon 사용자가 이 경로들에 접근할 수 있도록 이 경로의 소속 그룹(bakyeono)에 포함시킨다.&lt;/p&gt;
+&lt;p&gt;원하는 노드 선택&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;$ sudo addgroup tg-daemon bakyeono
+&lt;pre&gt;&lt;code&gt;$ hxselect &#39;#Types&#39; &amp;lt; normalized.html
+&amp;lt;span class=&quot;mw-headline&quot; id=&quot;Types&quot;&amp;gt;Types&amp;lt;/span&amp;gt;
+
+$ hxselect &#39;#mw-content-text &amp;gt; ul:nth-child(8) &amp;gt; li:nth-child(3)&#39; &amp;lt; normalized.html
+&amp;lt;li&amp;gt;A &quot;nasal lisp&quot; occurs when part or the entire air stream is directed through the nasal cavity.&amp;lt;/li&amp;gt;
+
+$ hxselect -c &#39;#mw-content-text &amp;gt; ul:nth-child(8) &amp;gt; li:nth-child(3)&#39; &amp;lt; normalized.html
+A &quot;nasal lisp&quot; occurs when part or the entire air stream is directed through the nasal cavity.
+
+$ hxselect -s &#39;\n----\n&#39; &quot;#mw-content-text &amp;gt; ul:nth-child(8) &amp;gt; li&quot; &amp;lt; normalized.html
+&amp;lt;li&amp;gt;&quot;Interdental&quot; lisping is produced (...중략...) it is expected.&amp;lt;/li&amp;gt;
+----
+&amp;lt;li&amp;gt;The &quot;lateral&quot; lisp is where the (...중략...) &amp;lt;/li&amp;gt;
+----
+&amp;lt;li&amp;gt;A &quot;nasal lisp&quot; occurs when part (...중략...) the nasal cavity.&amp;lt;/li&amp;gt;
+----
+&amp;lt;li&amp;gt;A &quot;strident lisp&quot; results in a (...중략...) hard surface.&amp;lt;/li&amp;gt;
+----
+&amp;lt;li&amp;gt;A &quot;dentalized lisp&quot; does not have (...중략...) and alveolar ridge.&amp;lt;/li&amp;gt;
+----
+&amp;lt;li&amp;gt;A &quot;palatal lisp&quot; is where the speaker attempts (...중략...) &amp;lt;/li&amp;gt;
+----
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;같은 그룹 구성원이 작업을 할 수도록 권한을 주는 것도 잊지 말자.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ chmod -R g+w /home/bakyeono/telegram-cli /home/bakyeono/telegram-cli-script
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;이제 tg-daemon 사용자가 telegram-cli와 스크립트에 접근하고 실행할 수 있다. 하지만 매번 tg-daemon 사용자 계정으로 로그인해서 실행하는 것은 번거롭다. 이럴 때 &lt;code&gt;sudo&lt;/code&gt;를 쓰면 된다. &lt;code&gt;sudo&lt;/code&gt;는 root 계정으로 작업할 때만 쓰이는 게 아니다. &lt;code&gt;-u&lt;/code&gt; 옵션으로 root 외에 다른 사용자로도 작업할 수 있다.&lt;/p&gt;
-
-&lt;p&gt;tg-daemon 계정으로 telegram-cli 를 실행하려면 이렇게 한다.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ sudo -u tg-daemon /home/tg-daemon/telegram-cli/telegram-cli
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;tg-daemon 계정으로는 처음 실행하는 것이므로 안내 메시지에 따라 인증 절차를 거쳐야 한다. 인증을 거친 후 자유롭게 사용할 수 있다.&lt;/p&gt;
-
-&lt;p&gt;백그라운드에서 telegram cli 스크립트가 실행되도록 하려면 다음과 같이 한다.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ sudo -u tg-daemon nohup /home/tg-daemon/telegram-cli/telegram-cli -s &amp;amp;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;이제 원래의 사용자 계정인 bakyeono 계정으로 telegram-cli를 실행해도 tg-daemon이 접속한 세션이 종료되지 않는다.&lt;/p&gt;
+&lt;p&gt;복잡한 문서에서 노드 추출을 위한 CSS 선택자 표현식을 작성하는 것은 간단하지는 않다. 여러 웹 브라우저들이 제공하는 개발자 도구를 활용하면 도움이 된다.&lt;/p&gt;
 
 </description>
         <author>박연오(bakyeono@gmail.com)</author>
-        <pubDate>Wed, 03 Jun 2015 10:56:00 +0900</pubDate>
-        <link>http://bakyeono.net/post/2015-06-03-running-multiple-telegram-cli-sessions.html</link>
-        <guid isPermaLink="true">http://bakyeono.net/post/2015-06-03-running-multiple-telegram-cli-sessions.html</guid>
+        <pubDate>Thu, 11 Jun 2015 14:50:00 +0900</pubDate>
+        <link>http://bakyeono.net/post/2015-06-11-parse-html-on-bash.html</link>
+        <guid isPermaLink="true">http://bakyeono.net/post/2015-06-11-parse-html-on-bash.html</guid>
         
-        <category>telegram</category>
+        <category>html</category>
         
-        <category>sudo</category>
+        <category>linux</category>
+        
+        <category>bash</category>
         
         
       </item>
