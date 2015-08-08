@@ -5,128 +5,47 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 09 Jul 2015 15:42:40 +0900</pubDate>
-    <lastBuildDate>Thu, 09 Jul 2015 15:42:40 +0900</lastBuildDate>
+    <pubDate>Sat, 08 Aug 2015 11:35:45 +0900</pubDate>
+    <lastBuildDate>Sat, 08 Aug 2015 11:35:45 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
-        <title>html-xml-utils - 커맨드라인에서 HTML 문서 탐색하기</title>
-        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;설치&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;사용&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#hxnormalize--x&quot; id=&quot;markdown-toc-hxnormalize--x&quot;&gt;hxnormalize -x&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#hxselect&quot; id=&quot;markdown-toc-hxselect&quot;&gt;hxselect&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;예&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
+        <title>NEXT-201N(rtl8192cu) 무선 랜 카드가 리눅스에서 오작동할 때</title>
+        <description>
+&lt;p&gt;NEXT-201N USB 미니 무선 랜 카드가 리눅스에서 오작동하는 경우가 있다. 나는 연결 속도가 느리거나 계속 접속이 끊기거나 하는 문제를 겪었다. 이 장치에 들어 있는 리얼테크사의 rtl8192cu 칩셋과 리눅스 커널의 드라이버가 잘 호환되지 않아서 생기는 문제인 것 같다.&lt;/p&gt;
 
-&lt;p&gt;스택 오버플로의 &lt;a href=&quot;http://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags/1732454#1732454&quot;&gt;이 글&lt;/a&gt;에 따르면 정규표현식으로 HTML 문서를 파싱하면 좋지 않다고 한다. 프로그래밍 환경에서 제공되는 적절한 HTML(XML) 문서 탐색기를 이용하는 것이 바람직하다. 리눅스 커맨드라인에서는 어떻게 해야 할까? html-xml-utils를 사용하면 CSS 선택자로 HTML 문서를 탐색할 수 있다.&lt;/p&gt;
+&lt;p&gt;이 문제를 해결하려면 리얼테크사의 드라이버를 직접 설치하면 된다. 아래 페이지에 우분투용으로 포팅한 드라이버가 있으니 우분투 사용자는 이걸 설치하면 된다.&lt;/p&gt;
 
-&lt;h2 id=&quot;section&quot;&gt;설치&lt;/h2&gt;
+&lt;p&gt;https://github.com/pvaret/rtl8192cu-fixes&lt;/p&gt;
 
-&lt;p&gt;데비안 기반 리눅스:&lt;/p&gt;
+&lt;p&gt;우분투 13.10 이후 버전용으로 제작된 드라이버다. 나는 우분투 14.12 LTS에 설치해 봤다. 다른 배포판에서도 동작하는지는 확인해보지 않았다. 배포판이 우분투가 아닌 경우에는 리얼테크사 웹사이트에서 드라이버 소스를 다운로드해서 직접 컴파일해 설치하기를 권한다.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;$ sudo apt-get install html-xml-utils
+&lt;p&gt;드라이버를 설치하기 전에 사용중인 장치가 rtl8192cu가 맞는지 확인해야 한다. 다음 명령어를 입력하면 사용 중인 장치를 알 수 있다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ sudo lshw -c network
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;레드햇 기반 리눅스:&lt;/p&gt;
+&lt;p&gt;rtl8192cu 또는 rtl8192cus라는 장치명이 확인되면 드라이버를 설치한다. 위 github 페이지에 나온 설치 과정은 아래와 같다.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;$ sudo yum install html-xml-utils
+&lt;pre&gt;&lt;code&gt;$ sudo apt-get install git linux-headers-generic build-essential dkms
+$ git clone https://github.com/pvaret/rtl8192cu-fixes.git
+$ sudo dkms add ./rtl8192cu-fixes
+$ sudo dkms install 8192cu/1.10
+$ sudo depmod -a
+$ sudo cp ./rtl8192cu-fixes/blacklist-native-rtl8192.conf /etc/modprobe.d/
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;패키지 직접 다운로드: &lt;a href=&quot;http://www.w3.org/Tools/HTML-XML-utils&quot;&gt;w3.org&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;section-1&quot;&gt;사용&lt;/h2&gt;
-
-&lt;h3 id=&quot;hxnormalize--x&quot;&gt;hxnormalize -x&lt;/h3&gt;
-
-&lt;p&gt;HTML 문서를 탐색하기 전에 먼저 HTML 문서를 Well-formed XML 양식으로 변환해야 한다. HTML 정의는 XML보다 약간 느슨하기 때문에 Well-formed XML 문서가 아닌 HTML 문서가 거의 대부분이다. 이를 수행하는 프로그램은 &lt;code&gt;hxnormalize -x&lt;/code&gt; 다. &lt;code&gt;hxnormalize&lt;/code&gt;는 HTML 문서 출력기이며 &lt;code&gt;-x&lt;/code&gt; 옵션을 주면 문서를 닫는 태그(&lt;code&gt;&amp;lt;img /&amp;gt;&lt;/code&gt;, &lt;code&gt;&amp;lt;/li&amp;gt;&lt;/code&gt; 등)가 없는 노드에 닫는 태그를 추가해 Well-formed XML 문서로 만들어준다.&lt;/p&gt;
-
-&lt;p&gt;아쉽게도 HTML 문서 내용에 따라 이것이 불가능한 경우도 있다. 이 때는 이 유틸리티만으로 탐색하는 것은 안되는 듯하다.&lt;/p&gt;
-
-&lt;p&gt;변환 명령은 다음과 같다.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ hxnormalize -x 원본파일명 &amp;gt; 출력파일명
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;물론, 출력파일 스트림을 지정하지 않으면 STDOUT(콘솔)으로 출력한다.&lt;/p&gt;
-
-&lt;h3 id=&quot;hxselect&quot;&gt;hxselect&lt;/h3&gt;
-
-&lt;p&gt;HTML 문서를 Well-formed XML 양식으로 변환했으면 &lt;code&gt;hxselect&lt;/code&gt; 명령으로 원하는 노드를 탐색할 수 있다.&lt;/p&gt;
-
-&lt;p&gt;명령은 다음과 같다.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ hxselect &#39;CSS선택자&#39; &amp;lt; 파일명
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;선택한 노드 자체는 빼고 노드가 포함한 내용물만 추출하고 싶다면 &lt;code&gt;-c&lt;/code&gt; 옵션을 준다.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ hxselect -c &#39;CSS선택자&#39; &amp;lt; 파일명
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;선택자로 여러 개의 노드가 선택되는 경우에, 각 노드 사이에 구분자를 출력하고 싶다면 &lt;code&gt;-s&lt;/code&gt; 옵션으로 구분자를 지정한다.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ hxselect -s &#39;구분자&#39; &#39;CSS선택자&#39; &amp;lt; 파일명
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&quot;section-2&quot;&gt;예&lt;/h3&gt;
-
-&lt;p&gt;위키피디아의 한 문서를 탐색해 보자.&lt;/p&gt;
-
-&lt;p&gt;문서 다운로드&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ curl &quot;https://en.wikipedia.org/wiki/Lisp&quot; &amp;gt; source.html
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100 53551    0 53551    0     0  58206      0 --:--:-- --:--:-- --:--:-- 69909
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Well-formed XML 문서로 변환&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ hxnormalize -x source.html &amp;gt; normalized.html
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;원하는 노드 선택&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ hxselect &#39;#Types&#39; &amp;lt; normalized.html
-&amp;lt;span class=&quot;mw-headline&quot; id=&quot;Types&quot;&amp;gt;Types&amp;lt;/span&amp;gt;
-
-$ hxselect &#39;#mw-content-text &amp;gt; ul:nth-child(8) &amp;gt; li:nth-child(3)&#39; &amp;lt; normalized.html
-&amp;lt;li&amp;gt;A &quot;nasal lisp&quot; occurs when part or the entire air stream is directed through the nasal cavity.&amp;lt;/li&amp;gt;
-
-$ hxselect -c &#39;#mw-content-text &amp;gt; ul:nth-child(8) &amp;gt; li:nth-child(3)&#39; &amp;lt; normalized.html
-A &quot;nasal lisp&quot; occurs when part or the entire air stream is directed through the nasal cavity.
-
-$ hxselect -s &#39;\n----\n&#39; &quot;#mw-content-text &amp;gt; ul:nth-child(8) &amp;gt; li&quot; &amp;lt; normalized.html
-&amp;lt;li&amp;gt;&quot;Interdental&quot; lisping is produced (...중략...) it is expected.&amp;lt;/li&amp;gt;
-----
-&amp;lt;li&amp;gt;The &quot;lateral&quot; lisp is where the (...중략...) &amp;lt;/li&amp;gt;
-----
-&amp;lt;li&amp;gt;A &quot;nasal lisp&quot; occurs when part (...중략...) the nasal cavity.&amp;lt;/li&amp;gt;
-----
-&amp;lt;li&amp;gt;A &quot;strident lisp&quot; results in a (...중략...) hard surface.&amp;lt;/li&amp;gt;
-----
-&amp;lt;li&amp;gt;A &quot;dentalized lisp&quot; does not have (...중략...) and alveolar ridge.&amp;lt;/li&amp;gt;
-----
-&amp;lt;li&amp;gt;A &quot;palatal lisp&quot; is where the speaker attempts (...중략...) &amp;lt;/li&amp;gt;
-----
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;복잡한 문서에서 노드 추출을 위한 CSS 선택자 표현식을 작성하는 것은 간단하지는 않다. 여러 웹 브라우저들이 제공하는 개발자 도구를 활용하면 도움이 된다.&lt;/p&gt;
+&lt;p&gt;이후 시스템을 재시작하면 된다.&lt;/p&gt;
 
 </description>
         <author>박연오(bakyeono@gmail.com)</author>
-        <pubDate>Thu, 11 Jun 2015 14:50:00 +0900</pubDate>
-        <link>http://bakyeono.net/post/2015-06-11-parse-html-on-bash.html</link>
-        <guid isPermaLink="true">http://bakyeono.net/post/2015-06-11-parse-html-on-bash.html</guid>
+        <pubDate>Sat, 08 Aug 2015 11:09:00 +0900</pubDate>
+        <link>http://bakyeono.net/post/2015-08-08-rtl8192cu-on-linux.html</link>
+        <guid isPermaLink="true">http://bakyeono.net/post/2015-08-08-rtl8192cu-on-linux.html</guid>
         
-        <category>html</category>
+        <category>리눅스</category>
         
-        <category>linux</category>
-        
-        <category>bash</category>
+        <category>네트워크</category>
         
         
       </item>
