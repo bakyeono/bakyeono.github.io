@@ -109,7 +109,7 @@ q_url="http://search.daum.net/search?nil_suggest=btn&amp;w=tot&amp;DA=SBC&amp;q=
 w3m -dump -cols 65536 -ppl 65536 $q_url &gt; $tmp_file 2&gt; /dev/null
 
 # parse
-sedexp='s/    ([0-9]{5})$/\1\n/p'
+sedexp='s/\ +([0-9]{5})$/\1\n/p'
 result=`sed -n -r "$sedexp" $tmp_file`
 echo "$result"
 

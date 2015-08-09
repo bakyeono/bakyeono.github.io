@@ -5,8 +5,8 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 09 Aug 2015 22:11:12 +0900</pubDate>
-    <lastBuildDate>Sun, 09 Aug 2015 22:11:12 +0900</lastBuildDate>
+    <pubDate>Sun, 09 Aug 2015 22:26:37 +0900</pubDate>
+    <lastBuildDate>Sun, 09 Aug 2015 22:26:37 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -67,7 +67,7 @@ q_url=&quot;http://search.daum.net/search?nil_suggest=btn&amp;amp;w=tot&amp;amp;
 w3m -dump -cols 65536 -ppl 65536 $q_url &amp;gt; $tmp_file 2&amp;gt; /dev/null
 
 # parse
-sedexp=&#39;s/    ([0-9]{5})$/\1\n/p&#39;
+sedexp=&#39;s/\ +([0-9]{5})$/\1\n/p&#39;
 result=`sed -n -r &quot;$sedexp&quot; $tmp_file`
 echo &quot;$result&quot;
 
