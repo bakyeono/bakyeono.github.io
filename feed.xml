@@ -5,8 +5,8 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 09 Aug 2015 21:42:27 +0900</pubDate>
-    <lastBuildDate>Sun, 09 Aug 2015 21:42:27 +0900</lastBuildDate>
+    <pubDate>Sun, 09 Aug 2015 21:47:00 +0900</pubDate>
+    <lastBuildDate>Sun, 09 Aug 2015 21:47:00 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -111,6 +111,10 @@ while read line; do
   echo $result
 done
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;실행 권한을 지정한다.&lt;/p&gt;
+
+&lt;p&gt;$ chmod u+x convert.sh&lt;/p&gt;
 
 &lt;p&gt;이 스크립트는 한 줄에 주소 하나씩 입력받아 우편번호를 출력해준다.&lt;/p&gt;
 
