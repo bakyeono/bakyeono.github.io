@@ -113,6 +113,7 @@ sedexp='s/    ([0-9]{5})$/\1\n/p'
 result=`sed -n -r "$sedexp" $tmp_file`
 echo "$result"
 
+# clear temp files
 if [[ $clear_tmp == true ]]; then
   rm $tmp_file
 fi
