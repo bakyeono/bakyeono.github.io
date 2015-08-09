@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>script-to-find-new-postcode | 박연오</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="canonical" href="http://bakyeono.net/post/2015-08-09-script-to-find-new-postcode.html" />
+  <link rel="alternate" type="application/rss+xml" title="박연오" href="http://bakyeono.net/feed.xml" />
+  <script type="text/javascript" src="/lib/jquery/jquery-1.11.2.min.js"></script>
+  <script type="text/javascript">
+    "use strict";
+    $(document).ready(function () {
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create','UA-44446622-4','auto');
+      ga('send','pageview');
+    });
+  </script>
+</head>
+
+  <body>
+    <header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="/">박연오</a>
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z" />
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z" />
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z" />
+        </svg>
+      </a>
+      <div class="trigger">
+        
+      </div>
+    </nav>
+  </div>
+</header>
+
+    <div class="page-content">
+      <div class="wrapper">
+        
+<div class="post">
+  <header class="post-header">
+    <h1 class="post-title">script-to-find-new-postcode</h1>
+    <p class="post-meta">
+      <span class="post-date">2015-08-09</span>
+       • <span class="post-author">박연오(bakyeono@gmail.com)</span>
+       • <span class="post-tags">태그: <a class="post-tag" href="/tag/%EB%A6%AC%EB%88%85%EC%8A%A4.html">리눅스</a> <a class="post-tag" href="/tag/bash.html">bash</a> <a class="post-tag" href="/tag/%EC%9A%B0%ED%8E%B8%EB%B2%88%ED%98%B8.html">우편번호</a></span>
+    </p>
+  </header>
+  <article>
+    <div class="post-content">
+      <ul id="markdown-toc">
+  <li><a href="#section" id="markdown-toc-section">새 우편번호 검색 스크립트</a></li>
+  <li><a href="#section-1" id="markdown-toc-section-1">대량의 우편번호 찾기</a></li>
+</ul>
+
+<p>우편번호 체계가 바뀌어서 데이터를 갱신해야 하는 작업이 많다. 한국 포털 검색 엔진에 주소를 검색하면 새 우편번호를 쉽게 찾을 수 있다. 반복잡업을 피하고 싶다면 w3m 브라우저를 이용해 우편번호를 찾는 스크립트를 만들어 쓰면 편하다.</p>
+
+<p>이 글은 개인적 용도로 만든 스크립트를 소개한다.</p>
+
+<blockquote>
+  <p>주의: 스크립트를 이용하는 방법은 해석하기에 따라 포털 사이트의 이용약관에 위배될 수 있다. 이 스크립트를 사용하는 사람은 그에 따르는 책임을 지도록 하자. 나는 책임을 지지 않는다.</p>
+</blockquote>
+
+<blockquote>
+  <p>참고: 새 우편번호를 찾으려면 기존 우편번호로 검색하면 안 되고 지번주소나 도로명주소로 검색해야 한다. 기존 우편번호와 새 우편번호는 1:1 대응관계가 아니다.</p>
+</blockquote>
+
+<h2 id="section">새 우편번호 검색 스크립트</h2>
+
+<p>이 스크립트를 사용하려면 w3m과 sed가 필요하다. 설치하자.</p>
+
+<pre><code>$ sudo apt-get install w3m sed
+</code></pre>
+
+<p>에디터를 열어 스크립트 파일을 만든다. 파일명은 <code>q-postcode.sh</code> 로 했다.</p>
+
+<pre><code>$ vi q-postcode.sh
+</code></pre>
+
+<p>스크립트 내용은 아래와 같다. 이 내용을 위의 파일에 넣는다.</p>
+
+<pre><code>#!/bin/bash
+
+# environment
+LANG="ko_KR.utf-8" 
+
+# temp file
+tmp_dir="/tmp" # dirs for temporary files
+tmp_prefix="postcode-conv" # prefix for temporary filename
+clear_tmp=true # clear temporary files after the job?
+time_stamp=`date +%s%N`
+tmp_file=$tmp_dir/$tmp_prefix$time_stamp
+
+# parameter check
+if [ -z $1 ]; then
+  &gt;&amp;2 echo "ERROR: No search string supplied."
+  exit 1
+fi
+
+# request
+function url_encode() { echo -n $@ | perl -pe's/([^-+_.~A-Za-z0-9])/sprintf("%%%02X", ord($1))/seg'; }
+address=`url_encode $@`
+q_url="http://search.daum.net/search?nil_suggest=btn&amp;w=tot&amp;DA=SBC&amp;q=$address"
+w3m -dump -cols 65536 -ppl 65536 $q_url &gt; $tmp_file 2&gt; /dev/null
+
+# parse
+sedexp='s/    ([0-9]{5})$/\1\n/p'
+result=`sed -n -r "$sedexp" $tmp_file`
+echo "$result"
+
+if [[ $clear_tmp == true ]]; then
+  rm $tmp_file
+fi
+
+exit
+</code></pre>
+
+<p>실행 권한을 지정한다.</p>
+
+<pre><code>$ chmod u+x q-postcode.sh
+</code></pre>
+
+<p>스크립트를 시험해 보자.</p>
+
+<pre><code>$ ./q-postcode 서울시 영등포구 버드나루로 100
+07230
+</code></pre>
+
+<p>우편번호가 정상적으로 출력된다.</p>
+
+<blockquote>
+  <p>주의: 소스를 보면 알곘지만 이건 급하게 만든 임시 스크립트다. html을 구조적으로 해석하지 않고 정규표현식으로 게으르게 읽는다. 따라서 잘못된 결과가 나올 경우가 있을 수 있으며, 포탈 사이트의 출력 방식이 바뀌면 sed 정규표현식을 수정해야 한다.</p>
+</blockquote>
+
+<h2 id="section-1">대량의 우편번호 찾기</h2>
+
+<p>찾아야 할 우편번호가 많다면 파일에서 주소 목록을 읽어 처리하도록 하면 된다. 한 줄에 주소가 하나씩 있는 파일을 처리하는 스크립트를 만들어 보자. 파일명은 <code>convert.sh</code> 로 했다.</p>
+
+<pre><code>$ vi convert.sh
+</code></pre>
+
+<p>아래 내용을 입력한다.</p>
+
+<pre><code>#!/bin/bash
+
+while read line; do
+  result=$(./q-postcode.sh $line | head -n 1)
+  echo $result
+done
+</code></pre>
+
+<p>이 스크립트는 한 줄에 주소 하나씩 입력받아 우편번호를 출력해준다.</p>
+
+<p>스크립트를 시험해보기 위한 데이터 파일을 준비하자. 터미널에 아래와 같이 입력한다. 주소 리스트가 있는 스프레드시트 문서에서 복사해 넣어도 된다.</p>
+
+<pre><code>$ cat &gt; data.txt &lt;&lt; _EOF_
+서울특별시 중구 세종대로 110
+부산 영도구 태종로 423
+율도국 홍길동 7878
+경기도 광주시 행정타운로 50
+_EOF_
+</code></pre>
+
+<p>찾을 수 없는 주소가 데이터에 있으면 어떻게 출력되는지 확인하기 위해 중간에 <strong>율도국 홍길동 7878</strong>을 넣었다.</p>
+
+<p>이제 시험해보자.</p>
+
+<pre><code>$ ./convert.sh &lt; data.txt
+04524
+49011
+
+12738
+</code></pre>
+
+<p>우편번호를 찾을 수 있는 경우 우편번호가 출력됐고, 찾을 수 없는 <strong>율도국 홍길동 7878</strong>의 우편번호는 빈 줄로 출력됐다.</p>
+
+<p>사용해보면 처리 속도가 느리다는 것을 알 수 있을 것이다. 수천 개 이상의 대량의 데이터를 작업해야 한다면 멀티쓰레딩을 해야 할 것이다. 이 글에서는 거기까지는 다루지 않는다.</p>
+
+
+    </div>
+  </article>
+</div>
+
+      </div>
+    </div>
+    <footer class="site-footer">
+  <div class="wrapper">
+    <h2 class="footer-heading">박연오</h2>
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li><a href="mailto:bakyeono@gmail.com">bakyeono@gmail.com</a></li>
+          <li><p class="rss-subscribe"><a href="http://feeds.feedburner.com/bakyeono">RSS 구독</a></p></li>
+        </ul>
+      </div>
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/bakyeono">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+              <span class="username">bakyeono</span>
+            </a>
+          </li>
+          
+          
+        </ul>
+      </div>
+      <div class="footer-col  footer-col-3">
+        <p class="text">Workers of the world, unite!</p>
+      </div>
+    </div>
+    <div class="copyright">
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />
+      This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.<br />
+      Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="http://bakyeono.net" rel="dct:source">http://bakyeono.net</a>.
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>
