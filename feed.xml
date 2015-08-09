@@ -5,12 +5,12 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 09 Aug 2015 21:41:21 +0900</pubDate>
-    <lastBuildDate>Sun, 09 Aug 2015 21:41:21 +0900</lastBuildDate>
+    <pubDate>Sun, 09 Aug 2015 21:42:27 +0900</pubDate>
+    <lastBuildDate>Sun, 09 Aug 2015 21:42:27 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
-        <title>script-to-find-new-postcode</title>
+        <title>새 우편번호 검색을 위한 간단한 스크립트</title>
         <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
   &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;새 우편번호 검색 스크립트&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;대량의 우편번호 찾기&lt;/a&gt;&lt;/li&gt;
