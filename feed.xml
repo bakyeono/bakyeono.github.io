@@ -5,157 +5,313 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 09 Aug 2015 22:26:37 +0900</pubDate>
-    <lastBuildDate>Sun, 09 Aug 2015 22:26:37 +0900</lastBuildDate>
+    <pubDate>Thu, 13 Aug 2015 01:22:45 +0900</pubDate>
+    <lastBuildDate>Thu, 13 Aug 2015 01:22:45 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
-        <title>새 우편번호 검색을 위한 간단한 스크립트</title>
+        <title>(번역) Vim의 탭은 그렇게 쓰는 게 아니다. 버퍼와 탭의 사용법</title>
         <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;새 우편번호 검색 스크립트&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;대량의 우편번호 찾기&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;탭 오용은 이제 그만&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;버퍼&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;윈도우&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;그러면 탭은 뭐냐?&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-4&quot; id=&quot;markdown-toc-section-4&quot;&gt;탭을 잘못 쓰는 문제&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-5&quot; id=&quot;markdown-toc-section-5&quot;&gt;해결책&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-6&quot; id=&quot;markdown-toc-section-6&quot;&gt;해결책 1: 탭을 버퍼로 대체&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-7&quot; id=&quot;markdown-toc-section-7&quot;&gt;해결책 2: 숨은 버퍼&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-8&quot; id=&quot;markdown-toc-section-8&quot;&gt;탭의 올바른 사용&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-9&quot; id=&quot;markdown-toc-section-9&quot;&gt;버퍼 활용 사례&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-10&quot; id=&quot;markdown-toc-section-10&quot;&gt;결론&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;우편번호 체계가 바뀌어서 데이터를 갱신해야 하는 작업이 많다. 한국 포털 검색 엔진에 주소를 검색하면 새 우편번호를 쉽게 찾을 수 있다. 반복잡업을 피하고 싶다면 w3m 브라우저를 이용해 우편번호를 찾는 스크립트를 만들어 쓰면 편하다.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;알림: 이 글은 조쉬 데이비스의 글(&lt;a href=&quot;https://joshldavis.com/2014/04/05/vim-tab-madness-buffers-vs-tabs&quot;&gt;https://joshldavis.com/2014/04/05/vim-tab-madness-buffers-vs-tabs&lt;/a&gt;)을 번역한 것이다. 저자의 허락을 구하고 번역했음을 밝힌다. -박연오&lt;/p&gt;
+&lt;/blockquote&gt;
 
-&lt;p&gt;이 글은 개인적 용도로 만든 스크립트를 소개한다.&lt;/p&gt;
+&lt;p&gt;우선 말하자면 나는 Vim에서 탭을 무척 많이 썼다.&lt;/p&gt;
+
+&lt;p&gt;다른 대부분의 프로그램들(크롬, 터미널, 아디움 등)에서 탭을 쓰듯이 Vim의 탭을 사용한 것이다. 나는 탭을 문서가 활성화되어 존재하는 모종의 공간으로 여기고 있었다.&lt;/p&gt;
+
+&lt;p&gt;문서를 편집하려면 탭을 하나 새로 열어 편집한다! 이게 탭이 작동하는 방식이고 Vim에서도 마찬가지일 것이다. 그렇지 않은가?&lt;/p&gt;
+
+&lt;p&gt;틀렸다.&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;탭 오용은 이제 그만&lt;/h2&gt;
+
+&lt;p&gt;만일 그런 방식으로 탭을 사용하는 중이라면 자기 손발을 묶는 셈이다. Vim이 제공하는 기능을 본연의 방식으로 사용하지 못하기 때문이다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://stackoverflow.com/questions/102384&quot;&gt;여러 사람들이 지적하는 것처럼&lt;/a&gt;, 사실 Vim의 탭은 엉뚱한 이름이 붙은 셈이다. 레이아웃이라는 이름이 더 어울릴 듯하다.&lt;/p&gt;
+
+&lt;p&gt;이에 관해 설명하기 전에, 몇가지 기초 사항과 함께 Vim의 버퍼가 무엇인지 정확히 알고 가자. 그 뒤에 Vim에서 탭을 사용하는 올바른 방법을 설명하겠다.&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;버퍼&lt;/h2&gt;
+
+&lt;p&gt;버퍼는 바로 편집중인 텍스트다. 예를 들어, 파일을 열면 그 파일의 내용이 버퍼로 로드된다. 따라서 다음과 같은 명령을 실행하면,&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ vim .vimrc
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;.vimrc&lt;/code&gt; 파일의 내용을 담은 하나의 버퍼를 갖도록 하여 Vim을 실행하는 것이다. 뭐, 간단한 이야기.&lt;/p&gt;
+
+&lt;p&gt;그러면 여러 개의 파일을 편집할 때는 어떻게 되는지 보자. 다음 명령을 실행해보자.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ vim .vimrc .zshrc
+# 그 후, Vim에서 다음 명령을 실행
+#   :bnext
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Vim은 아까와 같이 실행되지만 버퍼를 하나만 갖는 것이 아니라 &lt;code&gt;.zshrc&lt;/code&gt; 파일의 내용을 담은 버퍼를 추가로 연다. 따라서 이제 버퍼 두 개가 열렸다.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;.vimrc&lt;/code&gt; 편집을 멈추고 &lt;code&gt;.zshrc&lt;/code&gt; 를 편집하려면 &lt;code&gt;:bnext&lt;/code&gt; 명령을 실행한다. 그러면 Vim은 &lt;code&gt;.zshrc&lt;/code&gt; 버퍼를 표시한다. &lt;code&gt;:h buffer-list&lt;/code&gt; 명령을 입력하면 버퍼를 조작하는 다양한 명령어들을 볼 수 있다.&lt;/p&gt;
+
+&lt;p&gt;출력 화면:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://joshldavis.com/img/vim/buffers.gif&quot; alt=&quot;버퍼 두 개 편집&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;▲ 버퍼 두 개 편집&lt;/p&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;윈도우&lt;/h2&gt;
+
+&lt;p&gt;Vim의 윈도우는 버퍼를 출력하는 방법이다. 편집 화면을 세로 또는 가로로 분리할 때 만들어지는 것이 바로 윈도우다. 예를 들어, &lt;code&gt;:help&lt;/code&gt; 명령어를 실행하면 도움말 문서를 출력하는 새로운 윈도우가 실행될 것이다.&lt;/p&gt;
+
+&lt;p&gt;여기서 중요한 점은 윈도우는 어떤 버퍼든 출력할 수 있다는 것이다. 윈도우 하나가 버퍼 하나만 계속 출력하도록 강제되는 게 아니다. 물론 이 사실은 누구나 알 수 있다. 파일 하나를 편집할 때 &lt;code&gt;:vsplit&lt;/code&gt;을 입력하면 윈도우가 세로로 나눠지고, 새로 만들어진 윈도우에도 지금 편집하고 있는 버퍼가 출력되는 것이다!&lt;/p&gt;
+
+&lt;p&gt;이 점은 더 헷갈릴 것이 없다. 윈도우는 어떤 버퍼든 출력할 수 있다. &lt;code&gt;:split&lt;/code&gt; 또는 &lt;code&gt;:vsplit&lt;/code&gt; 명령으로 윈도우를 분할하면 새 윈도우에 출력되는 내용은 현재 버퍼다.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;:h buffer-list&lt;/code&gt;에서 볼 수 있는 버퍼 명령어로 윈도우가 출력할 버퍼를 바꿀 수 있다.&lt;/p&gt;
+
+&lt;p&gt;예를 들어, 아래 명령어로 다음과 같은 일을 할 수 있다. Vim에서 두 파일의 편집을 시작하고, 화면을 가로로 나눠 새 윈도우를 열고, 첫 윈도우에 두 번째 버퍼를 출력한다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ vim .vimrc .zshrc
+# Vim에서 다음 명령을 실행한다:
+#   :split
+#   :bnext
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;위 명령을 실행하면 이렇게 된다:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://joshldavis.com/img/vim/windows.gif&quot; alt=&quot;윈도우 두 개로 버퍼 두 개 편집&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;▲ 윈도우 두 개로 버퍼 두 개 편집&lt;/p&gt;
+
+&lt;h2 id=&quot;section-3&quot;&gt;그러면 탭은 뭐냐?&lt;/h2&gt;
+
+&lt;p&gt;이제 버퍼와 윈도우가 무엇인지 알았다. Vim의 공식 문서는 버퍼, 윈도우, 탭을 다음과 같이 설명한다:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;요약:
+    버퍼는 메모리 상의 텍스트 파일이다.
+    윈도우는 버퍼의 출력영역(viewport)이다.
+    탭 페이지는 윈도우의 집합이다.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이 문서에 따르면 탭은 단지 윈도우의 집합일 뿐이다. 이 설명은 처음에 탭이 사실상 레이아웃이라고 한 정의와 부합한다.&lt;/p&gt;
+
+&lt;p&gt;탭은 다양한 윈도우 레이아웃을 제공하기 위해 만들어진 것이다.&lt;/p&gt;
+
+&lt;p&gt;아래는 아까와 똑같은 상황(파일 두 개와 가로로 나눠진 화면)에 다른 윈도우 &lt;strong&gt;레이아웃&lt;/strong&gt;을 가진 탭이 하나 추가된 모습이다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://joshldavis.com/img/vim/tabs.gif&quot; alt=&quot;윈도우 레이아웃이 서로 다른 두 개의 탭&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;▲ 윈도우 레이아웃이 서로 다른 두 개의 탭&lt;/p&gt;
+
+&lt;p&gt;첫 번째 탭은 가로로 분할됐고, 두 번째 탭은 가로와 세로로 나눠졌다.&lt;/p&gt;
+
+&lt;p&gt;보다시피 두 탭은 레이아웃이 서로 다르지만 둘 다 똑같은 버퍼(&lt;code&gt;.vimrc&lt;/code&gt;와 &lt;code&gt;.zshrc&lt;/code&gt;)를 출력하고 있다.&lt;/p&gt;
+
+&lt;p&gt;이제 Vim에서 탭을 쓸 때의 문제로 돌아가 보자.&lt;/p&gt;
+
+&lt;h2 id=&quot;section-4&quot;&gt;탭을 잘못 쓰는 문제&lt;/h2&gt;
+
+&lt;p&gt;탭은 다양한 윈도우 레이아웃을 제공하기 위해 만들어졌다. 탭은 파일이 존재하는 공간이 아니다. 파일은 탭이 아니라 버퍼에 로드된다.&lt;/p&gt;
+
+&lt;p&gt;앞에서 본 gif는 이 문제를 보여준다. 똑같은 버퍼를 여러 탭에서 볼 수 있다면, Vim의 탭이 다른 에디터의 일반적인 탭과 어찌 비슷하겠는가?&lt;/p&gt;
+
+&lt;p&gt;탭 하나가 버퍼 하나를 가리키도록 강제하는 것은 좋은 방식이 아니다. Vim은 그런 방식으로 동작하지 않는다.&lt;/p&gt;
+
+&lt;h2 id=&quot;section-5&quot;&gt;해결책&lt;/h2&gt;
+
+&lt;p&gt;이 모두를 조화시키고 Vim의 버퍼/윈도우의 효과적인 사용법을 배우려면 버퍼/윈도우만으로 편집하는 법을 이해할 때까지 탭을 쓰지 않는 것이 도움이 될 듯 하다.&lt;/p&gt;
+
+&lt;p&gt;버퍼를 사용하는 두 가지 방법을 제시하겠다. 첫번째 방법은 일반 편집기의 탭 기능을 버퍼가 흉내내도록 하는 것이다.&lt;/p&gt;
+
+&lt;p&gt;두 번째 방법은 Vim 편집기의 본연에 더 가까운 방법으로, 더 강력한 파워를 가진다.&lt;/p&gt;
+
+&lt;h3 id=&quot;section-6&quot;&gt;해결책 1: 탭을 버퍼로 대체&lt;/h3&gt;
+
+&lt;p&gt;내가 처음 해 본 방법은 모든 버퍼를 화면 상단에 보여주는 플러그인을 설치하는 것이었다. 이걸 해주는 플러그인이 여러 가지 있다.&lt;/p&gt;
+
+&lt;p&gt;나는 이미 vim-airline을 쓰고 있었기 때문에 이 플러그인의 기능 중 버퍼 목록을 화면 상단에 출력하는 기능을 켰다. airline의 이 기능을 사용하려면 airline을 설치한 뒤 &lt;code&gt;.vimrc&lt;/code&gt; 파일에 다음 내용을 추가한다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&quot; 버퍼 목록 켜기
+let g:airline#extensions#tabline#enabled = 1
+
+&quot; 파일명만 출력
+let g:airline#extensions#tabline#fnamemod = &#39;:t&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;그러면 이렇게 된다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://joshldavis.com/img/vim/airline.gif&quot; alt=&quot;모든 버퍼를 보여주는 플러그인&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;▲ 모든 버퍼를 보여주는 플러그인&lt;/p&gt;
+
+&lt;p&gt;그 다음으로 나는 더이상 쓰지 않는 탭 단축키를 교체해야 했다. 이것도 &lt;code&gt;.vimrc&lt;/code&gt; 파일을 수정하면 되는 일이었다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&quot; 이 옵션은 버퍼를 수정한 직후 버퍼를 감춰지도록 한다.
+&quot; 이 방법으로 버퍼를 사용하려면 거의 필수다.
+set hidden
+
+&quot; 버퍼 새로 열기
+&quot; 원래 이 단축키로 바인딩해 두었던 :tabnew를 대체한다.
+nmap &amp;lt;leader&amp;gt;T :enew&amp;lt;cr&amp;gt;
+
+&quot; 다음 버퍼로 이동
+nmap &amp;lt;leader&amp;gt;l :bnext&amp;lt;CR&amp;gt;
+
+&quot; 이전 버퍼로 이동
+nmap &amp;lt;leader&amp;gt;h :bprevious&amp;lt;CR&amp;gt;
+
+&quot; 현재 버퍼를 닫고 이전 버퍼로 이동
+&quot; 탭 닫기 단축키를 대체한다.
+nmap &amp;lt;leader&amp;gt;bq :bp &amp;lt;BAR&amp;gt; bd #&amp;lt;CR&amp;gt;
+
+&quot; 모든 버퍼와 각 버퍼 상태 출력
+nmap &amp;lt;leader&amp;gt;bl :ls&amp;lt;CR&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이렇게 설정하니 일반적인 탭 방식을 Vim에서 쓰는 것과 버퍼를 제대로 이해하고 사용할 때 쓸 수 있는 강력한 기능들을 결합할 수 있었다.&lt;/p&gt;
+
+&lt;h3 id=&quot;section-7&quot;&gt;해결책 2: 숨은 버퍼&lt;/h3&gt;
+
+&lt;p&gt;탭을 흉내낸 첫번째 방법 대신, 어느 버퍼가 열렸는지 걱정할 필요 없이 여러 버퍼를 동시에 열어 작업하는 강력한 기능을 이용해보자.&lt;/p&gt;
+
+&lt;p&gt;나는 두 가지 플러그인에서 많은 도움을 얻을 수 있었다. 첫번째 플러그인은 버퍼를 관리하는 훌륭한 방법을 제공하는 Buffergator다. 두번째는 Vim 사용자들 사이에 인기 많은 CtrlP다. 이 플러그인은 파일 퍼지 파인드 기능을 제공한다.&lt;/p&gt;
+
+&lt;p&gt;앞서 제시한 해결책처럼 버퍼를 닫거나 가짜 탭을 관리하는 대신, 그냥 CtrlP로 편집할 파일을 열면 되고 버퍼를 닫는 문제나 버퍼를 얼마나 많이 열었는가에 관해서는 신경쓰지 않아도 된다.&lt;/p&gt;
+
+&lt;p&gt;파일 편집을 마치면 그냥 저장하고 CtrlP를 열어 다음 파일로 넘어가면 된다.&lt;/p&gt;
+
+&lt;p&gt;CtrlP는 퍼지 파인드를 위한 몇 가지 방법을 제공한다. 다음 퍼지 기능을 이용할 수 있다.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;현재 디렉토리에서 찾기&lt;/li&gt;
+  &lt;li&gt;모든 버퍼에서 찾기&lt;/li&gt;
+  &lt;li&gt;모든 버퍼에서 찾기 (최근 사용순 정렬)&lt;/li&gt;
+  &lt;li&gt;위 방법들을 모두 결합한 방식&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;다음은 내가 유용하게 사용하고 있는 CtrlP 설정이다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&quot; 기본 무시 설정
+let g:ctrlp_custom_ignore = {
+  \ &#39;dir&#39;:  &#39;\v[\/](\.(git|hg|svn)|\_site)$&#39;,
+  \ &#39;file&#39;: &#39;\v\.(exe|so|dll|class|png|jpg|jpeg)$&#39;,
+\}
+
+&quot; 가장 가까운 .git 디렉토리를 cwd(현재 작업 디렉토리)로 사용
+&quot; 버전 관리를 사용하는 프로젝트를 할 때 꽤 적절하다.
+&quot; .svn, .hg, .bzr도 지원한다.
+let g:ctrlp_working_path_mode = &#39;r&#39;
+
+&quot; 단축키를 리더 키로 대체
+nmap &amp;lt;leader&amp;gt;p :CtrlP&amp;lt;cr&amp;gt;
+
+&quot; 여러 모드를 위한 단축키
+nmap &amp;lt;leader&amp;gt;bb :CtrlPBuffer&amp;lt;cr&amp;gt;
+nmap &amp;lt;leader&amp;gt;bm :CtrlPMixed&amp;lt;cr&amp;gt;
+nmap &amp;lt;leader&amp;gt;bs :CtrlPMRU&amp;lt;cr&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;나는 Buffergator를 버퍼들을 정리하는 용도와 저장하는 걸 잊은 경우를 위해 편집한 파일들을 보는 용도로 사용한다.&lt;/p&gt;
+
+&lt;p&gt;다음은 내 Buffergator 설정과 단축키 바인딩이다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&quot; 화면 오른쪽을 사용
+let g:buffergator_viewport_split_policy = &#39;R&#39;
+
+&quot; 단축키를 직접 지정하겠음
+let g:buffergator_suppress_keymaps = 1
+
+&quot; 버퍼 돌기 (Looper buffers)
+&quot;let g:buffergator_mru_cycle_loop = 1
+
+&quot; 이전 버퍼로 이동
+nmap &amp;lt;leader&amp;gt;jj :BuffergatorMruCyclePrev&amp;lt;cr&amp;gt;
+
+&quot; 다음 버퍼로 이동
+nmap &amp;lt;leader&amp;gt;kk :BuffergatorMruCycleNext&amp;lt;cr&amp;gt;
+
+&quot; 모든 버퍼 보기
+nmap &amp;lt;leader&amp;gt;bl :BuffergatorOpen&amp;lt;cr&amp;gt;
+
+&quot; 위의 첫번재 해결책과 공유하는 단축키 (버퍼 닫기를 뜻함)
+nmap &amp;lt;leader&amp;gt;T :enew&amp;lt;cr&amp;gt;
+nmap &amp;lt;leader&amp;gt;bq :bp &amp;lt;BAR&amp;gt; bd #&amp;lt;cr&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;section-8&quot;&gt;탭의 올바른 사용&lt;/h3&gt;
+
+&lt;p&gt;이 글은 탭을 완전히 쓰지 말라는 뜻은 아니다. Vim이 제시하는 방법으로 탭을 쓰자는 것이다.&lt;/p&gt;
+
+&lt;p&gt;탭은 윈도우들의 레이아웃을 변경하기 위한 용도로 사용해야 한다. C 프로젝트를 한다고 생각해 보자. 탭 하나는 일반적인 편집용으로 쓰고, 다른 탭 하나는 화면을 세로로 나눠 &lt;code&gt;file.h&lt;/code&gt;와 &lt;code&gt;file.c&lt;/code&gt; 편집하는 용도로 쓴다면 여러 파일을 편집하기에 편리할 것이다.&lt;/p&gt;
+
+&lt;p&gt;탭은 여러 작업을 나누는 데도 유용하다. 한 탭에서 프로젝트의 한 부분을 작업하고 다른 탭에서 같은 프로젝트의 다른 부분을 작업할 수 있다.&lt;/p&gt;
+
+&lt;p&gt;탭 하나당 파일 하나를 할당하는 방식은 Vim이 의도하는 사용법이 아니라는 것만은 기억해주기 바란다.&lt;/p&gt;
+
+&lt;h2 id=&quot;section-9&quot;&gt;버퍼 활용 사례&lt;/h2&gt;
+
+&lt;p&gt;내가 이 글의 서두에서 주장한 것처럼, 잘못된 방법으로 탭을 쓰는 것보다 버퍼를 쓰는 것이 훨씬 강력하다.&lt;/p&gt;
+
+&lt;p&gt;이 점을 보기 위해 예를 들어 본다. 편집할 때 당신이 하는 일이다.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;블로그에 새 글을 쓴다고 생각해보자. 분할 화면 한 쪽에는 &lt;code&gt;base.css&lt;/code&gt; 파일을 참고용으로 펼쳐 놓았고, 그 위에는 실제 편집하고 있는 글이 있다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;그러면 여기서 홈페이지 레이아웃을 수정한다고 해 보자. 탭을 새로 여는(이전의 사고방식) 대신, CtrlP를 이용해 새로운 버퍼에 &lt;code&gt;index.html&lt;/code&gt;을 연다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;이렇게 하면 지금 보고 있는 윈도우가 &lt;code&gt;index.html&lt;/code&gt;의 버퍼를 보이도록 전환시킨다. 하단의 윈도우는 건드려지지 않은 채로 계속 &lt;code&gt;base.css&lt;/code&gt;를 참고용으로 출력하고 있다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;레이아웃 편집을 마친 후에는 &lt;code&gt;&amp;lt;leader&amp;gt;bq&lt;/code&gt; 를 눌러 포스트 편집으로 돌아간다.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;위 과정을 진행한 화면:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://joshldavis.com/img/vim/example.gif&quot; alt=&quot;버퍼의 활용 사례&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;▲ 버퍼의 활용 사례&lt;/p&gt;
+
+&lt;h2 id=&quot;section-10&quot;&gt;결론&lt;/h2&gt;
+
+&lt;p&gt;Vim에서 탭을 쓰는 방법은 다른 프로그램과 다르다. 하지만 언제 Vim이 다른 프로그램과 비슷했던 적이 있었던가.&lt;/p&gt;
+
+&lt;p&gt;버퍼와 윈도우를 사용하는 방법을 배우고 받아들이면 훨씬 아귀가 맞는 편집 경험을 누릴 수 있으며 탭을 부적절한 방법으로 사용할 때 겪는 여러 가지 어려움을 해결해준다.&lt;/p&gt;
+
+&lt;p&gt;이 기사에 대한 의견이나 다른 일반적인 Vim에 관한 의견이 있으면 연락해주기 바란다. 사람들과 대화하는 것을 좋아한다. =]&lt;/p&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;주의: 스크립트를 이용하는 방법은 해석하기에 따라 포털 사이트의 이용약관에 위배될 수 있다. 이 스크립트를 사용하는 사람은 그에 따르는 책임을 지도록 하자. 나는 책임을 지지 않는다.&lt;/p&gt;
+  &lt;p&gt;원문 URL: https://joshldavis.com/2014/04/05/vim-tab-madness-buffers-vs-tabs&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;참고: 새 우편번호를 찾으려면 기존 우편번호로 검색하면 안 되고 도로명주소로 검색해야 한다. 기존 우편번호와 새 우편번호는 1:1 대응관계가 아니다.&lt;/p&gt;
+  &lt;p&gt;원문 초판: 2014-04-05 / 원문 수정: 2014-10-25 / 번역: 2015-08-13&lt;/p&gt;
 &lt;/blockquote&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;새 우편번호 검색 스크립트&lt;/h2&gt;
-
-&lt;p&gt;이 스크립트를 사용하려면 w3m과 sed가 필요하다. 설치하자.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ sudo apt-get install w3m sed
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;에디터를 열어 스크립트 파일을 만든다. 파일명은 &lt;code&gt;q-postcode.sh&lt;/code&gt; 로 했다.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ vi q-postcode.sh
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;스크립트 내용은 아래와 같다. 이 내용을 위의 파일에 넣는다.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#!/bin/bash
-
-# environment
-LANG=&quot;ko_KR.utf-8&quot; 
-
-# temp file
-tmp_dir=&quot;/tmp&quot; # dirs for temporary files
-tmp_prefix=&quot;postcode-conv&quot; # prefix for temporary filename
-clear_tmp=true # clear temporary files after the job?
-time_stamp=`date +%s%N`
-tmp_file=$tmp_dir/$tmp_prefix$time_stamp
-
-# parameter check
-if [ -z $1 ]; then
-  &amp;gt;&amp;amp;2 echo &quot;ERROR: No search string supplied.&quot;
-  exit 1
-fi
-
-# request
-function url_encode() { echo -n $@ | perl -pe&#39;s/([^-+_.~A-Za-z0-9])/sprintf(&quot;%%%02X&quot;, ord($1))/seg&#39;; }
-address=`url_encode $@`
-q_url=&quot;http://search.daum.net/search?nil_suggest=btn&amp;amp;w=tot&amp;amp;DA=SBC&amp;amp;q=$address&quot;
-w3m -dump -cols 65536 -ppl 65536 $q_url &amp;gt; $tmp_file 2&amp;gt; /dev/null
-
-# parse
-sedexp=&#39;s/\ +([0-9]{5})$/\1\n/p&#39;
-result=`sed -n -r &quot;$sedexp&quot; $tmp_file`
-echo &quot;$result&quot;
-
-# clear temp files
-if [[ $clear_tmp == true ]]; then
-  rm $tmp_file
-fi
-
-exit
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;실행 권한을 지정한다.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ chmod u+x q-postcode.sh
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;스크립트를 시험해 보자.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ ./q-postcode 서울시 영등포구 버드나루로 100
-07230
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;우편번호가 정상적으로 출력된다.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;주의: 소스를 보면 알곘지만 이건 급하게 만든 임시 스크립트다. html을 구조적으로 해석하지 않고 정규표현식으로 게으르게 읽는다. 따라서 잘못된 결과가 나올 경우가 있을 수 있으며, 포탈 사이트의 출력 방식이 바뀌면 sed 정규표현식을 수정해야 한다.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;section-1&quot;&gt;대량의 우편번호 찾기&lt;/h2&gt;
-
-&lt;p&gt;찾아야 할 우편번호가 많다면 파일에서 주소 목록을 읽어 처리하도록 하면 된다. 한 줄에 주소가 하나씩 있는 파일을 처리하는 스크립트를 만들어 보자. 파일명은 &lt;code&gt;convert.sh&lt;/code&gt; 로 했다.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ vi convert.sh
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;아래 내용을 입력한다.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#!/bin/bash
-
-while read line; do
-  result=$(./q-postcode.sh $line | head -n 1)
-  echo $result
-done
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;이 스크립트에도 실행 권한을 지정한다.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ chmod u+x convert.sh
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;이 스크립트는 한 줄에 주소 하나씩 입력받아 우편번호를 출력해준다.&lt;/p&gt;
-
-&lt;p&gt;스크립트를 시험해보기 위한 데이터 파일을 준비하자. 터미널에 아래와 같이 입력한다. 주소 리스트가 있는 스프레드시트 문서에서 복사해 넣어도 된다.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ cat &amp;gt; data.txt &amp;lt;&amp;lt; _EOF_
-서울특별시 중구 세종대로 110
-부산 영도구 태종로 423
-율도국 홍길동 7878
-경기도 광주시 행정타운로 50
-_EOF_
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;찾을 수 없는 주소가 데이터에 있으면 어떻게 출력되는지 확인하기 위해 중간에 &lt;strong&gt;율도국 홍길동 7878&lt;/strong&gt;을 넣었다.&lt;/p&gt;
-
-&lt;p&gt;이제 시험해보자.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ ./convert.sh &amp;lt; data.txt
-04524
-49011
-
-12738
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;우편번호를 찾을 수 있는 경우 우편번호가 출력됐고, 찾을 수 없는 &lt;strong&gt;율도국 홍길동 7878&lt;/strong&gt;의 우편번호는 빈 줄로 출력됐다.&lt;/p&gt;
-
-&lt;p&gt;사용해보면 처리 속도가 느리다는 것을 알 수 있을 것이다. 수천 개 이상의 대량의 데이터를 작업해야 한다면 멀티쓰레딩을 해야 할 것이다. 이 글에서는 거기까지는 다루지 않는다.&lt;/p&gt;
 
 </description>
         <author>박연오(bakyeono@gmail.com)</author>
-        <pubDate>Sun, 09 Aug 2015 21:03:00 +0900</pubDate>
-        <link>http://bakyeono.net/post/2015-08-09-script-to-find-new-postcode.html</link>
-        <guid isPermaLink="true">http://bakyeono.net/post/2015-08-09-script-to-find-new-postcode.html</guid>
+        <pubDate>Thu, 13 Aug 2015 01:01:00 +0900</pubDate>
+        <link>http://bakyeono.net/post/2015-08-13-vim-tab-madness-translate.html</link>
+        <guid isPermaLink="true">http://bakyeono.net/post/2015-08-13-vim-tab-madness-translate.html</guid>
         
-        <category>리눅스</category>
-        
-        <category>bash</category>
-        
-        <category>우편번호</category>
+        <category>vim</category>
         
         
       </item>
