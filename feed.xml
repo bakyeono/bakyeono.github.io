@@ -5,8 +5,8 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 26 Aug 2015 17:33:30 +0900</pubDate>
-    <lastBuildDate>Wed, 26 Aug 2015 17:33:30 +0900</lastBuildDate>
+    <pubDate>Wed, 26 Aug 2015 17:35:50 +0900</pubDate>
+    <lastBuildDate>Wed, 26 Aug 2015 17:35:50 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -125,7 +125,7 @@
 
 &lt;h2 id=&quot;botfather------&quot;&gt;1. @BotFather를 통한 봇 등록 / 토큰 발급&lt;/h2&gt;
 
-&lt;p&gt;텔레그램 봇은 @BotFather 봇을 통해 관린된다.&lt;/p&gt;
+&lt;p&gt;텔레그램 봇은 @BotFather 봇을 통해 관리된다.&lt;/p&gt;
 
 &lt;p&gt;텔레그램 클라이언트에서 @botfather 사용자를 채팅 목록에 추가한다. 텔레그램 클라이언트에서 @BotFather를 검색하거나 웹 브라우저에서 &lt;a href=&quot;https://telegram.me/botfather&quot;&gt;https://telegram.me/botfather&lt;/a&gt; 주소로 접속해도 @BotFather 사용자를 추가할 수 있다.&lt;/p&gt;
 
@@ -139,7 +139,7 @@
 
 &lt;p&gt;@BotFather에게 &lt;code&gt;/newbot&lt;/code&gt; 메시지를 보내면 봇을 등록할 수 있다.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/telegram-bot-botfather-newbot1.png&quot; alt=&quot;BotFather newbot 명령 1&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;봇을 만드는 과정은 아래와 같다.&lt;/p&gt;
 
 &lt;ol&gt;
   &lt;li&gt;
@@ -155,6 +155,8 @@
     &lt;p&gt;@BotFather가 봇이 생성되었다고 알려주며 봇 주소와 토큰을 알려준다. 토큰은 봇 API를 사용하기 위해 꼭 필요하므로 잘 챙겨두고, 유출되지 않도록 한다.&lt;/p&gt;
   &lt;/li&gt;
 &lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/telegram-bot-botfather-newbot1.png&quot; alt=&quot;BotFather newbot 명령 1&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/telegram-bot-botfather-newbot2.png&quot; alt=&quot;BotFather newbot 명령 2&quot; /&gt;&lt;/p&gt;
 
