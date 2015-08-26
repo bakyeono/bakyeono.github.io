@@ -5,8 +5,8 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 27 Aug 2015 03:00:32 +0900</pubDate>
-    <lastBuildDate>Thu, 27 Aug 2015 03:00:32 +0900</lastBuildDate>
+    <pubDate>Thu, 27 Aug 2015 03:03:26 +0900</pubDate>
+    <lastBuildDate>Thu, 27 Aug 2015 03:03:26 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -60,7 +60,7 @@
 
 &lt;p&gt;내가 Glosbe API 사용을 위해 만든 파이썬 스크립트다. 아래 주소에서 다운로드하거나 클론하면 된다.&lt;/p&gt;
 
-&lt;p&gt;GitHub: &lt;a href=&quot;https://en.wikipedia.org/wiki/List_of_ISO_639-3_codes&quot;&gt;https://github.com/bakyeono/glosbe-api-client&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;glosbe-api-client GitHub: &lt;a href=&quot;https://github.com/bakyeono/glosbe-api-client&quot;&gt;https://github.com/bakyeono/glosbe-api-client&lt;/a&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;section&quot;&gt;사용법&lt;/h3&gt;
 
@@ -69,7 +69,7 @@
 &lt;pre&gt;&lt;code&gt;$ python glosbe.py 원래언어 목적언어 번역어
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;즉, 한-&amp;gt;영사전으로 ‘딸기’를 검색하고 싶다면 아래와 같이 실행한다.&lt;/p&gt;
+&lt;p&gt;즉, 한-&amp;gt;영 사전으로 ‘딸기’를 검색하고 싶다면 아래와 같이 실행한다.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;$ python glosbe.py kor eng 딸기
 딸기
