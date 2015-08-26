@@ -5,8 +5,8 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 26 Aug 2015 17:37:57 +0900</pubDate>
-    <lastBuildDate>Wed, 26 Aug 2015 17:37:57 +0900</lastBuildDate>
+    <pubDate>Wed, 26 Aug 2015 17:42:15 +0900</pubDate>
+    <lastBuildDate>Wed, 26 Aug 2015 17:42:15 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -32,7 +32,7 @@
       &lt;li&gt;&lt;a href=&quot;#section-7&quot; id=&quot;markdown-toc-section-7&quot;&gt;봇 사용하기&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-8&quot; id=&quot;markdown-toc-section-8&quot;&gt;서버 코드 설명&lt;/a&gt;    &lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-8&quot; id=&quot;markdown-toc-section-8&quot;&gt;봇 서버 코드 설명&lt;/a&gt;    &lt;ul&gt;
       &lt;li&gt;&lt;a href=&quot;#section-9&quot; id=&quot;markdown-toc-section-9&quot;&gt;봇 토큰 지정&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#section-10&quot; id=&quot;markdown-toc-section-10&quot;&gt;메시지 발송 함수&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#section-11&quot; id=&quot;markdown-toc-section-11&quot;&gt;커스텀 키보드&lt;/a&gt;&lt;/li&gt;
@@ -634,7 +634,7 @@ app = webapp2.WSGIApplication([
 
 &lt;p&gt;이제 &lt;code&gt;main.py&lt;/code&gt;를 수정해 위 기능들 중 불필요한 기능을 없애고 필요한 기능을 추가하면 된다. 자신만의 봇을 만들어 서비스해 보자.&lt;/p&gt;
 
-&lt;h2 id=&quot;section-8&quot;&gt;서버 코드 설명&lt;/h2&gt;
+&lt;h2 id=&quot;section-8&quot;&gt;봇 서버 코드 설명&lt;/h2&gt;
 
 &lt;p&gt;코드에 달린 주석과 텔레그램 API 문서를 참고하면 이해하기 어려운 부분은 없을 것이다. &lt;code&gt;main.py&lt;/code&gt; 코드 중 몇 가지만 설명한다.&lt;/p&gt;
 
@@ -745,9 +745,9 @@ BASE_URL = &#39;https://api.telegram.org/bot&#39; + TOKEN + &#39;/&#39;
 
 &lt;p&gt;핸들러는 구글 앱 엔진의 &lt;code&gt;webapp2.RequestHandler&lt;/code&gt; 객체를 확장해서 정의한다.&lt;/p&gt;
 
-&lt;p&gt;텔레그램 API는 post 방식으로 오므로, post 함수를 정의했다.&lt;/p&gt;
+&lt;p&gt;텔레그램 API는 POST 방식으로 오므로, 핸들러에 &lt;code&gt;post&lt;/code&gt; 메소드를 정의했다.&lt;/p&gt;
 
-&lt;p&gt;이 함수는 텔레그램이 보내온 JSON 객체를 해석해 &lt;code&gt;process_cmds&lt;/code&gt; 함수가 메시지를 처리하도록 전달한다.&lt;/p&gt;
+&lt;p&gt;이 메소드는 텔레그램이 보내온 JSON 객체를 해석해 &lt;code&gt;process_cmds&lt;/code&gt; 함수가 메시지를 처리하도록 전달한다.&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;process_cmd()&lt;/code&gt; 함수는 152번째 줄에 아래와 같이 정의돼 있다.&lt;/p&gt;
 

@@ -74,7 +74,7 @@
       <li><a href="#section-7" id="markdown-toc-section-7">봇 사용하기</a></li>
     </ul>
   </li>
-  <li><a href="#section-8" id="markdown-toc-section-8">서버 코드 설명</a>    <ul>
+  <li><a href="#section-8" id="markdown-toc-section-8">봇 서버 코드 설명</a>    <ul>
       <li><a href="#section-9" id="markdown-toc-section-9">봇 토큰 지정</a></li>
       <li><a href="#section-10" id="markdown-toc-section-10">메시지 발송 함수</a></li>
       <li><a href="#section-11" id="markdown-toc-section-11">커스텀 키보드</a></li>
@@ -676,7 +676,7 @@ app = webapp2.WSGIApplication([
 
 <p>이제 <code>main.py</code>를 수정해 위 기능들 중 불필요한 기능을 없애고 필요한 기능을 추가하면 된다. 자신만의 봇을 만들어 서비스해 보자.</p>
 
-<h2 id="section-8">서버 코드 설명</h2>
+<h2 id="section-8">봇 서버 코드 설명</h2>
 
 <p>코드에 달린 주석과 텔레그램 API 문서를 참고하면 이해하기 어려운 부분은 없을 것이다. <code>main.py</code> 코드 중 몇 가지만 설명한다.</p>
 
@@ -787,9 +787,9 @@ BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
 
 <p>핸들러는 구글 앱 엔진의 <code>webapp2.RequestHandler</code> 객체를 확장해서 정의한다.</p>
 
-<p>텔레그램 API는 post 방식으로 오므로, post 함수를 정의했다.</p>
+<p>텔레그램 API는 POST 방식으로 오므로, 핸들러에 <code>post</code> 메소드를 정의했다.</p>
 
-<p>이 함수는 텔레그램이 보내온 JSON 객체를 해석해 <code>process_cmds</code> 함수가 메시지를 처리하도록 전달한다.</p>
+<p>이 메소드는 텔레그램이 보내온 JSON 객체를 해석해 <code>process_cmds</code> 함수가 메시지를 처리하도록 전달한다.</p>
 
 <p><code>process_cmd()</code> 함수는 152번째 줄에 아래와 같이 정의돼 있다.</p>
 
