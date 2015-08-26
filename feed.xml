@@ -5,8 +5,8 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 26 Aug 2015 17:37:23 +0900</pubDate>
-    <lastBuildDate>Wed, 26 Aug 2015 17:37:23 +0900</lastBuildDate>
+    <pubDate>Wed, 26 Aug 2015 17:37:57 +0900</pubDate>
+    <lastBuildDate>Wed, 26 Aug 2015 17:37:57 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -302,7 +302,7 @@ libraries:
 
 &lt;ul&gt;
   &lt;li&gt;application 항목에는 &lt;strong&gt;아까 등록한 구글 앱 엔진 프로젝트의 ID&lt;/strong&gt;를 입력한다. &lt;code&gt;my-testing-bot&lt;/code&gt;을 입력하는 게 아니다.&lt;/li&gt;
-  &lt;li&gt;handler 항목은 URL 매개변수에 따른 처리기를 지정하는 항목이다. &lt;code&gt;/set-webhook&lt;/code&gt;은 구글 계정 로그인을 통해 권한을 검사한 후 main.app을 통해 처리하도록 하였고 기타 url은 로그인 없이 main.app을 통해 처리하도록 했다. 웹훅에 관해서는 나중에 설명하겠다.&lt;/li&gt;
+  &lt;li&gt;handlers 항목은 URL 매개변수에 따른 처리기를 지정하는 항목이다. &lt;code&gt;/set-webhook&lt;/code&gt;은 구글 계정 로그인을 통해 권한을 검사한 후 main.app을 통해 처리하도록 하였고 기타 url은 로그인 없이 main.app을 통해 처리하도록 했다. 웹훅에 관해서는 나중에 설명하겠다.&lt;/li&gt;
   &lt;li&gt;libraries 항목에는 구글 앱 엔진이 로드할 라이브러리와 버전을 지정한다. webapp2는 앱 엔진을 쓰기 위해 추가해야 하는 기본 라이브러리다.&lt;/li&gt;
 &lt;/ul&gt;
 
