@@ -5,8 +5,8 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 26 Aug 2015 17:42:15 +0900</pubDate>
-    <lastBuildDate>Wed, 26 Aug 2015 17:42:15 +0900</lastBuildDate>
+    <pubDate>Wed, 26 Aug 2015 17:43:01 +0900</pubDate>
+    <lastBuildDate>Wed, 26 Aug 2015 17:43:01 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -782,9 +782,11 @@ BASE_URL = &#39;https://api.telegram.org/bot&#39; + TOKEN + &#39;/&#39;
 
 &lt;p&gt;단순히 메시지 텍스트가 명령어에 해당되는지 비교하는 분기들이다.&lt;/p&gt;
 
-&lt;p&gt;눈여겨 봐둘 만한 부분은 봇 상태가 활성화되지 않았을 때는 &lt;code&gt;CMD_START&lt;/code&gt; 명령 외에는 처리하지 않는 부분이다.&lt;/p&gt;
+&lt;p&gt;눈여겨 봐둘 만한 부분은 봇 상태가 활성화되지 않았을 때는 &lt;code&gt;CMD_START&lt;/code&gt; 명령 외에는 처리하지 않도록 한 부분이다.&lt;/p&gt;
 
-&lt;p&gt;또, 방송 명령&lt;code&gt;CMD_BROADCAST&lt;/code&gt;의 경우에는 정규표현식 처리를 하여 명령과 매개변수(방송할 메시지)를 구분하였다. 실제 사용시에는 아무나 방송을 하지 못하도록 방송을 할 수 있는 사용자를 지정해두고 체크하도록 해야 할 것이다.&lt;/p&gt;
+&lt;p&gt;또, 방송 명령&lt;code&gt;CMD_BROADCAST&lt;/code&gt;의 경우에는 정규표현식 처리를 하여 명령과 매개변수(방송할 메시지)를 구분하였다.&lt;/p&gt;
+
+&lt;p&gt;방송 기능을 실제로 서비스 할 때는 아무나 방송을 하지 못하도록 방송을 할 수 있는 사용자를 지정해두고 체크하도록 해야 할 것이다.&lt;/p&gt;
 
 &lt;p&gt;그리고,&lt;/p&gt;
 
