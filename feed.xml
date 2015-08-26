@@ -5,8 +5,8 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 26 Aug 2015 17:43:01 +0900</pubDate>
-    <lastBuildDate>Wed, 26 Aug 2015 17:43:01 +0900</lastBuildDate>
+    <pubDate>Wed, 26 Aug 2015 17:45:09 +0900</pubDate>
+    <lastBuildDate>Wed, 26 Aug 2015 17:45:09 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -268,9 +268,11 @@ Options:
 
 &lt;h2 id=&quot;section-4&quot;&gt;3. 서버 프로그램 만들기&lt;/h2&gt;
 
-&lt;h3 id=&quot;appyaml------&quot;&gt;app.yaml - 앱과 요청에 대한 정의&lt;/h3&gt;
-
 &lt;p&gt;그러면 구글 앱 엔진으로 봇 서버 프로그램을 만들어보자.&lt;/p&gt;
+
+&lt;p&gt;딱 두 개의 파일만 만들면 된다. &lt;code&gt;app.yaml&lt;/code&gt;과 &lt;code&gt;main.py&lt;/code&gt;다.&lt;/p&gt;
+
+&lt;h3 id=&quot;appyaml------&quot;&gt;app.yaml - 앱과 요청에 대한 정의&lt;/h3&gt;
 
 &lt;p&gt;디렉토리를 하나 만들고&lt;/p&gt;
 
