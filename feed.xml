@@ -5,8 +5,8 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 27 Aug 2015 02:29:08 +0900</pubDate>
-    <lastBuildDate>Thu, 27 Aug 2015 02:29:08 +0900</lastBuildDate>
+    <pubDate>Thu, 27 Aug 2015 02:33:29 +0900</pubDate>
+    <lastBuildDate>Thu, 27 Aug 2015 02:33:29 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -44,6 +44,7 @@
       &lt;li&gt;&lt;a href=&quot;#section-15&quot; id=&quot;markdown-toc-section-15&quot;&gt;봇 서버 프로젝트 다운로드&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#faviconico--&quot; id=&quot;markdown-toc-faviconico--&quot;&gt;favicon.ico 에러 해결&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#cronyaml-----cron-job-&quot; id=&quot;markdown-toc-cronyaml-----cron-job-&quot;&gt;cron.yaml - 작업 스케줄 (cron job) 등록&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#telegram-cli--&quot; id=&quot;markdown-toc-telegram-cli--&quot;&gt;telegram-cli로 로봇 만들기&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
@@ -840,6 +841,10 @@ BASE_URL = &#39;https://api.telegram.org/bot&#39; + TOKEN + &#39;/&#39;
 &lt;p&gt;이렇게 지정해두면 서울 시간대로 오전 9시 ~ 오후 8시 사이에 30분에 한 번씩 작업이 요청된다.&lt;/p&gt;
 
 &lt;p&gt;물론, &lt;code&gt;main.py&lt;/code&gt;를 수정해 작업 요청을 수행하기 위한 핸들러(이 경우 ‘/broadcast-news`)와 기능을 추가해 줘야 한다.&lt;/p&gt;
+
+&lt;h3 id=&quot;telegram-cli--&quot;&gt;telegram-cli로 로봇 만들기&lt;/h3&gt;
+
+&lt;p&gt;telegram-cli로 로봇을 만드는 방법은 &lt;a href=&quot;http://bakyeono.net/post/2015-06-10-tg-broadcast.html&quot;&gt;이 글&lt;/a&gt;에 나와 있다.&lt;/p&gt;
 
 </description>
         <author>박연오(bakyeono@gmail.com)</author>
