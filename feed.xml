@@ -5,8 +5,8 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 27 Aug 2015 03:03:26 +0900</pubDate>
-    <lastBuildDate>Thu, 27 Aug 2015 03:03:26 +0900</lastBuildDate>
+    <pubDate>Thu, 27 Aug 2015 03:04:56 +0900</pubDate>
+    <lastBuildDate>Thu, 27 Aug 2015 03:04:56 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -22,7 +22,7 @@
 
 &lt;h2 id=&quot;glosbe-api&quot;&gt;다국어 사전 Glosbe API&lt;/h2&gt;
 
-&lt;p&gt;Glosbe는 다국어 온라인 사전이다. 사용자들이 직접 데이터베이스를 보완해 만드는 사전이며 무료다.&lt;/p&gt;
+&lt;p&gt;Glosbe는 다국어 온라인 사전이다. 사용자들이 직접 데이터베이스를 보완해 만드는 사전이며 무료다. 아쉽게도 사전의 질은 상용 사전만큼 좋지는 못한 듯하다.&lt;/p&gt;
 
 &lt;p&gt;Glosbe는 무료로 웹 API도 제공하기 때문에 다국어 사전이 필요한 경우 이용할 수 있다.&lt;/p&gt;
 
@@ -60,7 +60,7 @@
 
 &lt;p&gt;내가 Glosbe API 사용을 위해 만든 파이썬 스크립트다. 아래 주소에서 다운로드하거나 클론하면 된다.&lt;/p&gt;
 
-&lt;p&gt;glosbe-api-client GitHub: &lt;a href=&quot;https://github.com/bakyeono/glosbe-api-client&quot;&gt;https://github.com/bakyeono/glosbe-api-client&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;GitHub: &lt;a href=&quot;https://github.com/bakyeono/glosbe-api-client&quot;&gt;https://github.com/bakyeono/glosbe-api-client&lt;/a&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;section&quot;&gt;사용법&lt;/h3&gt;
 
