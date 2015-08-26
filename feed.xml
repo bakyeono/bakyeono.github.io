@@ -5,8 +5,8 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 26 Aug 2015 17:31:03 +0900</pubDate>
-    <lastBuildDate>Wed, 26 Aug 2015 17:31:03 +0900</lastBuildDate>
+    <pubDate>Wed, 26 Aug 2015 17:31:54 +0900</pubDate>
+    <lastBuildDate>Wed, 26 Aug 2015 17:31:54 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -802,7 +802,7 @@ BASE_URL = &#39;https://api.telegram.org/bot&#39; + TOKEN + &#39;/&#39;
 
 &lt;p&gt;이 글에서 작성한 봇 서버 프로젝트는 아래 GitHub에 올려두었다. 필요하면 아래 주소에서 다운로드 할 수 있다.&lt;/p&gt;
 
-&lt;p&gt;GitHub URL: github.com/bakyeono/using-telegram-bot-api&lt;/p&gt;
+&lt;p&gt;GitHub URL: &lt;a href=&quot;https://github.com/bakyeono/using-telegram-bot-api&quot;&gt;https://github.com/bakyeono/using-telegram-bot-api&lt;/a&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;faviconico--&quot;&gt;favicon.ico 에러 해결&lt;/h3&gt;
 
