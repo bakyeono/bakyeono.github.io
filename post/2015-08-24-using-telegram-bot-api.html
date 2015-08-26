@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>텔레그램 로봇, 공식 API로 만들기 (파이썬, 구글 앱 엔진) | 박연오</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="canonical" href="http://bakyeono.net/post/2015-08-24-using-telegram-bot-api.html" />
+  <link rel="alternate" type="application/rss+xml" title="박연오" href="http://bakyeono.net/feed.xml" />
+  <script type="text/javascript" src="/lib/jquery/jquery-1.11.2.min.js"></script>
+  <script type="text/javascript">
+    "use strict";
+    $(document).ready(function () {
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create','UA-44446622-4','auto');
+      ga('send','pageview');
+    });
+  </script>
+</head>
+
+  <body>
+    <header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="/">박연오</a>
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z" />
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z" />
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z" />
+        </svg>
+      </a>
+      <div class="trigger">
+        
+      </div>
+    </nav>
+  </div>
+</header>
+
+    <div class="page-content">
+      <div class="wrapper">
+        
+<div class="post">
+  <header class="post-header">
+    <h1 class="post-title">텔레그램 로봇, 공식 API로 만들기 (파이썬, 구글 앱 엔진)</h1>
+    <p class="post-meta">
+      <span class="post-date">2015-08-24</span>
+       • <span class="post-author">박연오(bakyeono@gmail.com)</span>
+       • <span class="post-tags">태그: <a class="post-tag" href="/tag/telegram.html">telegram</a> <a class="post-tag" href="/tag/bot.html">bot</a> <a class="post-tag" href="/tag/python.html">python</a> <a class="post-tag" href="/tag/google-app-engine.html">google-app-engine</a></span>
+    </p>
+  </header>
+  <article>
+    <div class="post-content">
+      <ul id="markdown-toc">
+  <li><a href="#telegram-cli---api-" id="markdown-toc-telegram-cli---api-">telegram-cli와 공식 봇 API의 비교</a></li>
+  <li><a href="#section" id="markdown-toc-section">참고 문서</a></li>
+  <li><a href="#section-1" id="markdown-toc-section-1">봇 제작 과정</a></li>
+  <li><a href="#botfather------" id="markdown-toc-botfather------">1. @BotFather를 통한 봇 등록 / 토큰 발급</a>    <ul>
+      <li><a href="#newbot" id="markdown-toc-newbot">/newbot</a></li>
+    </ul>
+  </li>
+  <li><a href="#section-2" id="markdown-toc-section-2">2. 봇을 위한 서버 준비</a>    <ul>
+      <li><a href="#section-3" id="markdown-toc-section-3">프로젝트 생성</a></li>
+      <li><a href="#sdk-" id="markdown-toc-sdk-">구글 앱 엔진 SDK 설치</a></li>
+    </ul>
+  </li>
+  <li><a href="#section-4" id="markdown-toc-section-4">3. 서버 프로그램 만들기</a>    <ul>
+      <li><a href="#section-5" id="markdown-toc-section-5">서버 프로그램 업로드</a></li>
+      <li><a href="#section-6" id="markdown-toc-section-6">웹훅 설정</a></li>
+      <li><a href="#section-7" id="markdown-toc-section-7">봇 사용하기</a></li>
+    </ul>
+  </li>
+  <li><a href="#section-8" id="markdown-toc-section-8">서버 코드 설명</a>    <ul>
+      <li><a href="#section-9" id="markdown-toc-section-9">봇 토큰 지정</a></li>
+      <li><a href="#section-10" id="markdown-toc-section-10">메시지 발송 함수</a></li>
+      <li><a href="#section-11" id="markdown-toc-section-11">커스텀 키보드</a></li>
+      <li><a href="#section-12" id="markdown-toc-section-12">방송 기능</a></li>
+      <li><a href="#section-13" id="markdown-toc-section-13">웹훅 핸들러</a></li>
+    </ul>
+  </li>
+  <li><a href="#section-14" id="markdown-toc-section-14">기타</a>    <ul>
+      <li><a href="#section-15" id="markdown-toc-section-15">봇 서버 프로젝트 다운로드</a></li>
+      <li><a href="#faviconico--" id="markdown-toc-faviconico--">favicon.ico 에러 해결</a></li>
+      <li><a href="#cron-job-" id="markdown-toc-cron-job-">작업 스케줄 (cron job) 등록</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="telegram-cli---api-">telegram-cli와 공식 봇 API의 비교</h2>
+
+<p>2015년 6월 24일 텔레그램이 봇 API를 공식 발표했다. 메신저마다 비공식 봇을 만드는 사람들이 있고, 타사 메신저 서비스는 비공식 봇들을 단속하는 경향이 있다. 텔레그램은 이와 반대로 공식적으로 봇을 지원하고 나선 것이 돋보인다. 텔레그램은 봇 API를 발표하기 전에도 텔레그램 API를 지원했기 때문에 봇을 만들기 쉬웠고 특히 telegram-cli로 만들어진 봇이 많았다. 그렇다면 앞으로 어떤 방식으로 봇을 만드는 게 좋을까? 기존 telegram-cli로 만든 봇을 공식 API로 포팅해야 할까?</p>
+
+<p>생각나는 대로 몇 가지 특징을 비교해 봤다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>분류</th>
+      <th>telegram-cli 봇</th>
+      <th>텔레그램 봇</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>지원</td>
+      <td>오픈소스 커뮤니티</td>
+      <td>텔레그램</td>
+    </tr>
+    <tr>
+      <td>합법성</td>
+      <td>비공식</td>
+      <td>공식</td>
+    </tr>
+    <tr>
+      <td>통신 API</td>
+      <td>텔레그램 API</td>
+      <td>봇 API</td>
+    </tr>
+    <tr>
+      <td>별도 서버</td>
+      <td>필요</td>
+      <td>필요</td>
+    </tr>
+    <tr>
+      <td>계정</td>
+      <td>실제 사용자 계정</td>
+      <td>봇 계정</td>
+    </tr>
+    <tr>
+      <td>UI</td>
+      <td>메시지</td>
+      <td>메시지, 커스텀 키보드</td>
+    </tr>
+    <tr>
+      <td>주 용도</td>
+      <td>개인용 스크립트</td>
+      <td>봇 서비스</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>개인용으로 봇 스크립트는 telegram-cli로 사용하던 게 있다면 그냥 계속 쓰면 될 것 같고, 사용자들을 대상으로 서비스하는 봇은 공식 API로 새로 제작하는 게 UI, 신뢰도, 법률적인 면에서 유리할 것 같다.</p>
+
+<h2 id="section">참고 문서</h2>
+
+<p>이 글을 쓰면서 참고한 문서/프로젝트다. 따라하다가 잘 모르겠으면 아래 문서를 찾아보자.</p>
+
+<ul>
+  <li><a href="https://core.telegram.org/bots">봇 설명 문서</a></li>
+  <li><a href="https://core.telegram.org/bots/api">봇 API 문서</a></li>
+  <li><a href="https://cloud.google.com/appengine/docs/developers-console">구글 앱 엔진 문서</a></li>
+  <li><a href="https://github.com/yukuku/telebot">yukuku의 텔레그램 봇 스타터킷</a>: 아래에 나오는 봇 서버 프로그램은 이 스타터킷을 수정해 만들었다.</li>
+</ul>
+
+<h2 id="section-1">봇 제작 과정</h2>
+
+<ol>
+  <li>@BotFather를 통한 봇 등록 / 토큰 발급 / 설정</li>
+  <li>서버 준비</li>
+  <li>봇 기능 프로그램</li>
+  <li>테스트 / 디버그</li>
+</ol>
+
+<h2 id="botfather------">1. @BotFather를 통한 봇 등록 / 토큰 발급</h2>
+
+<p>텔레그램 봇은 @BotFather 봇을 통해 관린된다.</p>
+
+<p>텔레그램 클라이언트에서 @botfather 사용자를 채팅 목록에 추가한다. 텔레그램 클라이언트에서 @BotFather를 검색하거나 웹 브라우저에서 <a href="https://telegram.me/botfather">https://telegram.me/botfather</a> 주소로 접속해도 @BotFather 사용자를 추가할 수 있다.</p>
+
+<p>@BotFather 사용자를 채팅 목록에 추가하면 아래와 같은 화면이 나온다.</p>
+
+<p><img src="http://bakyeono.net/imgs/telegram-bot-botfather.png" alt="BotFather 채팅 화면" /></p>
+
+<p><strong>START</strong>를 누른 후 @BotFather에게 <code>/help</code> 메시지를 보내면 사용가능한 명령어를 알려준다. 명령어에 대한 자세한 설명은 텔레그램 봇 API 문서에 있다.</p>
+
+<h3 id="newbot">/newbot</h3>
+
+<p>@BotFather에게 <code>/newbot</code> 메시지를 보내면 봇을 등록할 수 있다.</p>
+
+<p><img src="http://bakyeono.net/imgs/telegram-bot-botfather-newbot1.png" alt="BotFather newbot 명령 1" /></p>
+
+<ol>
+  <li>
+    <p><code>/newbot</code> 메시지를 보낸다.</p>
+  </li>
+  <li>
+    <p>봇의 이름을 입력한다. 한글도 쓸 수 있다. 예) <code>시험용 로봇</code></p>
+  </li>
+  <li>
+    <p>봇의 아이디를 입력한다. 한글은 쓸 수 없으며, 반드시 bot, Bot 등으로 끝나야 한다. 예) <code>my_testing_bot</code></p>
+  </li>
+  <li>
+    <p>@BotFather가 봇이 생성되었다고 알려주며 봇 주소와 토큰을 알려준다. 토큰은 봇 API를 사용하기 위해 꼭 필요하므로 잘 챙겨두고, 유출되지 않도록 한다.</p>
+  </li>
+</ol>
+
+<p><img src="http://bakyeono.net/imgs/telegram-bot-botfather-newbot2.png" alt="BotFather newbot 명령 2" /></p>
+
+<h2 id="section-2">2. 봇을 위한 서버 준비</h2>
+
+<p>사실 봇을 위한 별도의 서버 없이 그냥 봇을 등록해두기만 하는 것도 가능하다. 하지만 그냥 놔두면 의미 없는 대포 계정에 불과하다. 봇이 제대로 봇 구실을 할 수 있도록 봇의 동작을 정의하거나 데이터를 기록하려면 서버가 필요하다.</p>
+
+<p>이 글에서는 구글 앱 엔진을 사용해 봇 서버를 개발하고 호스팅 받는다. 아래 주소에서 구글 계정에 로그인하면 앱 엔진을 사용할 수 있다.</p>
+
+<ul>
+  <li><a href="https://appengine.google.com">구글 앱 엔진</a></li>
+</ul>
+
+<p>간단한 봇 서버를 운영하는 데는 거의 비용이 들 일이 없지만 혹시라도 요금이 청구될 수 있으니 이용 약관과 결제 설정을 잘 확인하기 바란다.</p>
+
+<h3 id="section-3">프로젝트 생성</h3>
+
+<p>구글 앱 엔진 <a href="https://console.developers.google.com">관리자 콘솔 페이지</a>에서 ‘프로젝트 생성…’ 버튼을 찾아 프로젝트를 만든다.</p>
+
+<p><img src="http://bakyeono.net/imgs/telegram-bot-google-app-engine-new-project1.png" alt="구글 앱 엔진 프로젝트 생성 1" /></p>
+
+<p><img src="http://bakyeono.net/imgs/telegram-bot-google-app-engine-new-project2.png" alt="구글 앱 엔진 프로젝트 생성 2" /></p>
+
+<p><img src="http://bakyeono.net/imgs/telegram-bot-google-app-engine-new-project3.png" alt="구글 앱 엔진 프로젝트 생성 3" /></p>
+
+<p>이 때 프로젝트 ID를 잘 정해야 한다. 나중에 app.yaml에 기록해야 하며, 앱 접속 주소에도 반영되기 때문이다.</p>
+
+<h3 id="sdk-">구글 앱 엔진 SDK 설치</h3>
+
+<p>윈도우 / 맥 환경 용으로는 구글 앱 엔진 GUI 툴이 제공되는 듯하다. 리눅스 용은 커맨드라인 툴이 제공된다. 이 글은 리눅스 환경을 대상으로 한 글이다. 리눅스 환경에서는 아래와 같이 설치한다.</p>
+
+<p>먼저, 파이썬 2.7이 설치돼있나 확인해 본다. 아마 이미 설치돼 있을 것이다.</p>
+
+<pre><code>$ python -V
+</code></pre>
+
+<p>만일 파이썬 버전이 2.7.x가 아니거나, 파이썬이 설치돼있지 않으면 아래 페이지를 참고해 파이썬을 2.7을 설치한다.</p>
+
+<ul>
+  <li><a href="https://www.python.org/downloads">파이썬 다운로드 페이지</a></li>
+</ul>
+
+<p>구글 앱 엔진을 다운로드하고 압축을 풀어 둔다.</p>
+
+<pre><code>$ cd ~
+$ curl https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.25.zip &gt; google_appengine_1.9.25.zip
+$ unzip google_appengine_1.9.25.zip
+</code></pre>
+
+<blockquote>
+  <p>주의: 이 글을 보는 사람에게는 1.9.25.zip이 최신 버전이 아닐 가능성이 높으므로 다운로드 페이지에서 버전을 확인하기 바란다.</p>
+</blockquote>
+
+<p>잘 실행되는지 확인해본다.</p>
+
+<pre><code>$ ~/google_appengine/appcfg.py help help
+Usage: appcfg.py help &lt;action&gt;
+
+Print help for a specific action.
+
+
+Options:
+  -h, --help            Show the help message and exit.
+  -q, --quiet           Print errors only.
+  -v, --verbose         Print info level logs.
+  --noisy               Print all logs.
+  -s SERVER, --server=SERVER
+                        The App Engine server.
+  -e EMAIL, --email=EMAIL
+                        The username to use. Will prompt if omitted.
+  -H HOST, --host=HOST  Overrides the Host header sent with all RPCs.
+  --no_cookies          Do not save authentication cookies to local disk.
+  --skip_sdk_update_check
+                        Do not check for SDK updates.
+  -A APP_ID, --application=APP_ID
+                        Set the application, overriding the application value
+                        from app.yaml file.
+  -M MODULE, --module=MODULE
+                        Set the module, overriding the module value from
+                        app.yaml.
+  -V VERSION, --version=VERSION
+                        Set the (major) version, overriding the version value
+                        from app.yaml file.
+  -r RUNTIME, --runtime=RUNTIME
+                        Override runtime from app.yaml file.
+  -E NAME:VALUE, --env_variable=NAME:VALUE
+                        Set an environment variable, potentially overriding an
+                        env_variable value from app.yaml file (flag may be
+                        repeated to set multiple variables).
+  -R, --allow_any_runtime
+                        Do not validate the runtime in app.yaml
+  --oauth2              Ignored (OAuth2 is the default).
+  --oauth2_refresh_token=OAUTH2_REFRESH_TOKEN
+                        An existing OAuth2 refresh token to use. Will not
+                        attempt interactive OAuth approval.
+  --oauth2_access_token=OAUTH2_ACCESS_TOKEN
+                        An existing OAuth2 access token to use. Will not
+                        attempt interactive OAuth approval.
+  --authenticate_service_account
+                        Authenticate using the default service account for the
+                        Google Compute Engine VM in which appcfg is being
+                        called
+  --noauth_local_webserver
+                        Do not run a local web server to handle redirects
+                        during OAuth authorization.
+</code></pre>
+
+<p>여러 가지 도구가 있지만 앱을 업로드할 때 쓰이는 <code>appcfg</code> 정도만 알아도 된다.</p>
+
+<h2 id="section-4">3. 서버 프로그램 만들기</h2>
+
+<p>그러면 구글 앱 엔진으로 봇 서버 프로그램을 만들어보자.</p>
+
+<p>디렉토리를 하나 만들고</p>
+
+<pre><code>$ mkdir ~/my-testing-bot
+$ cd ~/my-testing-bot
+</code></pre>
+
+<p>이곳에 <code>app.yaml</code> 이라는 이름으로 파일을 만들어 아래 내용을 넣는다.</p>
+
+<pre><code>application: my-testing-bot
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /set-webhook
+  login: admin
+  script: main.app
+- url: .*
+  script: main.app
+
+libraries:
+- name: webapp2
+  version: 2.5.2
+</code></pre>
+
+<p>TODO*<code>app.yaml</code>은 구글 앱 엔진 프로젝트를 정의하는 파일이다.</p>
+
+<ul>
+  <li>application 항목에는 <strong>아까 등록한 구글 앱 엔진 프로젝트의 ID</strong>를 입력한다. <code>my-testing-bot</code>을 입력하는 게 아니다.</li>
+  <li>handler 항목은 URL 매개변수에 따른 처리기를 지정하는 항목이다. <code>/set-webhook</code>은 구글 계정 로그인을 통해 권한을 검사한 후 main.app을 통해 처리하도록 하였고 기타 url은 로그인 없이 main.app을 통해 처리하도록 했다. 웹훅에 관해서는 나중에 설명하겠다.</li>
+  <li>libraries 항목에는 구글 앱 엔진이 로드할 라이브러리와 버전을 지정한다. webapp2는 앱 엔진을 쓰기 위해 추가해야 하는 기본 라이브러리다.</li>
+</ul>
+
+<p>그 다음으로 핸들러를 정의할 <code>main.py</code> 파일을 만들고 아래 내용을 넣는다. 그대로 복사해 넣으면 된다.</p>
+
+<blockquote>
+  <p>일러두기: 이 소스코드는 <a href="https://github.com/yukuku/telebot">yukuku의 텔레그램 봇 스타터킷</a>을 수정해 만든 것이다.</p>
+</blockquote>
+
+<pre><code>#-*- coding: utf-8 -*-
+#
+# original:    https://github.com/yukuku/telebot
+# modified by: Bak Yeon O @ http://bakyeono.net
+# description: http://bakyeono.net/post/2015-08-24-using-telegram-bot-api.html
+# github:      https://github.com/bakyeono/using-telegram-bot-api
+#
+
+# 구글 앱 엔진 라이브러리 로드
+from google.appengine.api import urlfetch
+from google.appengine.ext import ndb
+import webapp2
+
+# URL, JSON, 로그, 정규표현식 관련 라이브러리 로드
+import urllib
+import urllib2
+import json
+import logging
+import re
+
+# 봇 토큰, 봇 API 주소
+TOKEN = '137007641:AAFVXObeODnKcyDrbcBfEAHzYFGhcFeVlVk'
+BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
+
+# 봇이 응답할 명령어
+CMD_START     = '/start'
+CMD_STOP      = '/stop'
+CMD_HELP      = '/help'
+CMD_BROADCAST = '/broadcast'
+
+# 봇 사용법 &amp; 메시지
+USAGE = u"""[사용법] 아래 명령어를 메시지로 보내거나 버튼을 누르시면 됩니다.
+/start - (봇 활성화)
+/stop  - (봇 비활성화)
+/help  - (이 도움말 보여주기)
+"""
+MSG_START = u'봇을 시작합니다.'
+MSG_STOP  = u'봇을 정지합니다.'
+
+# 커스텀 키보드
+CUSTOM_KEYBOARD = [
+        [CMD_START],
+        [CMD_STOP],
+        [CMD_HELP],
+        ]
+
+# 채팅별 봇 활성화 상태
+# 구글 앱 엔진의 Datastore(NDB)에 상태를 저장하고 읽음
+# 사용자가 /start 누르면 활성화
+# 사용자가 /stop  누르면 비활성화
+class EnableStatus(ndb.Model):
+    enabled = ndb.BooleanProperty(required=True, indexed=True, default=False,)
+
+def set_enabled(chat_id, enabled):
+    u"""set_enabled: 봇 활성화/비활성화 상태 변경
+    chat_id:    (integer) 봇을 활성화/비활성화할 채팅 ID
+    enabled:    (boolean) 지정할 활성화/비활성화 상태
+    """
+    es = EnableStatus.get_or_insert(str(chat_id))
+    es.enabled = enabled
+    es.put()
+
+def get_enabled(chat_id):
+    u"""get_enabled: 봇 활성화/비활성화 상태 반환
+    return: (boolean)
+    """
+    es = EnableStatus.get_by_id(str(chat_id))
+    if es:
+        return es.enabled
+    return False
+
+def get_enabled_chats():
+    u"""get_enabled: 봇이 활성화된 채팅 리스트 반환
+    return: (list of EnableStatus)
+    """
+    query = EnableStatus.query(EnableStatus.enabled == True)
+    return query.fetch()
+
+# 메시지 발송 관련 함수들
+def send_msg(chat_id, text, reply_to=None, no_preview=True, keyboard=None):
+    u"""send_msg: 메시지 발송
+    chat_id:    (integer) 메시지를 보낼 채팅 ID
+    text:       (string)  메시지 내용
+    reply_to:   (integer) ~메시지에 대한 답장
+    no_preview: (boolean) URL 자동 링크(미리보기) 끄기
+    keyboard:   (list)    커스텀 키보드 지정
+    """
+    params = {
+        'chat_id': str(chat_id),
+        'text': text.encode('utf-8'),
+        }
+    if reply_to:
+        params['reply_to_message_id'] = reply_to
+    if no_preview:
+        params['disable_web_page_preview'] = no_preview
+    if keyboard:
+        reply_markup = json.dumps({
+            'keyboard': keyboard,
+            'resize_keyboard': True,
+            'one_time_keyboard': False,
+            'selective': (reply_to == True),
+            })
+        params['reply_markup'] = reply_markup
+    try:
+        urllib2.urlopen(BASE_URL + 'sendMessage', urllib.urlencode(params)).read()
+    except Exception as e: 
+        logging.exception(e)
+
+def broadcast(text):
+    u"""broadcast: 봇이 켜져 있는 모든 채팅에 메시지 발송
+    text:       (string)  메시지 내용
+    """
+    for chat in get_enabled_chats():
+        send_msg(chat.key.string_id(), text);
+
+# 봇 명령 처리 함수들
+def cmd_start(chat_id):
+    u"""cmd_start: 봇을 활성화하고, 활성화 메시지 발송
+    chat_id: (integer) 채팅 ID
+    """
+    set_enabled(chat_id, True)
+    send_msg(chat_id, MSG_START, keyboard=CUSTOM_KEYBOARD)
+
+def cmd_stop(chat_id):
+    u"""cmd_stop: 봇을 비활성화하고, 비활성화 메시지 발송
+    chat_id: (integer) 채팅 ID
+    """
+    set_enabled(chat_id, False)
+    send_msg(chat_id, MSG_STOP)
+
+def cmd_help(chat_id):
+    u"""cmd_help: 봇 사용법 메시지 발송
+    chat_id: (integer) 채팅 ID
+    """
+    send_msg(chat_id, USAGE, keyboard=CUSTOM_KEYBOARD)
+
+def cmd_broadcast(chat_id, text):
+    u"""cmd_broadcast: 봇이 활성화된 모든 채팅에 메시지 방송
+    chat_id: (integer) 채팅 ID
+    text:    (string)  방송할 메시지
+    """
+    send_msg(chat_id, u'메시지를 방송합니다.', keyboard=CUSTOM_KEYBOARD)
+    broadcast(text)
+
+def cmd_echo(chat_id, text, reply_to):
+    u"""cmd_echo: 사용자의 메시지를 따라서 답장
+    chat_id:  (integer) 채팅 ID
+    text:     (string)  사용자가 보낸 메시지 내용
+    reply_to: (integer) 답장할 메시지 ID
+    """
+    send_msg(chat_id, text, reply_to=reply_to)
+
+def process_cmds(msg):
+    u"""사용자 메시지를 분석해 봇 명령을 처리
+    chat_id: (integer) 채팅 ID
+    text:    (string)  사용자가 보낸 메시지 내용
+    """
+    msg_id = msg['message_id']
+    chat_id = msg['chat']['id']
+    text = msg.get('text')
+    if (not text):
+        return
+    if CMD_START == text:
+        cmd_start(chat_id)
+        return
+    if (not get_enabled(chat_id)):
+        return
+    if CMD_STOP == text:
+        cmd_stop(chat_id)
+        return
+    if CMD_HELP == text:
+        cmd_help(chat_id)
+        return
+    cmd_broadcast_match = re.match('^' + CMD_BROADCAST + ' (.*)', text)
+    if cmd_broadcast_match:
+        cmd_broadcast(chat_id, cmd_broadcast_match.group(1))
+        return
+    cmd_echo(chat_id, text, reply_to=msg_id)
+    return
+
+# 웹 요청에 대한 핸들러 정의
+# /me 요청시
+class MeHandler(webapp2.RequestHandler):
+    def get(self):
+        urlfetch.set_default_fetch_deadline(60)
+        self.response.write(json.dumps(json.load(urllib2.urlopen(BASE_URL + 'getMe'))))
+
+# /updates 요청시
+class GetUpdatesHandler(webapp2.RequestHandler):
+    def get(self):
+        urlfetch.set_default_fetch_deadline(60)
+        self.response.write(json.dumps(json.load(urllib2.urlopen(BASE_URL + 'getUpdates'))))
+
+# /set-wehook 요청시
+class SetWebhookHandler(webapp2.RequestHandler):
+    def get(self):
+        urlfetch.set_default_fetch_deadline(60)
+        url = self.request.get('url')
+        if url:
+            self.response.write(json.dumps(json.load(urllib2.urlopen(BASE_URL + 'setWebhook', urllib.urlencode({'url': url})))))
+
+# /webhook 요청시 (텔레그램 봇 API)
+class WebhookHandler(webapp2.RequestHandler):
+    def post(self):
+        urlfetch.set_default_fetch_deadline(60)
+        body = json.loads(self.request.body)
+        self.response.write(json.dumps(body))
+        process_cmds(body['message'])
+
+# 구글 앱 엔진에 웹 요청 핸들러 지정
+app = webapp2.WSGIApplication([
+    ('/me', MeHandler),
+    ('/updates', GetUpdatesHandler),
+    ('/set-webhook', SetWebhookHandler),
+    ('/webhook', WebhookHandler),
+], debug=True)
+</code></pre>
+
+<blockquote>
+  <p>주의: 소스코드 중 20번째 줄에 정의된 <code>TOKEN</code>은 자신의 봇 토큰으로 바꿔줘야 한다.</p>
+</blockquote>
+
+<p>주석도 열심히 달아 놓았으니 파이썬 코드를 읽을 수 있다면 소스코드를 한 번 읽어보면 좋다. 소스코드에 관해서는 잠시 뒤에 설명하겠다.</p>
+
+<h3 id="section-5">서버 프로그램 업로드</h3>
+
+<p>아래 명령어로 프로그램을 구글 앱 엔진에 업로드한다.</p>
+
+<pre><code>$ ~/google_appengine/appcfg.py update .
+</code></pre>
+
+<p>그러면 브라우저에 구글 앱 엔진 계정 인증 화면이 나올 것이다. 인증을 거치면 프로그램이 업로드된다.</p>
+
+<p>만일 구글 앱 엔진 계정이 여러 개여서 인증 문제가 발생할 경우엔 아래 명령어로 쿠키를 지우고 업로드하면 된다.</p>
+
+<pre><code>$ ~/google_appengine/appcfg.py --no_cookies update .
+</code></pre>
+
+<p>프로그램이 정상 업로드 되었는지 확인하려면 웹 브라우저로 아래 주소에 접속한다. 단, <code>my-testing-bot</code> 부분을 <strong>아까 등록한 구글 앱 엔진 프로젝트의 ID</strong>로 바꿔 입력해야 한다.</p>
+
+<pre><code>https://my-testing-bot.appspot.com/me
+</code></pre>
+
+<p>아래와 같은 유형의 JSON 문서가 반환되면 성공이다.</p>
+
+<pre><code>{
+  "ok": true,
+  "result": {
+              "username": "my_testing_bot",
+              "first_name": "\uc2dc\ud5d8\uc6a9 \ub85c\ubd07",
+              "id": 137007641
+            }
+}
+</code></pre>
+
+<h3 id="section-6">웹훅 설정</h3>
+
+<p>봇 서버를 사용하기 전에 먼저 웹훅을 설정해 봇 서버가 텔레그램 API와 통신할 수 있게 해야 한다.</p>
+
+<p>봇이 API와 통신하는 방식을 간단하게 나타내면 이렇다.</p>
+
+<ul>
+  <li>
+    <p>봇이 메시지 수신할 때</p>
+
+    <p>텔레그램 웹 API -&gt; 봇 서버 웹훅 -&gt; 스크립트 실행 -&gt; 응답</p>
+  </li>
+  <li>
+    <p>봇이 메시지 발신할 때</p>
+
+    <p>봇 서버 스크립트 -&gt; 텔레그램 웹 API</p>
+  </li>
+</ul>
+
+<p>따라서, 발신만 할 때는 상관없지만 메시지를 받아 처리하기 위해서는 웹훅을 설정해둬야 한다.</p>
+
+<p>웹훅을 설정하기 위해 웹 브라우저로 아래 주소에 접속한다. 단, <code>my-testing-bot</code> 부분을 <strong>아까 등록한 구글 앱 엔진 프로젝트의 ID</strong>로 바꿔 입력해야 한다. 두 번 나오니 둘 다 고쳐라.</p>
+
+<pre><code>https://my-testing-bot.appspot.com/set-webhook?url=https://my-testing-bot.appspot.com/webhook
+</code></pre>
+
+<p>구글 앱 엔진 인증을 마치면 웹훅이 설정된다. 아래와 같은 유형의 JSON 문서가 반환되면 성공이다.</p>
+
+<pre><code>{
+  "ok": true,
+  "result": true,
+  "description": "Webhook was set"
+}
+</code></pre>
+
+<h3 id="section-7">봇 사용하기</h3>
+
+<p>이제 봇에게 말을 걸어보자.</p>
+
+<p>텔레그램 클라이언트로 봇 이름이나 ID로 검색해 채팅 목록에 추가한다.</p>
+
+<p><img src="http://bakyeono.net/imgs/telegram-bot-test-search.png" alt="봇 검색하기" /></p>
+
+<p>웹 브라우저로 https://telegram.me/my_testing_bot 주소로 접속해도 봇을 추가할 수 있다. 물론 주소에서 봇 ID는 자신의 봇 ID로 것으로 바꿔야 한다. 사용자들에게 봇을 제공할 때는 이 방법이 더 좋을 것이다.</p>
+
+<p>봇을 추가하면 다음과 같은 화면과 <strong>START</strong> 버튼이 나온다.</p>
+
+<p><img src="http://bakyeono.net/imgs/telegram-bot-test-start1.png" alt="봇 시작하기 1" /></p>
+
+<p><strong>START</strong> 버튼을 누르면 아래와 같이 봇을 시작한다는 메시지가 나오고 커스텀 키보드도 쓸 수 있게 된다.</p>
+
+<p><img src="http://bakyeono.net/imgs/telegram-bot-test-start2.png" alt="봇 시작하기 2" /></p>
+
+<p>커스텀 키보드를 눌러 모든 기능이 잘 동작하는지 확인해보자.</p>
+
+<p><code>/broadcast 방송할 내용</code> 명령을 입력하면 봇이 활성화된 모든 채팅방에 봇이 메시지를 보낸다.</p>
+
+<p><img src="http://bakyeono.net/imgs/telegram-bot-test-broadcast.png" alt="봇 시작하기 2" /></p>
+
+<p>명령어가 아닌 문장을 입력하면, 봇이 그 말을 똑같이 따라한다.</p>
+
+<p><img src="http://bakyeono.net/imgs/telegram-bot-test-echo.png" alt="봇 시작하기 2" /></p>
+
+<p>이제 <code>main.py</code>를 수정해 위 기능들 중 불필요한 기능을 없애고 필요한 기능을 추가하면 된다. 자신만의 봇을 만들어 서비스해 보자.</p>
+
+<h2 id="section-8">서버 코드 설명</h2>
+
+<p>코드에 달린 주석과 텔레그램 API 문서를 참고하면 이해하기 어려운 부분은 없을 것이다. <code>main.py</code> 코드 중 몇 가지만 설명한다.</p>
+
+<h3 id="section-9">봇 토큰 지정</h3>
+
+<p>20번째 줄에 봇의 토큰과 API URL이 정의돼 있다. 여기서 토큰은 자신의 봇 토큰으로 지정해주어야 하며, 노출해서는 안된다.</p>
+
+<pre><code>TOKEN = '137007641:AAFVXObeODnKcyDrbcBfEAHzYFGhcFeVlVk'
+BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
+</code></pre>
+
+<h3 id="section-10">메시지 발송 함수</h3>
+
+<p>79번 줄에 메시지 발송 함수를 정의해 놓았다.</p>
+
+<pre><code>def send_msg(chat_id, text, reply_to=None, no_preview=True, keyboard=None):
+    u"""send_msg: 메시지 발송
+    chat_id:    (integer) 메시지를 보낼 채팅 ID
+    text:       (string)  메시지 내용
+    reply_to:   (integer) ~메시지에 대한 답장
+    no_preview: (boolean) URL 자동 링크(미리보기) 끄기
+    keyboard:   (list)    커스텀 키보드 지정
+    """
+    params = {
+        'chat_id': str(chat_id),
+        'text': text.encode('utf-8'),
+        }
+    if reply_to:
+        params['reply_to_message_id'] = reply_to
+    if no_preview:
+        params['disable_web_page_preview'] = no_preview
+    if keyboard:
+        reply_markup = json.dumps({
+            'keyboard': keyboard,
+            'resize_keyboard': True,
+            'one_time_keyboard': False,
+            'selective': (reply_to == True),
+            })
+        params['reply_markup'] = reply_markup
+    try:
+        urllib2.urlopen(BASE_URL + 'sendMessage', urllib.urlencode(params)).read()
+    except Exception as e:
+        logging.exception(e)
+</code></pre>
+
+<p>봇이 메시지를 보내게 하려면 <code>sendMessage</code> API를 이용한다. 각 매개변수에 대한 설명은 함수 주석을 참고하라.</p>
+
+<h3 id="section-11">커스텀 키보드</h3>
+
+<p>커스텀 키보드는 문자열을 담은 2차원 리스트로 돼 있다. 바깥 리스트의 각 항목(안쪽 리스트)이 키보드의 한 줄을 나타내고, 안쪽 리스트의 각 항목(문자열)은 키보드의 한 줄에 담긴 각 버튼을 나타낸다.</p>
+
+<p>따라서 소스코드에 쓰인 이 키보드 배열은,</p>
+
+<pre><code>CUSTOM_KEYBOARD = [
+        [CMD_START],
+        [CMD_STOP],
+        [CMD_HELP],
+        ]
+</code></pre>
+
+<p>다음과 같이 출력된다.</p>
+
+<p><img src="http://bakyeono.net/imgs/telegram-bot-test-start2.png" alt="커스텈 키보드 출력 예" /></p>
+
+<p>봇을 위한 명령어와 커스텀 키보드 버튼에는 한글도 사용할 수 있으며, 심지어 슬래시(<code>/</code>)를 붙이지 않아도 된다. 명령어와 키보드를 잘 만들어 편리하고 배우기 쉬운 UI를 제공해보자.</p>
+
+<p>사용자에게 커스텀 키보드를 보여주려면 메시지를 발송할 때 <code>reply_markup</code> 매개변수의 값으로 키보드 옵션 JSON 객체를 보내줘야 한다. 위의 메시지 발송 함수 설명을 참고하라.</p>
+
+<p>커스텀 키보드를 끄는 방법은 이 소스코드에 정의해두지 않았다. 키보드를 출력하는 방법과 별로 다를 것 없으니 텔레그램 봇 API 문서를 참고하기 바란다.</p>
+
+<h3 id="section-12">방송 기능</h3>
+
+<p>여러 사용자에게 방송하는 기능이다. 다양한 사용자를 쿼리할 수 있겠지만 여기서는 봇을 작동시켜둔 모든 채팅에 방송하도록 했다.</p>
+
+<p>방송 함수 자체에는 별 내용이 없다.</p>
+
+<pre><code>def broadcast(text):
+    u"""broadcast: 봇이 켜져 있는 모든 채팅에 메시지 발송
+    text:       (string)  메시지 내용
+    """
+    for chat in get_enabled_chats():
+        send_msg(chat.key.string_id(), text);
+</code></pre>
+
+<p>방송 함수가 참고하는 <code>get_enabled_chats</code> 함수가 좀더 중요하다.</p>
+
+<pre><code>def get_enabled_chats():
+    u"""get_enabled: 봇이 활성화된 채팅 리스트 반환
+    return: (list of EnableStatus)
+    """
+    query = EnableStatus.query(EnableStatus.enabled == True)
+    return query.fetch()
+</code></pre>
+
+<p>이 함수는 구글 앱 엔진의 Datastore에 쿼리를 보내 결과값을 돌려준다. 자세한 내용은 구글 앱 엔진 Datastore API를 참고하라.</p>
+
+<h3 id="section-13">웹훅 핸들러</h3>
+
+<p>202번째 줄에 정의된 웹훅 핸들러는 텔레그램 API가 보내오는 모든 메시지를 처리한다.</p>
+
+<pre><code>class WebhookHandler(webapp2.RequestHandler):
+    def post(self):
+        urlfetch.set_default_fetch_deadline(60)
+        body = json.loads(self.request.body)
+        self.response.write(json.dumps(body))
+        process_cmds(body['message'])
+</code></pre>
+
+<p>핸들러는 구글 앱 엔진의 <code>webapp2.RequestHandler</code> 객체를 확장해서 정의한다.</p>
+
+<p>텔레그램 API는 post 방식으로 오므로, post 함수를 정의했다.</p>
+
+<p>이 함수는 텔레그램이 보내온 JSON 객체를 해석해 <code>process_cmds</code> 함수가 메시지를 처리하도록 전달한다.</p>
+
+<p><code>process_cmd()</code> 함수는 152번째 줄에 아래와 같이 정의돼 있다.</p>
+
+<pre><code>def process_cmds(msg):
+    u"""사용자 메시지를 분석해 봇 명령을 처리
+    chat_id: (integer) 채팅 ID
+    text:    (string)  사용자가 보낸 메시지 내용
+    """
+    msg_id = msg['message_id']
+    chat_id = msg['chat']['id']
+    text = msg.get('text')
+    if (not text):
+        return
+    if CMD_START == text:
+        cmd_start(chat_id)
+        return
+    if (not get_enabled(chat_id)):
+        return
+    if CMD_STOP == text:
+        cmd_stop(chat_id)
+        return
+    if CMD_HELP == text:
+        cmd_help(chat_id)
+        return
+    cmd_broadcast_match = re.match('^' + CMD_BROADCAST + ' (.*)', text)
+    if cmd_broadcast_match:
+        cmd_broadcast(chat_id, cmd_broadcast_match.group(1))
+        return
+    cmd_echo(chat_id, text, reply_to=msg_id)
+    return
+</code></pre>
+
+<p>단순히 메시지 텍스트가 명령어에 해당되는지 비교하는 분기들이다.</p>
+
+<p>눈여겨 봐둘 만한 부분은 봇 상태가 활성화되지 않았을 때는 <code>CMD_START</code> 명령 외에는 처리하지 않는 부분이다.</p>
+
+<p>또, 방송 명령<code>CMD_BROADCAST</code>의 경우에는 정규표현식 처리를 하여 명령과 매개변수(방송할 메시지)를 구분하였다. 실제 사용시에는 아무나 방송을 하지 못하도록 방송을 할 수 있는 사용자를 지정해두고 체크하도록 해야 할 것이다.</p>
+
+<p>그리고,</p>
+
+<pre><code>app = webapp2.WSGIApplication([
+    ('/me', MeHandler),
+    ('/updates', GetUpdatesHandler),
+    ('/set-webhook', SetWebhookHandler),
+    ('/webhook', WebhookHandler),
+], debug=True)
+</code></pre>
+
+<p>새로운 핸들러를 지정할 때는 <code>webapp2.WSGIApplication</code> 객체를 생성할 때 매개변수에 추가해 둬야 한다.</p>
+
+<h2 id="section-14">기타</h2>
+
+<h3 id="section-15">봇 서버 프로젝트 다운로드</h3>
+
+<p>이 글에서 작성한 봇 서버 프로젝트는 아래 GitHub에 올려두었다. 필요하면 아래 주소에서 다운로드 할 수 있다.</p>
+
+<p>GitHub URL: github.com/bakyeono/using-telegram-bot-api</p>
+
+<h3 id="faviconico--">favicon.ico 에러 해결</h3>
+
+<p>웹 브라우저는 웹사이트에 접속할 때 웹사이트 아이콘(파비콘)을 표시하기 위해 <code>/favicon.ico</code> 파일을 요청한다. 제공하지 않아도 무방하지만 에러 로그가 쌓이는 걸 보기 싫다면 적당한 파일을 하나 넣어두고 URL 핸들러를 지정해주면 된다.</p>
+
+<p>파비콘으로 사용할 <code>favicon.ico</code> 파일을 봇 서버 디렉토리에 넣은 후, <code>app.yaml</code> 파일에 다음 내용을 추가하면 된다.</p>
+
+<pre><code>handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+</code></pre>
+
+<p>하지만 봇 서버이므로 굳이 파비콘을 제공할 필요 없다. 어차피 웹 브라우저를 통한 접근은 비정상 접근이기 때문이다.</p>
+
+<h3 id="cron-job-">작업 스케줄 (cron job) 등록</h3>
+
+<p>봇이 매시간 사용자에게 시간을 알려준다든지, 특정 웹사이트를 분석해 시간대별 상태를 메시지로 보낸다든지 하는, 지정된 시간대에 작업을 반복하도록 하는 것도 가능하다.</p>
+
+<p>반복 작업을 등록하려면 봇 서버가 있는 디렉토리에 <code>cron.yaml</code> 파일을 만들고 아래와 같은 내용을 넣으면 된다.</p>
+
+<pre><code>cron:
+- description: broadcast wspaper.org news
+  url: /broadcast-news
+  schedule: every 30 mins from 09:00 to 20:00
+  timezone: Asia/Seoul
+</code></pre>
+
+<p>이렇게 지정해두면 서울 시간대로 오전 9시 ~ 오후 8시 사이에 30분에 한 번씩 작업이 요청된다.</p>
+
+<p>물론, <code>main.py</code>를 수정해 작업 요청을 수행하기 위한 핸들러(이 경우 ‘/broadcast-news`)와 기능을 추가해 줘야 한다.</p>
+
+
+    </div>
+  </article>
+</div>
+
+      </div>
+    </div>
+    <footer class="site-footer">
+  <div class="wrapper">
+    <h2 class="footer-heading">박연오</h2>
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li><a href="mailto:bakyeono@gmail.com">bakyeono@gmail.com</a></li>
+          <li><p class="rss-subscribe"><a href="http://feeds.feedburner.com/bakyeono">RSS 구독</a></p></li>
+        </ul>
+      </div>
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/bakyeono">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+              <span class="username">bakyeono</span>
+            </a>
+          </li>
+          
+          
+        </ul>
+      </div>
+      <div class="footer-col  footer-col-3">
+        <p class="text">Workers of the world, unite!</p>
+      </div>
+    </div>
+    <div class="copyright">
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />
+      This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.<br />
+      Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="http://bakyeono.net" rel="dct:source">http://bakyeono.net</a>.
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>
