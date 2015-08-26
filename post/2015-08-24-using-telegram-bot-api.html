@@ -67,6 +67,8 @@
     </ul>
   </li>
   <li><a href="#section-4" id="markdown-toc-section-4">3. 서버 프로그램 만들기</a>    <ul>
+      <li><a href="#appyaml------" id="markdown-toc-appyaml------">app.yaml - 앱과 요청에 대한 정의</a></li>
+      <li><a href="#mainpy------" id="markdown-toc-mainpy------">main.py - 요청을 수행할 파이썬 코드</a></li>
       <li><a href="#section-5" id="markdown-toc-section-5">서버 프로그램 업로드</a></li>
       <li><a href="#section-6" id="markdown-toc-section-6">웹훅 설정</a></li>
       <li><a href="#section-7" id="markdown-toc-section-7">봇 사용하기</a></li>
@@ -83,7 +85,7 @@
   <li><a href="#section-14" id="markdown-toc-section-14">기타</a>    <ul>
       <li><a href="#section-15" id="markdown-toc-section-15">봇 서버 프로젝트 다운로드</a></li>
       <li><a href="#faviconico--" id="markdown-toc-faviconico--">favicon.ico 에러 해결</a></li>
-      <li><a href="#cron-job-" id="markdown-toc-cron-job-">작업 스케줄 (cron job) 등록</a></li>
+      <li><a href="#cronyaml-----cron-job-" id="markdown-toc-cronyaml-----cron-job-">cron.yaml - 작업 스케줄 (cron job) 등록</a></li>
     </ul>
   </li>
 </ul>
@@ -306,6 +308,8 @@ Options:
 
 <h2 id="section-4">3. 서버 프로그램 만들기</h2>
 
+<h3 id="appyaml------">app.yaml - 앱과 요청에 대한 정의</h3>
+
 <p>그러면 구글 앱 엔진으로 봇 서버 프로그램을 만들어보자.</p>
 
 <p>디렉토리를 하나 만들고</p>
@@ -341,6 +345,8 @@ libraries:
   <li>handler 항목은 URL 매개변수에 따른 처리기를 지정하는 항목이다. <code>/set-webhook</code>은 구글 계정 로그인을 통해 권한을 검사한 후 main.app을 통해 처리하도록 하였고 기타 url은 로그인 없이 main.app을 통해 처리하도록 했다. 웹훅에 관해서는 나중에 설명하겠다.</li>
   <li>libraries 항목에는 구글 앱 엔진이 로드할 라이브러리와 버전을 지정한다. webapp2는 앱 엔진을 쓰기 위해 추가해야 하는 기본 라이브러리다.</li>
 </ul>
+
+<h3 id="mainpy------">main.py - 요청을 수행할 파이썬 코드</h3>
 
 <p>그 다음으로 핸들러를 정의할 <code>main.py</code> 파일을 만들고 아래 내용을 넣는다. 그대로 복사해 넣으면 된다.</p>
 
@@ -854,7 +860,7 @@ BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
 
 <p>하지만 봇 서버이므로 굳이 파비콘을 제공할 필요 없다. 어차피 웹 브라우저를 통한 접근은 비정상 접근이기 때문이다.</p>
 
-<h3 id="cron-job-">작업 스케줄 (cron job) 등록</h3>
+<h3 id="cronyaml-----cron-job-">cron.yaml - 작업 스케줄 (cron job) 등록</h3>
 
 <p>봇이 매시간 사용자에게 시간을 알려준다든지, 특정 웹사이트를 분석해 시간대별 상태를 메시지로 보낸다든지 하는, 지정된 시간대에 작업을 반복하도록 하는 것도 가능하다.</p>
 

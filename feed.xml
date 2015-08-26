@@ -5,8 +5,8 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 26 Aug 2015 17:28:05 +0900</pubDate>
-    <lastBuildDate>Wed, 26 Aug 2015 17:28:05 +0900</lastBuildDate>
+    <pubDate>Wed, 26 Aug 2015 17:31:03 +0900</pubDate>
+    <lastBuildDate>Wed, 26 Aug 2015 17:31:03 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -25,6 +25,8 @@
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#section-4&quot; id=&quot;markdown-toc-section-4&quot;&gt;3. 서버 프로그램 만들기&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#appyaml------&quot; id=&quot;markdown-toc-appyaml------&quot;&gt;app.yaml - 앱과 요청에 대한 정의&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#mainpy------&quot; id=&quot;markdown-toc-mainpy------&quot;&gt;main.py - 요청을 수행할 파이썬 코드&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#section-5&quot; id=&quot;markdown-toc-section-5&quot;&gt;서버 프로그램 업로드&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#section-6&quot; id=&quot;markdown-toc-section-6&quot;&gt;웹훅 설정&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#section-7&quot; id=&quot;markdown-toc-section-7&quot;&gt;봇 사용하기&lt;/a&gt;&lt;/li&gt;
@@ -41,7 +43,7 @@
   &lt;li&gt;&lt;a href=&quot;#section-14&quot; id=&quot;markdown-toc-section-14&quot;&gt;기타&lt;/a&gt;    &lt;ul&gt;
       &lt;li&gt;&lt;a href=&quot;#section-15&quot; id=&quot;markdown-toc-section-15&quot;&gt;봇 서버 프로젝트 다운로드&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#faviconico--&quot; id=&quot;markdown-toc-faviconico--&quot;&gt;favicon.ico 에러 해결&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#cron-job-&quot; id=&quot;markdown-toc-cron-job-&quot;&gt;작업 스케줄 (cron job) 등록&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#cronyaml-----cron-job-&quot; id=&quot;markdown-toc-cronyaml-----cron-job-&quot;&gt;cron.yaml - 작업 스케줄 (cron job) 등록&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
@@ -264,6 +266,8 @@ Options:
 
 &lt;h2 id=&quot;section-4&quot;&gt;3. 서버 프로그램 만들기&lt;/h2&gt;
 
+&lt;h3 id=&quot;appyaml------&quot;&gt;app.yaml - 앱과 요청에 대한 정의&lt;/h3&gt;
+
 &lt;p&gt;그러면 구글 앱 엔진으로 봇 서버 프로그램을 만들어보자.&lt;/p&gt;
 
 &lt;p&gt;디렉토리를 하나 만들고&lt;/p&gt;
@@ -299,6 +303,8 @@ libraries:
   &lt;li&gt;handler 항목은 URL 매개변수에 따른 처리기를 지정하는 항목이다. &lt;code&gt;/set-webhook&lt;/code&gt;은 구글 계정 로그인을 통해 권한을 검사한 후 main.app을 통해 처리하도록 하였고 기타 url은 로그인 없이 main.app을 통해 처리하도록 했다. 웹훅에 관해서는 나중에 설명하겠다.&lt;/li&gt;
   &lt;li&gt;libraries 항목에는 구글 앱 엔진이 로드할 라이브러리와 버전을 지정한다. webapp2는 앱 엔진을 쓰기 위해 추가해야 하는 기본 라이브러리다.&lt;/li&gt;
 &lt;/ul&gt;
+
+&lt;h3 id=&quot;mainpy------&quot;&gt;main.py - 요청을 수행할 파이썬 코드&lt;/h3&gt;
 
 &lt;p&gt;그 다음으로 핸들러를 정의할 &lt;code&gt;main.py&lt;/code&gt; 파일을 만들고 아래 내용을 넣는다. 그대로 복사해 넣으면 된다.&lt;/p&gt;
 
@@ -812,7 +818,7 @@ BASE_URL = &#39;https://api.telegram.org/bot&#39; + TOKEN + &#39;/&#39;
 
 &lt;p&gt;하지만 봇 서버이므로 굳이 파비콘을 제공할 필요 없다. 어차피 웹 브라우저를 통한 접근은 비정상 접근이기 때문이다.&lt;/p&gt;
 
-&lt;h3 id=&quot;cron-job-&quot;&gt;작업 스케줄 (cron job) 등록&lt;/h3&gt;
+&lt;h3 id=&quot;cronyaml-----cron-job-&quot;&gt;cron.yaml - 작업 스케줄 (cron job) 등록&lt;/h3&gt;
 
 &lt;p&gt;봇이 매시간 사용자에게 시간을 알려준다든지, 특정 웹사이트를 분석해 시간대별 상태를 메시지로 보낸다든지 하는, 지정된 시간대에 작업을 반복하도록 하는 것도 가능하다.&lt;/p&gt;
 
