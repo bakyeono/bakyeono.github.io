@@ -5,8 +5,8 @@
     <description>Workers of the world, unite!</description>
     <link>http://bakyeono.net/</link>
     <atom:link href="http://bakyeono.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 27 Aug 2015 02:11:23 +0900</pubDate>
-    <lastBuildDate>Thu, 27 Aug 2015 02:11:23 +0900</lastBuildDate>
+    <pubDate>Thu, 27 Aug 2015 02:19:07 +0900</pubDate>
+    <lastBuildDate>Thu, 27 Aug 2015 02:19:07 +0900</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -614,7 +614,7 @@ app = webapp2.WSGIApplication([
 
 &lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/telegram-bot-test-search.png&quot; alt=&quot;봇 검색하기&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;웹 브라우저로 https://telegram.me/my_testing_bot 주소로 접속해도 봇을 추가할 수 있다. 물론 주소에서 봇 ID는 자신의 봇 ID로 것으로 바꿔야 한다. 사용자들에게 봇을 제공할 때는 이 방법이 더 좋을 것이다.&lt;/p&gt;
+&lt;p&gt;웹 브라우저로 https://telegram.me/my_testing_bot 주소로 접속해도 봇을 추가할 수 있다. 물론 주소에서 봇 ID는 자신의 봇 ID로 바꿔야 한다. 사용자들에게 봇을 제공할 때는 이 방법이 더 좋을 것이다.&lt;/p&gt;
 
 &lt;p&gt;봇을 추가하면 다음과 같은 화면과 &lt;strong&gt;START&lt;/strong&gt; 버튼이 나온다.&lt;/p&gt;
 
