@@ -4,17 +4,17 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>파이썬 | 박연오</title>
-  <meta name="description" content="Workers of the world, unite!">
-  <meta property="og:title" content="파이썬 | 박연오">
+  <title>무료 다국어 사전 API, Glosbe | 박연오</title>
+  <meta name="description" content="">
+  <meta property="og:title" content="무료 다국어 사전 API, Glosbe | 박연오">
   <meta property="og:site_name" content="박연오">
   <meta property="og:author" content="Bak Yeon O (bakyeono@gmail.com)">
   <meta property="og:type" content="article">
-  <meta property="og:description" content="Workers of the world, unite!">
-  <meta property="og:url" content="http://bakyeono.net/tag/%ED%8C%8C%EC%9D%B4%EC%8D%AC.html">
+  <meta property="og:description" content="">
+  <meta property="og:url" content="http://bakyeono.net/post/2015-06-26-glosbe-api-client.html">
   <meta property="og:locale" content="ko_KR" />
   <link rel="stylesheet" href="/css/main.css" />
-  <link rel="canonical" href="http://bakyeono.net/tag/%ED%8C%8C%EC%9D%B4%EC%8D%AC.html" />
+  <link rel="canonical" href="http://bakyeono.net/post/2015-06-26-glosbe-api-client.html" />
   <link rel="alternate" type="application/rss+xml" title="박연오" href="http://bakyeono.net/feed.xml" />
   <script type="text/javascript" src="/lib/jquery/jquery-1.11.2.min.js"></script>
   <script type="text/javascript">
@@ -48,23 +48,89 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="tag">
-  <h1 class="page-heading">태그: 파이썬</h1>
-  
-    <ul class="post-list">
-      
-        <li>
-          <span class="post-meta">2015-08-24</span>
-          <h2><a class="post-link" href="/post/2015-08-24-using-telegram-bot-api.html">텔레그램 로봇, 공식 API로 만들기 (파이썬, 구글 앱 엔진)</a></h2>
-        </li>
-      
-        <li>
-          <span class="post-meta">2015-06-26</span>
-          <h2><a class="post-link" href="/post/2015-06-26-glosbe-api-client.html">무료 다국어 사전 API, Glosbe</a></h2>
-        </li>
-      
+        
+<div class="post">
+  <header class="post-header">
+    <h1 class="post-title">무료 다국어 사전 API, Glosbe</h1>
+    <p class="post-meta">
+      <span class="post-date">2015-06-26</span>
+       • <span class="post-author">박연오(bakyeono@gmail.com)</span>
+       • <span class="post-tags">태그: <a class="post-tag" href="/tag/glosbe.html">glosbe</a> <a class="post-tag" href="/tag/%EC%82%AC%EC%A0%84.html">사전</a> <a class="post-tag" href="/tag/%ED%8C%8C%EC%9D%B4%EC%8D%AC.html">파이썬</a></span>
+    </p>
+  </header>
+  <article>
+    <div class="post-content">
+      <ul id="markdown-toc">
+  <li><a href="#glosbe-api" id="markdown-toc-glosbe-api">다국어 사전 Glosbe API</a></li>
+  <li><a href="#glosbe-api-" id="markdown-toc-glosbe-api-">Glosbe API 사용하기</a></li>
+  <li><a href="#glosbe-api-client" id="markdown-toc-glosbe-api-client">glosbe-api-client</a>    <ul>
+      <li><a href="#section" id="markdown-toc-section">사용법</a></li>
     </ul>
-  
+  </li>
+</ul>
+
+<h2 id="glosbe-api">다국어 사전 Glosbe API</h2>
+
+<p>Glosbe는 다국어 온라인 사전이다. 사용자들이 직접 데이터베이스를 보완해 만드는 사전이며 무료다.</p>
+
+<p>Glosbe는 무료로 웹 API도 제공하기 때문에 다국어 사전이 필요한 경우 이용할 수 있다.</p>
+
+<ul>
+  <li>Glosbe: <a href="https://glosbe.com">https://glosbe.com</a></li>
+  <li>Glosbe API 페이지: <a href="https://glosbe.com/a-api">https://glosbe.com/a-api</a></li>
+</ul>
+
+<h2 id="glosbe-api-">Glosbe API 사용하기</h2>
+
+<p>Glosbe API 를 사용하려면 다음과 같이 요청을 보내면 된다.</p>
+
+<pre><code>https://glosbe.com/gapi/translate?from=eng&amp;dest=kor&amp;format=json&amp;pretty=true&amp;phrase=phrase
+</code></pre>
+
+<p>요청을 보낼 프로토콜과 주소는 <code>https://glosbe.com/gapi/translate</code> 이다.</p>
+
+<p>위 예에서 쓰인 매개변수는 다음과 같다.</p>
+
+<ul>
+  <li><code>from</code>: 번역해야 할 단어의 언어 (ISO 693-3 코드)</li>
+  <li><code>dest</code>: ~으로 번역되어야 할 언어 (ISO 693-3 코드)</li>
+  <li><code>format</code>: 응답 받은 데이터의 유형 (JSON 또는 XML)</li>
+  <li><code>pretty</code>: 응답을 사람이 보기 좋게 출력할 것인지 여부 (Boolean)</li>
+  <li><code>phrase</code>: 번역해야 할 단어 (대소문자 구분)</li>
+</ul>
+
+<p>언어를 지정할 때는 ISO 693-3 코드로 지정해야 한다. <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-3_codes">ISO 693-3 코드 문서</a>에서 해당 언어를 찾아보면 된다.</p>
+
+<p>문제는 응답인데 사전에 실린 여러 개의 번역어가 모두 담겨서 오기 때문에 처리하기 약간 복잡할 수 있다. (직접 뜯어보길 바라며, 자세한 설명은 생략한다.)</p>
+
+<p>파이썬 사용자는 바로 아래에 내가 짠 스크립트가 있으니 이걸 사용하면 요청과 응답 모두 해결할 수 있다.</p>
+
+<h2 id="glosbe-api-client">glosbe-api-client</h2>
+
+<p>내가 Glosbe API 사용을 위해 만든 파이썬 스크립트다. 아래 주소에서 다운로드하거나 클론하면 된다.</p>
+
+<p>GitHub: <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-3_codes">https://github.com/bakyeono/glosbe-api-client</a></p>
+
+<h3 id="section">사용법</h3>
+
+<p>사용법은 아래와 같다.</p>
+
+<pre><code>$ python glosbe.py 원래언어 목적언어 번역어
+</code></pre>
+
+<p>즉, 한-&gt;영사전으로 ‘딸기’를 검색하고 싶다면 아래와 같이 실행한다.</p>
+
+<pre><code>$ python glosbe.py kor eng 딸기
+딸기
+========
+strawberry
+berry
+strawberries
+</code></pre>
+
+
+    </div>
+  </article>
 </div>
 
       </div>
