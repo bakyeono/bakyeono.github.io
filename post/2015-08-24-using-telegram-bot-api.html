@@ -466,7 +466,7 @@ def send_msg(chat_id, text, reply_to=None, no_preview=True, keyboard=None):
             'keyboard': keyboard,
             'resize_keyboard': True,
             'one_time_keyboard': False,
-            'selective': (reply_to == True),
+            'selective': (reply_to != None),
             })
         params['reply_markup'] = reply_markup
     try:
@@ -723,7 +723,7 @@ BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
             'keyboard': keyboard,
             'resize_keyboard': True,
             'one_time_keyboard': False,
-            'selective': (reply_to == True),
+            'selective': (reply_to != None),
             })
         params['reply_markup'] = reply_markup
     try:
