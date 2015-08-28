@@ -479,7 +479,7 @@ def broadcast(text):
     text:       (string)  메시지 내용
     """
     for chat in get_enabled_chats():
-        send_msg(chat.key.string_id(), text);
+        send_msg(chat.key.string_id(), text)
 
 # 봇 명령 처리 함수들
 def cmd_start(chat_id):
@@ -768,7 +768,7 @@ BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
     text:       (string)  메시지 내용
     """
     for chat in get_enabled_chats():
-        send_msg(chat.key.string_id(), text);
+        send_msg(chat.key.string_id(), text)
 </code></pre>
 
 <p>방송 함수가 참고하는 <code>get_enabled_chats</code> 함수가 좀더 중요하다.</p>
