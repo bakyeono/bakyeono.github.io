@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>삽질 없이 라즈베리 파이 2 모델 B에 와이파이와 블루투스 키보드 연결하기 (커맨드 라인으로) | 박연오</title>
+  <meta name="description" content="">
+  <meta property="og:title" content="삽질 없이 라즈베리 파이 2 모델 B에 와이파이와 블루투스 키보드 연결하기 (커맨드 라인으로) | 박연오">
+  <meta property="og:site_name" content="박연오">
+  <meta property="og:author" content="Bak Yeon O (bakyeono@gmail.com)">
+  <meta property="og:type" content="article">
+  <meta property="og:description" content="">
+  <meta property="og:url" content="http://bakyeono.net/post/2015-08-30-connect-to-wifi-and-bluetooth-keyboard-on-raspberry-pi.html">
+  <meta property="og:locale" content="ko_KR" />
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="canonical" href="http://bakyeono.net/post/2015-08-30-connect-to-wifi-and-bluetooth-keyboard-on-raspberry-pi.html" />
+  <link rel="alternate" type="application/rss+xml" title="박연오" href="http://bakyeono.net/feed.xml" />
+  <script type="text/javascript" src="/lib/jquery/jquery-1.11.2.min.js"></script>
+  <script type="text/javascript">
+    "use strict";
+    $(document).ready(function () {
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create','UA-44446622-4','auto');
+      ga('send','pageview');
+    });
+  </script>
+</head>
+
+  <body>
+    <header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="/">박연오</a>
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z" />
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z" />
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z" />
+        </svg>
+      </a>
+      <div class="trigger">
+        
+      </div>
+    </nav>
+  </div>
+</header>
+
+    <div class="page-content">
+      <div class="wrapper">
+        
+<div class="post">
+  <header class="post-header">
+    <h1 class="post-title">삽질 없이 라즈베리 파이 2 모델 B에 와이파이와 블루투스 키보드 연결하기 (커맨드 라인으로)</h1>
+    <p class="post-meta">
+      <span class="post-date">2015-08-30</span>
+       • <span class="post-author">박연오(bakyeono@gmail.com)</span>
+       • <span class="post-tags">태그: <a class="post-tag" href="/tag/%EB%9D%BC%EC%A6%88%EB%B2%A0%EB%A6%AC-%ED%8C%8C%EC%9D%B4.html">라즈베리-파이</a> <a class="post-tag" href="/tag/%EC%99%80%EC%9D%B4%ED%8C%8C%EC%9D%B4.html">와이파이</a> <a class="post-tag" href="/tag/%EB%B8%94%EB%A3%A8%ED%88%AC%EC%8A%A4.html">블루투스</a> <a class="post-tag" href="/tag/%EB%A6%AC%EB%88%85%EC%8A%A4.html">리눅스</a></span>
+    </p>
+  </header>
+  <article>
+    <div class="post-content">
+      <ul id="markdown-toc">
+  <li><a href="#section" id="markdown-toc-section">1. 와이파이 연결하기</a>    <ul>
+      <li><a href="#etcnetworkinterfaces---" id="markdown-toc-etcnetworkinterfaces---">/etc/network/interfaces 파일은 건드리지 마라!</a></li>
+      <li><a href="#etcwpasupplicant---" id="markdown-toc-etcwpasupplicant---">/etc/wpa_supplicant 파일만 수정하면 된다</a></li>
+      <li><a href="#section-1" id="markdown-toc-section-1">변경한 설정 적용하기</a></li>
+    </ul>
+  </li>
+  <li><a href="#section-2" id="markdown-toc-section-2">2. 블루투스 키보드 연결하기</a>    <ul>
+      <li><a href="#section-3" id="markdown-toc-section-3">필요한 패키지 설치</a></li>
+      <li><a href="#section-4" id="markdown-toc-section-4">장치 검색</a></li>
+      <li><a href="#section-5" id="markdown-toc-section-5">장치 연결</a></li>
+    </ul>
+  </li>
+  <li><a href="#section-6" id="markdown-toc-section-6">보너스</a>    <ul>
+      <li><a href="#section-7" id="markdown-toc-section-7">루비 설치</a></li>
+      <li><a href="#nodejs-" id="markdown-toc-nodejs-">Node.js 설치</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p>라즈베리 파이에는 아직 무선 환경을 위한 장치가 달려 있지 않다. 그래서 와이파이와 블루투스 장치를 연결하려면 별도의 장치를 설치해야 하고 몇 가지 설정 작업도 해야 한다.</p>
+
+<p>인터넷에 이와 관련한 가이드가 많이 올라와 있다. 그런데 많은 가이드가 그 내용이 영원히 적용될 듯이 씌어 있지만 라즈베리 파이와 리눅스 버전이 올라갈 때마다 맞지 않는 내용들이 생긴다. 특히 와이파이 잡는 방법은 여러 글마다 다르게 설명돼 있어 나도 어려움을 많이 겪었다.</p>
+
+<p>이 글은 라즈비안 2015-05-05 버전이 설치된 라즈베리 파이 2 모델 B에 와이파이와 블루투스 키보드를 연결하는 (아마도) 가장 간단한 방법이다.</p>
+
+<p>이 글은 2015년 8월 30일에 썼다. 이 글도 시간이 흐르면 맞지 않게 될 테니 시간이 많이 지났다면 다른 가이드를 찾아 보기 바란다.</p>
+
+<h2 id="section">1. 와이파이 연결하기</h2>
+
+<p>무선네트워크 보안 설정은 WPA-PSK 또는 WPA2-PSK 로 설정돼 있는 걸 전제로 한다. 만일 다른 방식으로 보안이 설정돼 있다면 보안이 취약한 네트워크이니 사용하지 말고, 보안 설정을 변경할 수 있다면 안전한 방식으로 바꿔라.</p>
+
+<p>그리고 당연한 이야기지만 라즈베리 파이 2 모델 B에는 무선 랜카드가 내장되어있지 않기 때문에 USB 무선 랜카드를 장착해야 한다. 드라이버 설치하는 방법까지는까지 이 글에서 설명하기 어렵다. 왠만한 USB 무선 랜카드는 자동으로 드라이버가 잡힐 것이다.</p>
+
+<h3 id="etcnetworkinterfaces---">/etc/network/interfaces 파일은 건드리지 마라!</h3>
+
+<p>인터넷 글을 보면 <code>/etc/network/interfaces</code> 파일을 수정하라는 글이 많을 것이다. 아니다. 건드리지 마라. 라즈베리 파이 2는 이미 무선 네트워크를 쉽게 연결할 수 있도록 미리 설정이 돼 있다. 그러니까, 그 파일을 건드리지 마라!</p>
+
+<p>혹시 이 파일을 이미 수정했다면, 원래 상태로 돌려라. 원래 상태는 아래 내용과 같다.</p>
+
+<pre><code>auto lo
+
+iface lo inet loopback
+iface eth0 inet dhcp
+
+allow-hotplug wlan0
+iface wlan0 inet manual
+wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
+iface default inet dhcp
+</code></pre>
+
+<p>이 설정은 wpa roaming을 이용해 자동으로 무선 네트워크에 접속하도록 한다.</p>
+
+<h3 id="etcwpasupplicant---">/etc/wpa_supplicant 파일만 수정하면 된다</h3>
+
+<p>무선 네트워크 설정은 <code>/etc/wpa_supplicant/wpa_supplicant.conf</code> 파일에 하면 된다.</p>
+
+<p>관리자 권한으로 이 파일을 수정한다.</p>
+
+<pre><code>$ sudo vi /etc/wpa_supplicant/wpa_supplicant.conf
+</code></pre>
+
+<p>그러면 파일 내용은 아래와 같을 것이다.</p>
+
+<pre><code>ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+</code></pre>
+
+<p>그 아래 줄에 접속한 무선 네트워크를 설정해두면 된다. 아래와 같이 한다.</p>
+
+<pre><code>ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+
+network={ 
+    ssid="접속할 AP ID"
+    psk="비밀번호"
+}
+</code></pre>
+
+<p>스마트폰을 쓸 때처럼 무선 네트워크를 여러 개 설정해두고 싶다면? network를 여러 개 지정해두면 된다.</p>
+
+<pre><code>ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+
+network={ 
+    ssid="접속할 AP ID"
+    psk="비밀번호"
+}
+network={ 
+    ssid="회사 AP"
+    psk="비밀번호"
+}
+network={ 
+    ssid="카페 AP"
+    psk="비밀번호"
+}
+</code></pre>
+
+<h3 id="section-1">변경한 설정 적용하기</h3>
+
+<p>이제 시스템을 재시작하거나</p>
+
+<pre><code>$ sudo reboot
+</code></pre>
+
+<p>그냥 네트워크만 다시 연결하도록 해도 된다.</p>
+
+<pre><code>$ sudo ifdown wlan0
+$ sudo ifup wlan0
+</code></pre>
+
+<p>(인트라넷이 아니라면) 인터넷이 잘 되는지 확인해본다.</p>
+
+<pre><code>$ ping google.com
+PING google.com (59.18.49.251) 56(84) bytes of data.
+64 bytes from cache.google.com (59.18.49.251): icmp_req=1 ttl=56 time=6.80 ms
+64 bytes from cache.google.com (59.18.49.251): icmp_req=2 ttl=56 time=3.77 ms
+64 bytes from cache.google.com (59.18.49.251): icmp_req=3 ttl=56 time=7.92 ms
+
+--- google.com ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2002ms
+rtt min/avg/max/mdev = 3.777/6.168/7.927/1.752 ms
+</code></pre>
+
+<h2 id="section-2">2. 블루투스 키보드 연결하기</h2>
+
+<p>라즈베리 파이 2 모델 B에는 무선 랜카드뿐 아니라 블루투스 동글도 달려있지 않다. 따라서 블루투스 장치를 쓰고 싶다면 별도로 USB 동글을 장착해줘야 한다. 이 글은 USB 동글을 설치했고, 드라이버도 정상적으로 작동한다는 것을 전제로 한다. 일반적인 블루투스 동글은 USB를 연결하면 드라이버가 바로 잡힐 것이니 걱정하지 않아도 된다.</p>
+
+<h3 id="section-3">필요한 패키지 설치</h3>
+
+<p>라즈비안에는 블루투스 장치 연결에 필요한 소프트웨어가 기본 설치되어 있지 않다. 따라서 블루투스 장치 지원을 위한 몇 가지 패키지를 설치해야 한다.</p>
+
+<p>우선 apt 저장소 업데이트를 안했다면 해 둔다.</p>
+
+<pre><code>$ sudo apt-get update
+$ sudo apt-get upgrade
+</code></pre>
+
+<p>다음 명령으로 블루투스 지원 패키지를 설치한다.</p>
+
+<pre><code>$ sudo apt-get install bluetooth blue-utils
+</code></pre>
+
+<p>dBus를 활성화한다.</p>
+
+<pre><code>$ sudo update-rc.d -f dBus defaults
+</code></pre>
+
+<p>라즈베리 파이를 재시작한다.</p>
+
+<pre><code>$ sudo reboot
+</code></pre>
+
+<h3 id="section-4">장치 검색</h3>
+
+<p>블루투스 키보드의 페어링 버튼을 몇 초 동안 꾹~ 누르고, 아래 명령으로 장치를 검색한다. (장치를 찾지 못하거나 오류가 발생하면 페어링 버튼을 다시 누르고 해보라.)</p>
+
+<pre><code>$ sudo hcitool scan
+Scanning ...
+        00:0D:F0:8B:12:33 LG-PC
+        00:1F:20:F0:20:12 Logitech Keyboard K480
+</code></pre>
+
+<p>이런 식으로 장치가 나오면 성공이다. 연결하려는 장치의 MAC 주소를 확인해둔다. (이 경우엔 <code>00:1F:20:F0:20:12</code>)</p>
+
+<h3 id="section-5">장치 연결</h3>
+
+<p>다시 블루투스 키보드의 페어링 버튼을 꾹 누르고, 아래 명령으로 장치를 연결한다.</p>
+
+<pre><code>$ sudo bluez-simple-agent hci0 00:1F:20:F0:20:12
+</code></pre>
+
+<blockquote>
+  <p>주의: 여러분은 <code>00:1F:20:f0:20:12</code>가 아니라, 위에서 발견한 MAC 주소를 입력해야 한다.</p>
+</blockquote>
+
+<p>PIN 번호를 입력하는 다이얼로그가 다오면 <code>0000</code>을 입력하고 엔터 키를 누른다. 그 후 블루투스 키보드로 <code>0000</code>을 입력하고 엔터 키를 누르면 된다.</p>
+
+<p>오류가 발생하면 블루투스 키보드의 페어링 버튼을 다시 꾹~ 누르고 다시 시도해보라.</p>
+
+<p>장치를 신뢰할 수 있는 장치로 연결해 둔다. 그래야 앞으로 연결 작업을 반복하지 않는다.</p>
+
+<pre><code>$ sudo bluez-test-device trusted 00:1F:20:F0:20:12 yes
+</code></pre>
+
+<blockquote>
+  <p>주의: 여러분은 <code>00:1F:20:f0:20:12</code>가 아니라, 위에서 발견한 MAC 주소를 입력해야 한다.</p>
+</blockquote>
+
+<p>아직 블루투스 키보드가 작동하지 않을 것이다. 아직 한 단계가 더 남았다. 아래 명령을 입력한다.</p>
+
+<pre><code>$ sudo bluez-test-input connect 00:1F:20:F0:20:12
+</code></pre>
+
+<blockquote>
+  <p>주의: 여러분은 <code>00:1F:20:f0:20:12</code>가 아니라, 위에서 발견한 MAC 주소를 입력해야 한다.</p>
+</blockquote>
+
+<p>이제 시스템을 재시작한다. 부팅 과정이 끝나고 몇 초 뒤 블루투스 키보드를 사용할 수 있을 것이다.</p>
+
+<h2 id="section-6">보너스</h2>
+
+<h3 id="section-7">루비 설치</h3>
+
+<p>apt 저장소에 있는 루비를 설치하면 멘붕을 경험하게 된다. 멘붕없이 설치하려면 아래 가이드를 따르면 된다.</p>
+
+<ul>
+  <li><a href="http://bigmatch.i-um.net/2013/12/%EB%A9%98%EB%B6%95%EC%97%86%EC%9D%B4-rvm%EA%B3%BC-%EB%A3%A8%EB%B9%84-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0/">멘붕없이 RVM과 루비 설치하기</a></li>
+</ul>
+
+<h3 id="nodejs-">Node.js 설치</h3>
+
+<p>라즈베리 파이의 apt 저장소에 있는 Node.js는 낡은 버전이다. 최신 버전 Node.js를 설치하고 싶으면 아래 사이트에 나온 방법을 따르면 된다.</p>
+
+<ul>
+  <li><a href="http://node-arm.herokuapp.com">node-arm</a></li>
+</ul>
+
+
+    </div>
+  </article>
+</div>
+
+      </div>
+    </div>
+    <footer class="site-footer">
+  <div class="wrapper">
+    <h2 class="footer-heading">박연오</h2>
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li><a href="mailto:bakyeono@gmail.com">bakyeono@gmail.com</a></li>
+          <li><p class="rss-subscribe"><a href="http://feeds.feedburner.com/bakyeono">RSS 구독</a></p></li>
+        </ul>
+      </div>
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/bakyeono">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+              <span class="username">bakyeono</span>
+            </a>
+          </li>
+          
+          
+        </ul>
+      </div>
+      <div class="footer-col  footer-col-3">
+        <p class="text">Workers of the world, unite!</p>
+      </div>
+    </div>
+    <div class="copyright">
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />
+      This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.<br />
+      Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="http://bakyeono.net" rel="dct:source">http://bakyeono.net</a>.
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>
