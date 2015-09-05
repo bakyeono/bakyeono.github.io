@@ -1,7 +1,7 @@
 # Site Settings
 title: 박연오
 email: bakyeono@gmail.com
-description: "Workers of the world, unite!"
+description: "박연오의 개인 웹 페이지"
 url: "http://bakyeono.net"
 github_username: bakyeono 
 license_url: "http://www.freeuse.or.kr/license/2.0/yg/index.htm"
@@ -30,7 +30,12 @@ unpublished: false
 
 # Plugins
 whitelist: []
-gems:      []
+gems:
+- jekyll-mentions
+- jekyll-redirect-from
+- jekyll-sitemap
+- jekyll-feed
+- emoji
 
 # Conversion
 markdown:    kramdown
@@ -49,7 +54,8 @@ relative_permalinks: false
 
 # Outputting
 permalink: "/post/:year-:month-:day-:title.html"
-paginate_path: /page:num
+paginate: 10
+paginate_path: "/page:num/"
 timezone: "Asia/Seoul"
 
 quiet:    false
