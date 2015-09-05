@@ -1,0 +1,72 @@
+# Site Settings
+title: 박연오
+email: bakyeono@gmail.com
+description: "Workers of the world, unite!"
+url: "http://bakyeono.net"
+github_username: bakyeono 
+license_url: "http://www.freeuse.or.kr/license/2.0/yg/index.htm"
+
+# Where things are
+source:      .
+destination: ./_site
+plugins:     ./_plugins
+layouts:     ./_layouts
+data_source: ./_data
+collections: null
+
+# Handling Reading
+safe:         false
+include:      [".htaccess"]
+exclude:      ["newpost", "publish", "start", "stop"]
+keep_files:   [".git", ".svn"]
+encoding:     "utf-8"
+markdown_ext: "markdown,mkdown,mkdn,mkd,md"
+
+# Filtering Content
+show_drafts: null
+limit_posts: 0
+future:      false
+unpublished: false
+
+# Plugins
+whitelist: []
+gems:      []
+
+# Conversion
+markdown:    kramdown
+highlighter: false
+lsi:         false
+excerpt_separator: "\n\n"
+
+# Serving
+detach:  false
+port:    4000
+host:    0.0.0.0
+baseurl: "" # does not include hostname
+
+# Backwards-compatibility
+relative_permalinks: false
+
+# Outputting
+permalink: "/post/:year-:month-:day-:title.html"
+paginate_path: /page:num
+timezone: "Asia/Seoul"
+
+quiet:    false
+defaults: []
+
+# Markdown Processors
+rdiscount:
+  extensions: []
+
+redcarpet:
+  extensions: []
+
+kramdown:
+  auto_ids:       true
+  footnote_nr:    1
+  entity_output:  as_char
+  toc_levels:     2..3
+  smart_quotes:   lsquo,rsquo,ldquo,rdquo
+  enable_coderay: false
+

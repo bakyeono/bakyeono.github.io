@@ -1,0 +1,33 @@
+---
+layout: post
+title: NEXT-201N(rtl8192cu) 무선 랜 카드가 리눅스에서 오작동할 때
+author: 박연오(bakyeono@gmail.com)
+date: 2015-08-08 11:09
+tags: 리눅스 네트워크
+---
+* table of contents
+{:toc}
+
+NEXT-201N USB 미니 무선 랜 카드가 리눅스에서 오작동하는 경우가 있다. 나는 연결 속도가 느리거나 계속 접속이 끊기거나 하는 문제를 겪었다. 이 장치에 들어 있는 리얼테크사의 rtl8192cu 칩셋과 리눅스 커널의 드라이버가 잘 호환되지 않아서 생기는 문제인 것 같다.
+
+이 문제를 해결하려면 리얼테크사의 드라이버를 직접 설치하면 된다. 아래 페이지에 우분투용으로 포팅한 드라이버가 있으니 우분투 사용자는 이걸 설치하면 된다.
+
+https://github.com/pvaret/rtl8192cu-fixes
+
+우분투 13.10 이후 버전용으로 제작된 드라이버다. 나는 우분투 14.12 LTS에 설치해 봤다. 다른 배포판에서도 동작하는지는 확인해보지 않았다. 배포판이 우분투가 아닌 경우에는 리얼테크사 웹사이트에서 드라이버 소스를 다운로드해서 직접 컴파일해 설치하기를 권한다.
+
+드라이버를 설치하기 전에 사용중인 장치가 rtl8192cu가 맞는지 확인해야 한다. 다음 명령어를 입력하면 사용 중인 장치를 알 수 있다.
+
+    $ sudo lshw -c network
+
+rtl8192cu 또는 rtl8192cus라는 장치명이 확인되면 드라이버를 설치한다. 위 github 페이지에 나온 설치 과정은 아래와 같다.
+
+    $ sudo apt-get install git linux-headers-generic build-essential dkms
+    $ git clone https://github.com/pvaret/rtl8192cu-fixes.git
+    $ sudo dkms add ./rtl8192cu-fixes
+    $ sudo dkms install 8192cu/1.10
+    $ sudo depmod -a
+    $ sudo cp ./rtl8192cu-fixes/blacklist-native-rtl8192.conf /etc/modprobe.d/
+
+이후 시스템을 재시작하면 된다.
+

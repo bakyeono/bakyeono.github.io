@@ -1,0 +1,28 @@
+/**
+ * Table of Contents
+ */
+#markdown-toc {
+  @include media-query($on-palm) {
+    display: none;
+  }
+
+  margin: 24px 0;
+  padding: 12px 32px;
+  border-top: dotted 3px $block-border-color;
+  border-bottom: dotted 3px $block-border-color;
+  background-color: $block-background-color;
+  line-height: 2;
+
+  li {
+    font-size: $small-font-size;
+    list-style-type: none;
+    list-style-position: inside;
+  }
+
+  ol, ul {
+    li:before {
+      content: '~';
+      padding-right: 20px;
+    }
+  }
+}
