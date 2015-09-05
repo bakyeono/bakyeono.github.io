@@ -13,23 +13,16 @@ layout: default
   </ul>
   {% if paginator.total_pages > 1 %}
   <div class="pagination">
-    {% if paginator.previous_page %}
-    <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&laquo; 이전 목록</a>
-    {% endif %}
-
+    <h2 class="pagination-heading">다음 페이지</h2>
     {% for page in (1..paginator.total_pages) %}
     {% if page == paginator.page %}
-    <em>{{ page }}</em>
+    <span class="pagination-item pagination-current">{{ page }}</span>
     {% elsif page == 1 %}
-    <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">{{ page }}</a>
+    <a href="{{ '/' | prepend: site.baseurl | replace: '//', '/' }}"><span class="pagination-item">{{ page }}</span></a></li>
     {% else %}
-    <a href="{{ site.paginate_path | prepend: site.baseurl | replace: '//', '/' | replace: ':num', page }}">{{ page }}</a>
+    <a href="{{ site.paginate_path | prepend: site.baseurl | replace: '//', '/' | replace: ':num', page }}"><span class="pagination-item">{{ page }}</span></a>
     {% endif %}
     {% endfor %}
-
-    {% if paginator.next_page %}
-    <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">다음 목록 &raquo;</a>
-    {% endif %}
   </div>
   {% endif %}
 </div>

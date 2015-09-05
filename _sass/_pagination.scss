@@ -1,0 +1,27 @@
+/**
+ * Pagination
+ */
+.pagination {
+  .pagination-heading {
+    font-size: 20px;
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+
+  .pagination-item {
+    font-size: $small-font-size;
+    color: white;
+    border: 8px solid $brand-color;
+    border-radius: 20px;
+    background-color: $brand-color;
+  }
+
+  .pagination-current {
+    font-weight: bold;
+    color: $text-color;
+    border-color: $block-background-color;
+    background-color: $block-background-color;
+  }
+}
