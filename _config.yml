@@ -30,8 +30,7 @@ unpublished: false
 
 # Plugins
 whitelist: []
-gems:
-- jekyll-sitemap
+gems:      []
 
 # Conversion
 markdown:    kramdown
