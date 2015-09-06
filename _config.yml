@@ -7,11 +7,13 @@ github_username: bakyeono
 license_url: "http://www.freeuse.or.kr/license/2.0/yg/index.htm"
 
 # Where things are
-source:      .
-destination: ./_site
-plugins:     ./_plugins
-layouts:     ./_layouts
-collections: null
+source:       "."
+destination:  "./_site"
+plugins_dir:  "./_plugins"
+layouts_dir:  "./_layouts"
+data_dir:     "./_data"
+includes_dir: "./_includes"
+collections:  null
 
 # Handling Reading
 safe:         false
@@ -37,7 +39,7 @@ gems:
 
 # Conversion
 markdown:    kramdown
-highlighter: null
+# highlighter: pygments
 lsi:         false
 excerpt_separator: "\n\n"
 
@@ -51,12 +53,12 @@ baseurl: "" # does not include hostname
 relative_permalinks: false
 
 # Outputting
-permalink: "/post/:year-:month-:day-:title.html"
-paginate: 20
+permalink:     "/post/:year-:month-:day-:title.html"
+paginate:      20
 paginate_path: "/page:num"
-timezone: "Asia/Seoul"
-quiet:    true
-defaults: []
+timezone:      "Asia/Seoul"
+quiet:         true
+defaults:      []
 
 # Markdown Processors
 kramdown:
