@@ -11,7 +11,6 @@ source:      .
 destination: ./_site
 plugins:     ./_plugins
 layouts:     ./_layouts
-data_source: ./_data
 collections: null
 
 # Handling Reading
@@ -35,11 +34,10 @@ gems:
 - jekyll-redirect-from
 - jekyll-sitemap
 - jekyll-feed
-- emoji
 
 # Conversion
 markdown:    kramdown
-highlighter: false
+highlighter: null
 lsi:         false
 excerpt_separator: "\n\n"
 
@@ -54,20 +52,13 @@ relative_permalinks: false
 
 # Outputting
 permalink: "/post/:year-:month-:day-:title.html"
-paginate: 10
-paginate_path: "/page:num/"
+paginate: 20
+paginate_path: "/page:num"
 timezone: "Asia/Seoul"
-
-quiet:    false
+quiet:    true
 defaults: []
 
 # Markdown Processors
-rdiscount:
-  extensions: []
-
-redcarpet:
-  extensions: []
-
 kramdown:
   auto_ids:       true
   footnote_nr:    1
