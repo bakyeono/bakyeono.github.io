@@ -54,7 +54,7 @@ tags: diy tv 안테나 옷걸이
 
 ### 옷걸이 펴기
 
-![옷걸이 펴기](http://bakyeono.net/img/diy-dtv-antenna1.png)
+![옷걸이 펴기](http://bakyeono.net/img/diy-dtv-antenna1.jpg)
 
 옷걸이를 풀어서 철사를 쓱쓱 펴준다. 나에게는 이게 가장 힘든 작업이었지만 손재주가 좋은 사람들은 쉽게 할 수 있을 것이다. 나는 깔끔하게 펴지 못하고 그냥 대충 폈다.
 
@@ -64,13 +64,13 @@ tags: diy tv 안테나 옷걸이
 
 다 접었으면 옷걸이 아래쪽을 잘라 내고 피복을 벗겨 철사가 드러나게 한다.
 
-![옷걸이 접기](http://bakyeono.net/img/diy-dtv-antenna2.png)
+![옷걸이 접기](http://bakyeono.net/img/diy-dtv-antenna2.jpg)
 
 ### TV 안테나 케이블 자르고 전선 정리하기
 
 TV 안테나 케이블의 한쪽 끝을 자른다. 가위나 니퍼로 과감하게 싹둑 자르면 된다.
 
-![케이블 자르기](http://bakyeono.net/img/diy-dtv-antenna3.png)
+![케이블 자르기](http://bakyeono.net/img/diy-dtv-antenna3.jpg)
 
 그 다음, 전선을 두 가닥으로 정리해야 한다. 먼저 바깥쪽을 둘러싸고 있는 가는 전선들을 모아서 한 가닥으로 뭉쳐 준다.
 
@@ -82,11 +82,11 @@ TV 안테나 케이블의 한쪽 끝을 자른다. 가위나 니퍼로 과감하
 
 이제 옷걸이의 두 가닥과 TV 안테나의 두 가닥을 각각 연결해 준다. 동영상에서 납땜을 해 주면 더 좋다길로 나도 납땜을 해 봤다. 하지만 납이 옷걸이 철사에 달라붙지 않고 계속 흘러내리는 바람에 납 연기만 잔뜩 마시고 납땜을 성공하지는 못했다.
 
-![옷걸이와 케이블을 붙이기](http://bakyeono.net/img/diy-dtv-antenna4.png)
+![옷걸이와 케이블을 붙이기](http://bakyeono.net/img/diy-dtv-antenna4.jpg)
 
 그래서 그냥 청테이프를 대충대충 발라서 연결해 버렸다. 그래도 청테이프 파워가 있으니 튼튼하게 잘 연결된 것 같다.
 
-![완성!!](http://bakyeono.net/img/diy-dtv-antenna5.png)
+![완성!!](http://bakyeono.net/img/diy-dtv-antenna5.jpg)
 
 완성!!
 
@@ -94,7 +94,7 @@ TV 안테나 케이블의 한쪽 끝을 자른다. 가위나 니퍼로 과감하
 
 모양도 울퉁불퉁하고 납땜도 실패했고 옷걸이 윗부분을 여러 번 접지도 않았지만, TV 수신이 꽤 잘 됐다!
 
-![잘 수신된다](http://bakyeono.net/img/diy-dtv-antenna6.png)
+![잘 수신된다](http://bakyeono.net/img/diy-dtv-antenna6.jpg)
 
 다만, 창 밖에 안테나를 내놓았을 때만 수신이 잘 됐고, 그냥 실내에 뒀을 때는 수신이 잘 되지 않았다. 또, 안테나의 각도에 따라서 TV 수신이 잘 안 되기도 했다.
 
