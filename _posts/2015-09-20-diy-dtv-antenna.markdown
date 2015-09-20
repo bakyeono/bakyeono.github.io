@@ -1,9 +1,9 @@
 ---
 layout: post
-title: TV를 사 왔는데 왜 보지를 못하니? 옷걸이로 디지털 TV 안테나 만들어 보았다
+title: TV를 사 왔는데 왜 보지를 못하니? 옷걸이로 디지털 TV 안테나 만들기
 author: 박연오(bakyeono@gmail.com)
 date: 2015-09-20 18:00
-tags: DIY TV 안테나 옷걸이
+tags: diy tv 안테나 옷걸이
 ---
 * table of contents
 {:toc}
