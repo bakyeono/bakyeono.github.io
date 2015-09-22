@@ -2,7 +2,7 @@
 layout: post
 title: 네이버 데뷰 2015 참가기 2일차 - 매우 가벼운 실시간 추천 엔진
 author: 박연오(bakyeono@gmail.com)
-date: 2015-09-22
+date: 2015-09-15
 tags: 네이버 데뷰 추천엔진 minhash
 ---
 * table of contents
