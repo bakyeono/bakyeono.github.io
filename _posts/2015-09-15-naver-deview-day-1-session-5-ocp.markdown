@@ -2,7 +2,7 @@
 layout: post
 title: 네이버 데뷰 2015 참가기 1일차 - Open Compute Project (OCP)
 author: 박연오(bakyeono@gmail.com)
-date: 2015-09-15
+date: 2015-09-14
 tags: 네이버 데뷰 OCP
 ---
 * table of contents
