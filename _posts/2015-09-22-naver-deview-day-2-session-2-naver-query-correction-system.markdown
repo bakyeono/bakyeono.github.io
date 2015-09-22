@@ -3,7 +3,7 @@ layout: post
 title: 네이버 데뷰 2015 참가기 2일차 - 기계 번역을 이용한 검색어 수정 시스템
 author: 박연오(bakyeono@gmail.com)
 date: 2015-09-22
-tags: 네이버 데뷰 검색 검색어
+tags: 네이버 데뷰 검색 기계번역
 ---
 * table of contents
 {:toc}
