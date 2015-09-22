@@ -3,7 +3,7 @@ layout: post
 title: 네이버 데뷰 2015 참가기 2일차 - 네이버의 데이터 처리 기술
 author: 박연오(bakyeono@gmail.com)
 date: 2015-09-22
-tags: 네이버 데뷰 검색 검색어
+tags: 네이버 데뷰 데이터마이닝
 ---
 * table of contents
 {:toc}
