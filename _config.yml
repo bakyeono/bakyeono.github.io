@@ -54,7 +54,7 @@ relative_permalinks: false
 
 # Outputting
 permalink:     "/post/:year-:month-:day-:title.html"
-paginate:      10
+paginate:      100
 paginate_path: "/page:num"
 timezone:      "Asia/Seoul"
 quiet:         true
