@@ -10,7 +10,7 @@ tags: nodejs 자바스크립트
 
 ## 자식 프로세스 실행
 
-Node.js에서 `child_process` 모듈을 이용해 외부 프로그램을 자식 프로세스로 실행할 수 있다. 자식 프로세스가 보내주는 데이터는 표준출력(STDOUT) 이벤트에 콜백을 걸어 받을 수 있다. 다음과 같이 한다.
+Node.js에서 child_process 모듈을 이용해 외부 프로그램을 자식 프로세스로 실행할 수 있다. 자식 프로세스가 보내주는 데이터는 표준출력(STDOUT) 이벤트에 콜백을 걸어 받을 수 있다. 다음과 같이 한다.
 
     var spawn = require('child_process').spawn,
         subprocess;
@@ -45,7 +45,7 @@ Node.js에서 `child_process` 모듈을 이용해 외부 프로그램을 자식 
 
 ## 해결방법
 
-해결방법은 STDOUT data 이벤트에 대한 콜백에서 여러 줄을 각각 분리해주는 것이다. 이 떄, 빈 줄이 추가되는 경우도 있으므로 이에 대한 처리도 해주는 것이 좋다. 위의 on_child_stdout 함수를 아래와 같이 수정하면 된다.
+해결방법은 STDOUT data 이벤트에 대한 콜백에서 여러 줄을 각각 분리해주는 것이다. 이 때, 빈 줄이 추가되는 경우도 있으므로 이에 대한 처리도 해주는 것이 좋다. 위의 `on_child_stdout` 함수를 아래와 같이 수정하면 된다.
 
     function on_child_stdout(data) {
      	var str = data.toString(),
