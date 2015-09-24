@@ -3,7 +3,7 @@ layout: post
 title: Node.js - 자식 프로세스에서 데이터 출력이 불규칙하게 들어올 때 한 줄씩 나누기
 author: 박연오(bakyeono@gmail.com)
 date: 2015-09-25 01:53
-tags: nodejs
+tags: nodejs 자바스크립트
 ---
 * table of contents
 {:toc}
