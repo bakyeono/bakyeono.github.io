@@ -8,7 +8,7 @@ tags: 자바스크립트 iframe
 * table of contents
 {:toc}
 
-## iframe의 src 경로 접속이 속성이 실패할 때
+## iframe의 특정 경로 접속이 실패할 때
 
 iframe 노드의 src 속성을 수정하여 iframe이 출력할 페이지의 경로를 지정할 수 있다. jQuery를 쓴다고 하면, 아래 명령으로 iframe의 페이지를 바꿀 수 있다.
 
@@ -38,7 +38,13 @@ iframe 노드의 src 속성을 수정하여 iframe이 출력할 페이지의 경
 
 이렇게 하면 접속이 가능한 경로만 iframe에 지정해줄 수 있고, 접속할 수 없는 경우 사용자에게 알리는 것도 가능하다.
 
-다만 해당 경로에 요청을 한 번이 아니라 두 번 보내게 된다는 점에 유의해야 한다.
+### 주의사항
 
-jQuery의 get 메소드에 관한 자세한 명세는 이 공식 문서에 나와 있다. [https://api.jquery.com/jquery.get](https://api.jquery.com/jquery.get)
+해당 경로에 요청을 한 번이 아니라 두 번 보내게 된다는 점에 유의해야 한다.
+
+### 참고
+
+jQuery의 get 메소드에 관한 자세한 명세는 이 공식 문서에 나와 있다.
+
+[https://api.jquery.com/jquery.get](https://api.jquery.com/jquery.get)
 
