@@ -25,16 +25,16 @@ iframe 노드의 src 속성을 수정하여 iframe이 출력할 페이지의 경
 접속할 경로를 미리 테스트해 본 후 성공/실패를 구분하면 간단하다. jQuery를 쓴다고 하면, get 메소드로 테스트하면 된다.
 
     var location = 'http://wrong.location.somewhere/';
-  	$.get(location, function() {
-  	  alert('성공');
-  		$('iframe').attr('src', location);
-  	}).done(function() {
-  	  alert('두 번째 성공');
-  	}).fail(function(e) {
-  	  alert('접속 실패');
-  	}).always(function() {
-  	  alert('완료');
-  	});
+    $.get(location, function() {
+      alert('성공');
+      $('iframe').attr('src', location);
+    }).done(function() {
+      alert('두 번째 성공');
+    }).fail(function(e) {
+      alert('접속 실패');
+    }).always(function() {
+      alert('완료');
+    });
 
 이렇게 하면 접속이 가능한 경로만 iframe에 지정해줄 수 있고, 접속할 수 없는 경우 사용자에게 알리는 것도 가능하다.
 
