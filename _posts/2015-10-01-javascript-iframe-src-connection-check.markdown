@@ -48,5 +48,4 @@ jQuery의 get 메소드에 관한 자세한 명세는 이 공식 문서에 나�
 
 [https://api.jquery.com/jquery.get](https://api.jquery.com/jquery.get)
 
-꼼수 말고 제대로 예외를 처리하는 방법을 아시는 분은 제보 바란다.
-
+이런 꼼수 말고 제대로 예외 처리하는 방법을 아는 분이 계시면... 가르침을 구합니다.
