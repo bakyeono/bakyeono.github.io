@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # remove old tag
+rm -r tag
 rm -r _site/tag
 
 # build site
