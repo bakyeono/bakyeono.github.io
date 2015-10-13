@@ -49,10 +49,10 @@ Node.js에서 child_process 모듈을 이용해 외부 프로그램을 자식 �
 
     function on_child_stdout(data) {
      	var str = data.toString(),
-     		  lines = str.split(/\n/g);
+            lines = str.split(/\n/g);
     	for (var i in lines) {
     	  if (! lines[i]) {
-          console.log(lines[i]);
+            console.log(lines[i]);
     	  }
     	}
     };
