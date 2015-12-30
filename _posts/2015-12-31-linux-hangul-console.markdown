@@ -55,7 +55,7 @@ tags: 리눅스 한글 콘솔 터미널
 
 다만 폰트를 바꾸는 건 고려해 볼 만 하다. 다른 폰트를 적용해 보고 싶다면 [이 페이지](http://kldp.net/projects/hangul-jfbterm/download/note/757)에서 이야기 폰트를 다운로드할 수 있고 수정 방법도 나와 있으니 참고한다. 참고로 UTF-8 환경에선 `+fontset: iso10646.1,pcf,U,폰트파일경로` 옵션만 바꿔주면 적용된다.
 
-위 페이지의 폰트를 적용하면 이런 모양 된다.
+이야기 폰트를 적용하면 이런 모양이 나온다.
 
 ![이야기 폰트](http://bakyeono.net/img/linux-hangul-console-3.jpg)
 
