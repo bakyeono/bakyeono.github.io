@@ -39,8 +39,8 @@ gems:
 
 # Conversion
 markdown:    kramdown
-lsi:         false
-excerpt_separator: "\n\n"
+#lsi:         false
+#excerpt_separator: "\n\n"
 
 # Serving
 detach:  false
@@ -50,19 +50,18 @@ baseurl: "" # does not include hostname
 
 # Outputting
 #permalink:     "/post/:year-:month-:day-:title.html"
-permalink:     "/post/:title"
-paginate:      100
-paginate_path: "/page:num"
+#paginate:      100
+#paginate_path: "/page:num"
 timezone:      "Asia/Seoul"
-quiet:         true
-defaults:      []
+#quiet:         true
+#defaults:      []
 
 # Markdown Processors
-kramdown:
-  auto_ids:       true
-  footnote_nr:    1
-  entity_output:  as_char
-  toc_levels:     2..3
-  smart_quotes:   lsquo,rsquo,ldquo,rdquo
-  enable_coderay: false
+#kramdown:
+#  auto_ids:       true
+#  footnote_nr:    1
+#  entity_output:  as_char
+#  toc_levels:     2..3
+#  smart_quotes:   lsquo,rsquo,ldquo,rdquo
+#  enable_coderay: false
 
