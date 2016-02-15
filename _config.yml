@@ -53,7 +53,7 @@ baseurl: "" # does not include hostname
 relative_permalinks: false
 
 # Outputting
-permalink:     "/post/:year-:month-:day-:title"
+permalink:     "/post/:year-:month-:day-:title.html"
 paginate:      100
 paginate_path: "/page:num"
 timezone:      "Asia/Seoul"
