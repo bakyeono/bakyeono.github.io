@@ -39,8 +39,8 @@ gems:
 
 # Conversion
 markdown:    kramdown
-#lsi:         false
-#excerpt_separator: "\n\n"
+lsi:         false
+excerpt_separator: "\n\n"
 
 # Serving
 detach:  false
@@ -54,7 +54,7 @@ baseurl: "" # does not include hostname
 #paginate_path: "/page:num"
 timezone:      "Asia/Seoul"
 #quiet:         true
-#defaults:      []
+defaults:      []
 
 # Markdown Processors
 #kramdown:
