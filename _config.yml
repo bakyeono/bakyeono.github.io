@@ -39,7 +39,6 @@ gems:
 
 # Conversion
 markdown:    kramdown
-# highlighter: pygments
 lsi:         false
 excerpt_separator: "\n\n"
 
@@ -49,11 +48,8 @@ port:    4000
 host:    0.0.0.0
 baseurl: "" # does not include hostname
 
-# Backwards-compatibility
-relative_permalinks: false
-
 # Outputting
-permalink:     "/post/:year-:month-:day-:title\.html"
+permalink:     "/post/:year-:month-:day-:title.html"
 paginate:      100
 paginate_path: "/page:num"
 timezone:      "Asia/Seoul"
