@@ -50,6 +50,7 @@ baseurl: "" # does not include hostname
 
 # Outputting
 #permalink:     "/post/:year-:month-:day-:title.html"
+permalink:     "/post/:title"
 paginate:      100
 paginate_path: "/page:num"
 timezone:      "Asia/Seoul"
