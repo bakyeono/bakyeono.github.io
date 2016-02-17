@@ -1,0 +1,1687 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>박연오</title>
+  <subtitle>bakyeono.net</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://bakyeono.net/"/>
+  <updated>2016-02-17T17:28:40.973Z</updated>
+  <id>http://bakyeono.net/</id>
+  
+  <author>
+    <name>박연오</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>리눅스 콘솔(X-window 말고 진짜 콘솔!)에서 한글 보기</title>
+    <link href="http://bakyeono.net/post/2015-12-31-linux-hangul-console.html"/>
+    <id>http://bakyeono.net/post/2015-12-31-linux-hangul-console.html</id>
+    <published>2015-12-30T17:26:00.000Z</published>
+    <updated>2016-02-17T17:28:40.973Z</updated>
+    
+    <content type="html">&lt;p&gt;며칠 전 라즈베리 파이에 모니터를 연결한 김에 콘솔에서 한글도 써 보잔 생각이 들었다.&lt;/p&gt;
+&lt;p&gt;기본 콘솔 화면에서는 한글을 출력하면 폰트가 찍히지 않고 이런 식으로 사각형 모양만 출력된다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/linux-hangul-console-1.jpg&quot; alt=&quot;한글 안 나오네&quot;&gt;&lt;/p&gt;
+&lt;p&gt;한글 출력 방법을 오랜만에 찾아 보니 관련 자료가 많니 나오진 않았다. 그냥 다 X-window용 터미널 에뮬레이터에서 한글 출력하는 방법만 나와 있지 않은가. 나도 마찬가지지만 요새 CLI를 쓰는 사람이 대부분 리눅스 서버에 원격 접속해서 쓰거나 GUI 환경(X-window)에서 터미널 에뮬레이터를 쓰기 때문에 콘솔에 한글을 찍을 필요성 자체를 못 느끼는 듯하다.&lt;/p&gt;
+&lt;p&gt;다행히 kldp.org에 한글 콘솔 관련 자료들이 남아 있었다. &lt;a href=&quot;https://wiki.kldp.org/wiki.php/HangulConsole&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;관련 문서&lt;/a&gt; 여기 나와 있는 방법을 체크해 봤고 한글 콘솔 출력에 성공했다. 그 결과를 남겨 둔다. 누군가 저사양 시스템이나 옛날 추억 살리기 같은 특별한 경우가 있을 수 있지 않겠나.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;테스트 환경: 라즈베리 파이 2 Model B / Raspbian Jessie(2015-11-21)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;안-되는-방법&quot;&gt;&lt;a href=&quot;#안-되는-방법&quot; class=&quot;headerlink&quot; title=&quot;안 되는 방법&quot;&gt;&lt;/a&gt;안 되는 방법&lt;/h2&gt;&lt;p&gt;이 문서에 소개된 방법은 모두 오래 됐고 버려진 상태다. 이 중 대부분은 지금 적용하기가 거의 불가능하다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;fbcon: 커널 패치 방식이다. 10년 전이면 모를까 요즘 나오는 커널 버전과 당연히 맞지 않을 것이다.&lt;/li&gt;
+&lt;li&gt;unicon: 커널 패치 방식이다. 10년 전이면 모를까 요즘 나오는 커널 버전과 당연히 맞지 않을 것이다.&lt;/li&gt;
+&lt;li&gt;uterm: 프로젝트 사이트 접속 불가. Wayback Machine으로 찾아보면 옛날 문서가 캐시돼 있지만 소스코드나 바이너리는 캐시되어 있지 않다. 잘 찾아보면 구할 수 있을지도 모르지만, 난 못 구했다.&lt;/li&gt;
+&lt;li&gt;zhcon: 간단히 apt를 통해 설치할 수 있고, 잘 작동한다! 하지만 UTF-8을 지원하지 않는다. EUC-KR을 쓰는 서버에는 적용해도 되겠지만 요즘은 웬만해선 다 UTF-8 아닌가.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;되는-유일한-방법-jfbterm&quot;&gt;&lt;a href=&quot;#되는-유일한-방법-jfbterm&quot; class=&quot;headerlink&quot; title=&quot;되는 유일한 방법: jfbterm&quot;&gt;&lt;/a&gt;되는 유일한 방법: jfbterm&lt;/h2&gt;&lt;p&gt;다른 걸 빼니 남은 선택지는 jfbterm 밖에 없었다. 다행히 이건 작동한다. 설치와 사용도 쉽다. 한가지 단점이 있는데 아래에 설명한다.&lt;/p&gt;
+&lt;h3 id=&quot;설치&quot;&gt;&lt;a href=&quot;#설치&quot; class=&quot;headerlink&quot; title=&quot;설치&quot;&gt;&lt;/a&gt;설치&lt;/h3&gt;&lt;p&gt;간단히 apt로 설치 가능하다. 필요한 폰트가 들어 있는 xfonts-base 패키지가 의존성 설정은 안 돼 있고 권장 패키지로만 설정돼 있는데 같이 설치해 주는게 좋다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo apt-get install jfbterm xfonts-base
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;실행&quot;&gt;&lt;a href=&quot;#실행&quot; class=&quot;headerlink&quot; title=&quot;실행&quot;&gt;&lt;/a&gt;실행&lt;/h3&gt;&lt;p&gt;설치를 마쳤으면 jfbterm 명령으로 한글 출력이 되는 콘솔 세션에 접속할 수 있다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ jfbterm
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;이제 이렇게 한글이 잘 나온다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/linux-hangul-console-2.jpg&quot; alt=&quot;한글 잘 나오네&quot;&gt;&lt;/p&gt;
+&lt;h3 id=&quot;폰트-바꾸기&quot;&gt;&lt;a href=&quot;#폰트-바꾸기&quot; class=&quot;headerlink&quot; title=&quot;폰트 바꾸기&quot;&gt;&lt;/a&gt;폰트 바꾸기&lt;/h3&gt;&lt;p&gt;&lt;code&gt;/etc/jfbterm.conf&lt;/code&gt; 파일을 열어 옵션을 고칠 수 있다. 그런데 설정할 수 있는 옵션이 많지도 않고 굳이 건드려야 할 옵션도 없다.&lt;/p&gt;
+&lt;p&gt;다만 폰트를 바꾸는 건 고려해 볼 만 하다. 다른 폰트를 적용해 보고 싶다면 &lt;a href=&quot;http://kldp.net/projects/hangul-jfbterm/download/note/757&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;이 페이지&lt;/a&gt;에서 이야기 폰트를 다운로드할 수 있고 수정 방법도 나와 있으니 참고한다. 참고로 UTF-8 환경에선 &lt;code&gt;+fontset: iso10646.1,pcf,U,폰트파일경로&lt;/code&gt; 옵션만 바꿔주면 적용된다.&lt;/p&gt;
+&lt;p&gt;이야기 폰트를 적용하면 이런 모양이 나온다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/linux-hangul-console-3.jpg&quot; alt=&quot;이야기 폰트&quot;&gt;&lt;/p&gt;
+&lt;p&gt;나는 이야기 폰트보다는 기본 GNU 폰트가 더 마음에 든다.&lt;/p&gt;
+&lt;h3 id=&quot;문제점과-해결-방안&quot;&gt;&lt;a href=&quot;#문제점과-해결-방안&quot; class=&quot;headerlink&quot; title=&quot;문제점과 해결 방안&quot;&gt;&lt;/a&gt;문제점과 해결 방안&lt;/h3&gt;&lt;p&gt;아쉽게도 jfbterm에는 한 가지 문제가 있다. 그건 … 바로 … 세션을 종료하면 화면이 멈춘다는 것이다. 이렇게 되면 리눅스 자체의 실행에는 문제가 없지만 콘솔 화면 출력이 멈춰 버려서 더이상 작업을 할 수 없다. 원격으로 작업하거나 &lt;code&gt;Ctrl&lt;/code&gt; + &lt;code&gt;Alt&lt;/code&gt; + &lt;code&gt;Delete&lt;/code&gt; 키를 눌러 재부팅하는 수밖에 없다.&lt;/p&gt;
+&lt;p&gt;프로그램 버그이거나 환경 문제인 듯한데 이걸 해결하려면 가장 최신 소스로 컴파일해야 할 듯 하다. 그런데 가장 최신 소스의 의존성이 한~참 옛날 버전의 도구들을 요구하고 있기 때문에 컴파일 하는게 만만치 않아 보인다. 그래서 나는 그냥 쓰기로 했다. 내가 찾은 간단한 해결 방법은 이거다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;해결 방법: jfbterm 세션을 종료하지 않는다.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;진정한 해결 방법은 아니지만 당장 갖고 노는 데는 무리 없으니 이걸로 만족한다.&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      jfbterm을 이용해 리눅스 콘솔에서 한글 출력하기
+    
+    </summary>
+    
+    
+      <category term="linux" scheme="http://bakyeono.net/tag/linux/"/>
+    
+      <category term="한글" scheme="http://bakyeono.net/tag/%ED%95%9C%EA%B8%80/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>자바스크립트 - iframe이 경로(src)에 접속할 수 없을 때 예외 처리하기</title>
+    <link href="http://bakyeono.net/post/2015-10-01-javascript-iframe-src-connection-check.html"/>
+    <id>http://bakyeono.net/post/2015-10-01-javascript-iframe-src-connection-check.html</id>
+    <published>2015-10-01T14:30:00.000Z</published>
+    <updated>2016-02-17T15:57:37.441Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;iframe의-특정-경로-접속이-실패할-때&quot;&gt;&lt;a href=&quot;#iframe의-특정-경로-접속이-실패할-때&quot; class=&quot;headerlink&quot; title=&quot;iframe의 특정 경로 접속이 실패할 때&quot;&gt;&lt;/a&gt;iframe의 특정 경로 접속이 실패할 때&lt;/h2&gt;&lt;p&gt;iframe 노드의 src 속성을 수정하여 iframe이 출력할 페이지의 경로를 지정할 수 있다. jQuery를 쓴다고 하면, 아래 명령으로 iframe의 페이지를 바꿀 수 있다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$(&amp;apos;iframe&amp;apos;).attr(&amp;apos;src&amp;apos;, &amp;apos;http://wrong.location.somewhere/&amp;apos;);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;그런데 지정한 경로에 접속할 수 없는 경우 콘솔에 다음과 같은 예외만 남기고 실패한다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;GET http://wrong.location.somewhere/ net::ERR_NAME_NOT_RESOLVED
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;골치 아픈 것은 이 예외를 캐치할 수 없다는 것이다. jQuery를 쓰든 DOM 객체를 직접 건드리든 마찬가지다. 이걸 잡을 수 있는 이벤트도 찾지 못했는데, 아마 없는 것 같다.&lt;/p&gt;
+&lt;h2 id=&quot;예외는-못-잡지만…-꼼수로-처리하기&quot;&gt;&lt;a href=&quot;#예외는-못-잡지만…-꼼수로-처리하기&quot; class=&quot;headerlink&quot; title=&quot;예외는 못 잡지만… 꼼수로 처리하기&quot;&gt;&lt;/a&gt;예외는 못 잡지만… 꼼수로 처리하기&lt;/h2&gt;&lt;p&gt;접속할 경로를 미리 테스트해 본 후 성공/실패를 구분하면 간단하다. jQuery를 쓴다고 하면, get 메소드로 테스트하면 된다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;var location = &amp;apos;http://wrong.location.somewhere/&amp;apos;;
+$.get(location, function() {
+  alert(&amp;apos;성공&amp;apos;);
+  $(&amp;apos;iframe&amp;apos;).attr(&amp;apos;src&amp;apos;, location);
+}).done(function() {
+  alert(&amp;apos;두 번째 성공&amp;apos;);
+}).fail(function(e) {
+  alert(&amp;apos;접속 실패&amp;apos;);
+}).always(function() {
+  alert(&amp;apos;완료&amp;apos;);
+});
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;이렇게 하면 접속이 가능한 경로만 iframe에 지정해줄 수 있고, 접속할 수 없는 경우 사용자에게 알리는 것도 가능하다.&lt;/p&gt;
+&lt;h3 id=&quot;주의사항&quot;&gt;&lt;a href=&quot;#주의사항&quot; class=&quot;headerlink&quot; title=&quot;주의사항&quot;&gt;&lt;/a&gt;주의사항&lt;/h3&gt;&lt;p&gt;해당 경로에 요청을 한 번이 아니라 두 번 보내게 된다는 점에 유의해야 한다.&lt;/p&gt;
+&lt;h3 id=&quot;참고&quot;&gt;&lt;a href=&quot;#참고&quot; class=&quot;headerlink&quot; title=&quot;참고&quot;&gt;&lt;/a&gt;참고&lt;/h3&gt;&lt;p&gt;jQuery의 get 메소드에 관한 자세한 명세는 이 공식 문서에 나와 있다.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://api.jquery.com/jquery.get&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://api.jquery.com/jquery.get&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;이런 꼼수 말고 제대로 예외 처리하는 방법을 아는 분이 계시면… 가르침을 구합니다.&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;iframe의-특정-경로-접속이-실패할-때&quot;&gt;&lt;a href=&quot;#iframe의-특정-경로-접속이-실패할-때&quot; class=&quot;headerlink&quot; title=&quot;iframe의 특정 경로 접속이 실패할 때&quot;&gt;&lt;/a&gt;iframe의 특정 경로 접속이
+    
+    </summary>
+    
+    
+      <category term="iframe" scheme="http://bakyeono.net/tag/iframe/"/>
+    
+      <category term="javascript" scheme="http://bakyeono.net/tag/javascript/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>자바스크립트 - 여러 페이지 사이에 데이터를 저장, 교환하기</title>
+    <link href="http://bakyeono.net/post/2015-09-25-javascript-store-data-between-pages.html"/>
+    <id>http://bakyeono.net/post/2015-09-25-javascript-store-data-between-pages.html</id>
+    <published>2015-09-24T17:10:00.000Z</published>
+    <updated>2016-02-17T15:59:47.171Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;여러-페이지-사이에-데이터-교환하는-문제&quot;&gt;&lt;a href=&quot;#여러-페이지-사이에-데이터-교환하는-문제&quot; class=&quot;headerlink&quot; title=&quot;여러 페이지 사이에 데이터 교환하는 문제&quot;&gt;&lt;/a&gt;여러 페이지 사이에 데이터 교환하는 문제&lt;/h2&gt;&lt;p&gt;브라우저 위에서 실행되는 자바스크립트는 기본적으로 페이지에 종속돼 있다. 한 페이지에서 다른 페이지로 전환하면 메모리상의 자바스크립트 개체들은 사라져 버린다.&lt;/p&gt;
+&lt;p&gt;웹킷을 이용한 프로젝트처럼 여러 페이지 사이에 데이터를 교환해야 할 때는 어떻게 하면 좋을까?&lt;/p&gt;
+&lt;p&gt;sqlite3이나 파일을 이용해도 되고, 믿을만한 RDBMS를 이용할 수도 있을 것이다. 하지만 목적에 비해 너무 번거롭거나 무거운 감이 있다.&lt;/p&gt;
+&lt;p&gt;찾아보니 HTML5에서 지원되는 훨씬 편리한 방법이 있었다. 바로 sessionStorage를 이용하는 것이다.&lt;/p&gt;
+&lt;h2 id=&quot;sessionStorage&quot;&gt;&lt;a href=&quot;#sessionStorage&quot; class=&quot;headerlink&quot; title=&quot;sessionStorage&quot;&gt;&lt;/a&gt;sessionStorage&lt;/h2&gt;&lt;p&gt;sessionStorage를 이용하면 한 세션 안에서 여러 페이지에 걸쳐 데이터를 저장하고 읽을 수 있다. 사용법도 매우 간단하다. 그냥 sessionStorage 객체의 원하는 필드명에 데이터를 넣고 쓰면 된다.&lt;/p&gt;
+&lt;p&gt;이렇게 쓰고,&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sessionStorage.foo = &amp;apos;bar&amp;apos;;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;이렇게 로드한다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sessionStorage.foo;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;JSON과-함께-쓰기&quot;&gt;&lt;a href=&quot;#JSON과-함께-쓰기&quot; class=&quot;headerlink&quot; title=&quot;JSON과 함께 쓰기&quot;&gt;&lt;/a&gt;JSON과 함께 쓰기&lt;/h3&gt;&lt;p&gt;단, 위의 방법으로는 무조건 문자열만 쓰고 읽을 수 있다. 저기에다 자바스크립트 개체를 넣으면 강제로 &lt;code&gt;toString&lt;/code&gt;이 호출돼 원하는 결과가 되지 않을 것이므로 주의해야 한다. 특히 &lt;code&gt;true&lt;/code&gt;, &lt;code&gt;false&lt;/code&gt;, &lt;code&gt;0&lt;/code&gt;, &lt;code&gt;1&lt;/code&gt;, &lt;code&gt;2&lt;/code&gt; 등 문자열이 아닌 리터럴들을 쓸 때 주의해야 한다.&lt;/p&gt;
+&lt;p&gt;문자열이든 다른 개체든 JSON 파서를 같이 이용해서 쓰는게 좋다. 간단하다.&lt;/p&gt;
+&lt;p&gt;이렇게 자바스크립트 개체를 저장하고,&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sessionStorage.foo = JSON.stringify({bar: [1, 2, 3, 4, 5], baz: [&amp;apos;a&amp;apos;, &amp;apos;b&amp;apos;, &amp;apos;c&amp;apos;, &amp;apos;d&amp;apos;]});
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;이렇게 자바스크립트 개체를 로드한다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;JSON.parse(sessionStorage.foo);
+&lt;/code&gt;&lt;/pre&gt;</content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;여러-페이지-사이에-데이터-교환하는-문제&quot;&gt;&lt;a href=&quot;#여러-페이지-사이에-데이터-교환하는-문제&quot; class=&quot;headerlink&quot; title=&quot;여러 페이지 사이에 데이터 교환하는 문제&quot;&gt;&lt;/a&gt;여러 페이지 사이에 데이터 교환하는 
+    
+    </summary>
+    
+    
+      <category term="javascript" scheme="http://bakyeono.net/tag/javascript/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Node.js - 자식 프로세스에서 데이터 출력이 불규칙하게 들어올 때 한 줄씩 나누기</title>
+    <link href="http://bakyeono.net/post/2015-09-25-nodejs-child-process-stdout-split-lines.html"/>
+    <id>http://bakyeono.net/post/2015-09-25-nodejs-child-process-stdout-split-lines.html</id>
+    <published>2015-09-24T16:53:00.000Z</published>
+    <updated>2016-02-17T15:57:25.682Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;자식-프로세스-실행&quot;&gt;&lt;a href=&quot;#자식-프로세스-실행&quot; class=&quot;headerlink&quot; title=&quot;자식 프로세스 실행&quot;&gt;&lt;/a&gt;자식 프로세스 실행&lt;/h2&gt;&lt;p&gt;Node.js에서 child_process 모듈을 이용해 외부 프로그램을 자식 프로세스로 실행할 수 있다. 자식 프로세스가 보내주는 데이터는 표준출력(STDOUT) 이벤트에 콜백을 걸어 받을 수 있다. 다음과 같이 한다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;var spawn = require(&amp;apos;child_process&amp;apos;).spawn,
+    subprocess;
+function on_child_stdout(data) {
+  console.log(data.toString());
+};
+function on_child_exit(exit_code) {
+  console.log(&amp;apos;the child is no more: &amp;apos; + exit_code);
+};
+
+// 자식 프로세서 실행
+subprocess = spawn(&amp;apos;some_process&amp;apos;, &amp;apos;parameter&amp;apos;);
+subprocess.stdout.setEncoding(&amp;apos;utf8&amp;apos;);
+subprocess.stdout.on(&amp;apos;data&amp;apos;, on_child_stdout);
+subprocess.on(&amp;apos;exit&amp;apos;, on_child_exit);
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;데이터가-불규칙하게-들어올-때&quot;&gt;&lt;a href=&quot;#데이터가-불규칙하게-들어올-때&quot; class=&quot;headerlink&quot; title=&quot;데이터가 불규칙하게 들어올 때&quot;&gt;&lt;/a&gt;데이터가 불규칙하게 들어올 때&lt;/h2&gt;&lt;p&gt;보통은 한 줄당 한 번씩 STDOUT data 이벤트가 발생하여 한 줄씩 콜백에 전달된다. 그런데 종종 데이터가 불규칙하게 들어오기도 한다.&lt;/p&gt;
+&lt;p&gt;예를 들어 한 줄에 URL 데이터가 하나씩 들어오는 상황이라고 하면,&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;aaa.com
+bbb.com
+ccc.com
+ddd.com\neee.com\nfff.com\nggg.com
+hhh.com
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;4번째 줄처럼 여러 줄이 한꺼번에 입력되는 경우가 불규칙하게 있는 것이다.&lt;/p&gt;
+&lt;p&gt;정확히 언제 무슨 이유로 이런 문제가 생기는지는 알 수 없지만 이렇게 될 때가 있다. 아마 비동기 I/O 때문인 듯하다.&lt;/p&gt;
+&lt;h2 id=&quot;해결방법&quot;&gt;&lt;a href=&quot;#해결방법&quot; class=&quot;headerlink&quot; title=&quot;해결방법&quot;&gt;&lt;/a&gt;해결방법&lt;/h2&gt;&lt;p&gt;해결방법은 STDOUT data 이벤트에 대한 콜백에서 여러 줄을 각각 분리해주는 것이다. 이 때, 빈 줄이 추가되는 경우도 있으므로 이에 대한 처리도 해주는 것이 좋다. 위의 &lt;code&gt;on_child_stdout&lt;/code&gt; 함수를 아래와 같이 수정하면 된다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;function on_child_stdout(data) {
+     var str = data.toString(),
+        lines = str.split(/\n/g);
+    for (var i in lines) {
+      if (! lines[i]) {
+        console.log(lines[i]);
+      }
+    }
+};
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;이 해결방법은 &lt;a href=&quot;http://stackoverflow.com/questions/9781214/parse-output-of-spawned-node-js-child-process-line-by-line&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;스택오버플로 문서&lt;/a&gt;에서 본 것을 조금 수정한 것이다.&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;자식-프로세스-실행&quot;&gt;&lt;a href=&quot;#자식-프로세스-실행&quot; class=&quot;headerlink&quot; title=&quot;자식 프로세스 실행&quot;&gt;&lt;/a&gt;자식 프로세스 실행&lt;/h2&gt;&lt;p&gt;Node.js에서 child_process 모듈을 이용해 외부 프로그
+    
+    </summary>
+    
+    
+      <category term="javascript" scheme="http://bakyeono.net/tag/javascript/"/>
+    
+      <category term="node.js" scheme="http://bakyeono.net/tag/node-js/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>TV를 사 왔는데 왜 보지를 못하니? 옷걸이로 디지털 TV 안테나 만들기</title>
+    <link href="http://bakyeono.net/post/2015-09-20-diy-dtv-antenna.html"/>
+    <id>http://bakyeono.net/post/2015-09-20-diy-dtv-antenna.html</id>
+    <published>2015-09-20T09:00:00.000Z</published>
+    <updated>2016-02-17T17:29:53.763Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;TV를-사-왔는데-왜-보지를-못하니&quot;&gt;&lt;a href=&quot;#TV를-사-왔는데-왜-보지를-못하니&quot; class=&quot;headerlink&quot; title=&quot;TV를 사 왔는데 왜 보지를 못하니?&quot;&gt;&lt;/a&gt;TV를 사 왔는데 왜 보지를 못하니?&lt;/h2&gt;&lt;p&gt;모니터를 새로 사면서 찾아보니 TV 수신기능이 내장된 모델이 많았다. 맙소사! 디지털 TV라니! 이제 나도 부르주아 라이프스타일을!!!&lt;/p&gt;
+&lt;p&gt;그런데 응? 모니터를 사서 신나게 설치했지만 TV가 안 나오는 게 아닌가! 벽에 안테나 플러그가 있어서 여기에 연결하면 당연히 TV를 볼 수 있을 줄 알았는데 아니었다. 벽에 달린 플러그가 그냥 장식용이고 실제 안테나는 아닌 모양이다.&lt;/p&gt;
+&lt;p&gt;할 수 없이 TV 안테나를 추가로 사려고 인터넷을 검색하다가 옷걸이로 안테나를 만들 수 있는 방법을 발견했다. 바로 아래의 링크의 동영상이다. 이거 보고 따라 만들면 된다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=geiU3foKGOk&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;안테나 직접 만들어서 TV를 공짜로 보자! - 미디어잇&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;안테나를 주문해놓긴 했지만 주문한 안테나가 오기를 기다리는 동안 TV를 보고 싶기도 했고 옷걸이로 안테나를 만들어보는 게 재미있을 것 같기도 해서 한 번 해 보았다.&lt;/p&gt;
+&lt;p&gt;생각보다 훨씬 쉬워서 겁만 먹지 않으면 누구나 할 수 있을 것 같다. 다만 동영상에 나온 정보(송신소 주파수 등)가 내 조건과는 정확하게 맞지 않을 수 있으니 잘 확인해보고 해야 한다.&lt;/p&gt;
+&lt;h2 id=&quot;도와주신-분들&quot;&gt;&lt;a href=&quot;#도와주신-분들&quot; class=&quot;headerlink&quot; title=&quot;도와주신 분들&quot;&gt;&lt;/a&gt;도와주신 분들&lt;/h2&gt;&lt;p&gt;재미있는 일을 혼자 하기 아까운 것도 있고 필요한 도움도 있어서 친구들의 도움을 받았다. 이 분들이 아니었으면 지금 이 글도 없었을 것이다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://gnoownow10.cafe24.com/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;이원웅&lt;/a&gt;: 각종 연장을 제공했고, 납땜 작업을 도와줬다. 물론, 납땜은 할 필요가 없는 작업이었다.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://mytory.net&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;안형우&lt;/a&gt;: 사진 촬영을 해줬다. 그리고 우리집 식량을 축내고 하룻밤 자고 갔다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;두 분 다 &lt;a href=&quot;http://wspaper.org&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;“노동자 연대” 신문&lt;/a&gt;의 개발팀 소속이다.&lt;/p&gt;
+&lt;h2 id=&quot;준비물&quot;&gt;&lt;a href=&quot;#준비물&quot; class=&quot;headerlink&quot; title=&quot;준비물&quot;&gt;&lt;/a&gt;준비물&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;철사 옷걸이&lt;/li&gt;
+&lt;li&gt;TV 안테나 케이블&lt;/li&gt;
+&lt;li&gt;니퍼&lt;/li&gt;
+&lt;li&gt;절연 테이프&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;철사 옷걸이를 안테나로 만들어 안테나 케이블에 붙이는 작업이다. 니퍼는 전선 피복을 벗길 때 필요한데, 없으면 대충 칼이나 가위로 해도 된다(조심조심). 절연 테이프가 없다면 나처럼 청테이프를 써도 된다.&lt;/p&gt;
+&lt;h2 id=&quot;제작-과정&quot;&gt;&lt;a href=&quot;#제작-과정&quot; class=&quot;headerlink&quot; title=&quot;제작 과정&quot;&gt;&lt;/a&gt;제작 과정&lt;/h2&gt;&lt;h3 id=&quot;정보수집&quot;&gt;&lt;a href=&quot;#정보수집&quot; class=&quot;headerlink&quot; title=&quot;정보수집&quot;&gt;&lt;/a&gt;정보수집&lt;/h3&gt;&lt;p&gt;먼저 안테나를 설치할 곳에서 가까운 DTV 송신소가 어디인지를 찾아보아야 한다. 아래 페이지에서 찾아보면 된다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://211.43.210.46/DigitalTV&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;디지털방송 수신정보시스템&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;나는 관악산이 가장 가까운 수신소였다. 그래서 주파수를 500MHz로 잡았다. 수신소의 방송 채널별 주파수 정보는 위 동영상에 나온다.&lt;/p&gt;
+&lt;p&gt;그 다음 주파수에 따라 안테나의 변의 길이를 계산해야 한다. 이걸 계산해주는 verizon.net 사이트가 동영상에 소개돼 있지만 시간이 많이 지나서 그 페이지는 더이상 존재하지 않는다. 하지만 웹 아카이브 웨이백 머신(Web Archive Wayback Machine)을 이용하면 저장된 옛 페이지 사본을 이용할 수 있다. 아래 주소로 접속하면 된다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://web.archive.org/web/20130328081107/http://mysite.verizon.net/ka1fsb/loopcalc.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;저장된 verizon.net 페이지 사본&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;위 페이지에서 500MHz로 계산하니, 한 변의 길이를 15.316cm으로 하라고 나왔다.&lt;/p&gt;
+&lt;h3 id=&quot;옷걸이-펴기&quot;&gt;&lt;a href=&quot;#옷걸이-펴기&quot; class=&quot;headerlink&quot; title=&quot;옷걸이 펴기&quot;&gt;&lt;/a&gt;옷걸이 펴기&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/diy-dtv-antenna1.jpg&quot; alt=&quot;옷걸이 펴기&quot;&gt;&lt;/p&gt;
+&lt;p&gt;옷걸이를 풀어서 철사를 쓱쓱 펴준다. 나에게는 이게 가장 힘든 작업이었지만 손재주가 좋은 사람들은 쉽게 할 수 있을 것이다. 나는 깔끔하게 펴지 못하고 그냥 대충 폈다.&lt;/p&gt;
+&lt;h3 id=&quot;옷걸이-접기&quot;&gt;&lt;a href=&quot;#옷걸이-접기&quot; class=&quot;headerlink&quot; title=&quot;옷걸이 접기&quot;&gt;&lt;/a&gt;옷걸이 접기&lt;/h3&gt;&lt;p&gt;옷걸이에 위에 나온 한 변의 길이(내 경우는 15.3cm)마다 눈금을 표시하고 정사각형으로 접는다. 동영상에서는 윗변을 좀 더 여러번 접어 수신이 잘 되게 했지만, 나는 귀찮아서 그냥 대충 접었다.&lt;/p&gt;
+&lt;p&gt;다 접었으면 옷걸이 아래쪽을 잘라 내고 피복을 벗겨 철사가 드러나게 한다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/diy-dtv-antenna2.jpg&quot; alt=&quot;옷걸이 접기&quot;&gt;&lt;/p&gt;
+&lt;h3 id=&quot;TV-안테나-케이블-자르고-전선-정리하기&quot;&gt;&lt;a href=&quot;#TV-안테나-케이블-자르고-전선-정리하기&quot; class=&quot;headerlink&quot; title=&quot;TV 안테나 케이블 자르고 전선 정리하기&quot;&gt;&lt;/a&gt;TV 안테나 케이블 자르고 전선 정리하기&lt;/h3&gt;&lt;p&gt;TV 안테나 케이블의 한쪽 끝을 자른다. 가위나 니퍼로 미련 없이 싹둑 자르면 된다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/diy-dtv-antenna3.jpg&quot; alt=&quot;케이블 자르기&quot;&gt;&lt;/p&gt;
+&lt;p&gt;그 다음, 전선을 두 가닥으로 정리해야 한다. 먼저 바깥쪽을 둘러싸고 있는 가는 전선들을 모아서 한 가닥으로 뭉쳐 준다.&lt;/p&gt;
+&lt;p&gt;전선들이 둘러싸고 있던 선을 자세히 보면 안쪽에 굵은 전선이 하나 있고 피복이 그걸 둘러싸고 있다. 조심해서 피복을 벗겨 낸다.&lt;/p&gt;
+&lt;p&gt;가는 전선 뭉치와 굵은 전선을 각각 구분해서 서로 닿지 않게 하면 된다.&lt;/p&gt;
+&lt;h3 id=&quot;옷걸이와-TV-안테나-연결&quot;&gt;&lt;a href=&quot;#옷걸이와-TV-안테나-연결&quot; class=&quot;headerlink&quot; title=&quot;옷걸이와 TV 안테나 연결&quot;&gt;&lt;/a&gt;옷걸이와 TV 안테나 연결&lt;/h3&gt;&lt;p&gt;이제 옷걸이의 두 가닥과 TV 안테나의 두 가닥을 각각 연결해 준다. 동영상에서 납땜을 해 주면 더 좋다길래 나도 납땜을 해 봤다. 하지만 납이 옷걸이 철사에 달라붙지 않고 계속 흘러내리는 바람에 납 연기만 잔뜩 마시고 납땜을 성공하지는 못했다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/diy-dtv-antenna4.jpg&quot; alt=&quot;옷걸이와 케이블을 붙이기&quot;&gt;&lt;/p&gt;
+&lt;p&gt;그래서 그냥 청테이프를 대충대충 발라서 연결해 버렸다. 그래도 청테이프 파워가 있으니 튼튼하게 잘 연결된 것 같다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/diy-dtv-antenna5.jpg&quot; alt=&quot;완성!!&quot;&gt;&lt;/p&gt;
+&lt;p&gt;완성!!&lt;/p&gt;
+&lt;h2 id=&quot;잘-작동하는가&quot;&gt;&lt;a href=&quot;#잘-작동하는가&quot; class=&quot;headerlink&quot; title=&quot;잘 작동하는가?&quot;&gt;&lt;/a&gt;잘 작동하는가?&lt;/h2&gt;&lt;p&gt;모양도 울퉁불퉁하고 납땜도 실패했고 옷걸이 윗부분을 여러 번 접지도 않았지만, TV 수신이 꽤 잘 됐다!&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/diy-dtv-antenna6.jpg&quot; alt=&quot;잘 수신된다&quot;&gt;&lt;/p&gt;
+&lt;p&gt;다만, 창 밖에 안테나를 내놓았을 때만 수신이 잘 됐고, 그냥 실내에 뒀을 때는 수신이 잘 되지 않았다. 또, 안테나의 각도에 따라서 TV 수신이 잘 안 되기도 했다.&lt;/p&gt;
+&lt;p&gt;나중에 상용 안테나와 비교해보니 확실히 실내 수신률의 차이가 컸다.&lt;/p&gt;
+&lt;p&gt;상용 안테나보다는 나쁘지만 그래도 돈 들이지 않고 급하게 TV 안테나를 만들어야할 때 간편하게 할 수 있는 좋은 방법이다. 재미도 있으니 안테나가 필요할 때 겁먹지 말고 해 보자.&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      니퍼(칼), 철사 옷걸이, TV 안테나 케이블, 절연 테이프(청테이프)만 있으면 디지털 TV 신호를 수신할 수 있다.
+    
+    </summary>
+    
+    
+      <category term="diy" scheme="http://bakyeono.net/tag/diy/"/>
+    
+      <category term="tv" scheme="http://bakyeono.net/tag/tv/"/>
+    
+      <category term="안테나" scheme="http://bakyeono.net/tag/%EC%95%88%ED%85%8C%EB%82%98/"/>
+    
+      <category term="옷걸이" scheme="http://bakyeono.net/tag/%EC%98%B7%EA%B1%B8%EC%9D%B4/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>네이버 데뷰 2015 참가기 2일차 - 매우 가벼운 실시간 추천 엔진</title>
+    <link href="http://bakyeono.net/post/2015-09-15-naver-deview-day-2-session-6-realtime-recommendation-engine-on-laptop.html"/>
+    <id>http://bakyeono.net/post/2015-09-15-naver-deview-day-2-session-6-realtime-recommendation-engine-on-laptop.html</id>
+    <published>2015-09-14T15:00:00.000Z</published>
+    <updated>2016-02-17T16:29:21.764Z</updated>
+    
+    <content type="html">&lt;blockquote&gt;
+&lt;p&gt;회사의 지원으로 네이버 데뷰 2015에 참가할 수 있었다. 흥미로웠던 세션을 정리해 둔다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;2일차-세션-6-코끼리-냉장고에-집어넣기-실시간-추천엔진을-머신-한대에-구겨넣기&quot;&gt;&lt;a href=&quot;#2일차-세션-6-코끼리-냉장고에-집어넣기-실시간-추천엔진을-머신-한대에-구겨넣기&quot; class=&quot;headerlink&quot; title=&quot;2일차 세션 6. 코끼리 냉장고에 집어넣기 - 실시간 추천엔진을 머신 한대에 구겨넣기&quot;&gt;&lt;/a&gt;2일차 세션 6. 코끼리 냉장고에 집어넣기 - 실시간 추천엔진을 머신 한대에 구겨넣기&lt;/h2&gt;&lt;p&gt;발표자: 하용호(넘버웍스)&lt;/p&gt;
+&lt;p&gt;슬라이드: &lt;a href=&quot;http://www.slideshare.net/deview/261-52784785&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://www.slideshare.net/deview/261-52784785&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;이 날 들은 세션 중에 가장 흥미롭고 재미있었던 세션이었다. 내용이 어려워서 전체적인 얼개를 중심으로 40% 정도만 이해한 것 같지만 한 번 정리해본다. 세션 내용은 코끼리 한 마리를 냉장고에 집어넣는 것이다. 즉, 수십-수백 대의 서버가 필요한 실시간 추천엔진을 노트북 하나에 집어넣어 구동해보겠다는 야심찬 프로젝트다. 그리고 실제로 성공했다!&lt;/p&gt;
+&lt;h3 id=&quot;협력필터-엔진&quot;&gt;&lt;a href=&quot;#협력필터-엔진&quot; class=&quot;headerlink&quot; title=&quot;협력필터 엔진&quot;&gt;&lt;/a&gt;협력필터 엔진&lt;/h3&gt;&lt;p&gt;추천엔진은 내용기반 엔진과 협력필터 엔진으로 나뉜다. 내용기반 엔진은 다루기 어렵기 때문에 많은 경우 협력필터 엔진을 사용한다. 그 예로는 아마존의 상품 추천 기능을 들 수 있다.&lt;/p&gt;
+&lt;p&gt;협력필터 엔진은 다시 메모리 기반과 모델 기반이 있는데, 보통 둘 다 조합해서 쓰인다. 이 세션이 다룬 내용은 메모리 기반 모델이다.&lt;/p&gt;
+&lt;p&gt;협력필터 엔진의 원리는 한 사람이 선택한 상품들을 다른 사람과 비교해 가장 비슷한 상품을 선택한 사람이 고른 상품 중에서 빠진 상품을 찾는 것이다. 즉, 가장 닮은 꼴을 찾는 것이다. 이 닮은 꼴을 찾기 위한 알고리즘이 자카드 유사도(Jaccard similarity)다.&lt;/p&gt;
+&lt;h3 id=&quot;규모의-문제&quot;&gt;&lt;a href=&quot;#규모의-문제&quot; class=&quot;headerlink&quot; title=&quot;규모의 문제&quot;&gt;&lt;/a&gt;규모의 문제&lt;/h3&gt;&lt;p&gt;자카드 유사도는 이해하기 간단한 알고리즘이지만 규모가 문제가 된다. 사용자가 3명, 상품이 10개라면 비교할 횟수는 그렇게 많지 않다. 하지만 상품이 1백만 개, 사용자가 10만 명이라면 어떨까? 엄청난 횟수를 비교해야 하며, 수십-수백 대의 서버를 구동해야 하는 사태가 벌어진다. Hadoop과 같은 도구를 사용하면 대규모 데이터를 처리하는데 도움을 받을 수 있지만, 이건 Hadoop에게도 감당하기 힘든 너무 큰 계산이다.&lt;/p&gt;
+&lt;p&gt;미리 비교 대상을 줄여놓으면 계산량을 줄일 수 있다. 이를 위한 방법으로 샘플링과 클러스터링이 있는데 이 때는 특정 유형으로 사람들을 묶는 클러스터링을 쓴다.&lt;/p&gt;
+&lt;p&gt;그런데 클러스터링을 할 때도 여전히 규모가 문제가 된다. 평범한 방법으로 클러스터링을 하게 되면 클러스터링 자체를 위한 계산량도 여전히 많게 되는 것이다. 계산량을 줄이려고 클러스터링을 하려는데 클러스터링을 하는 계산량이 많으면 안 된다. 그래서 좀 더 가벼운 클러스터링 방법이 필요하다.&lt;/p&gt;
+&lt;h3 id=&quot;MinHASH&quot;&gt;&lt;a href=&quot;#MinHASH&quot; class=&quot;headerlink&quot; title=&quot;MinHASH&quot;&gt;&lt;/a&gt;MinHASH&lt;/h3&gt;&lt;p&gt;구글은 MinHASH를 이용해 이 문제를 해결했다. MinHASH란 해시를 만들 때 일부러 버킷을 적게 잡아서 비슷한 것들끼리 충돌하게 만드는 방법이다. 이렇게 비슷한 것들이 충돌해 뭉치게 되면 클러스터가 구성되는 것이다. 클러스터링은 원래 O(n^2)의 연산량증가를 갖지만, MinHASH를 사용하면 O(n)의 연산증가량을 갖게 돼 비교할 수 없이 훨씬 효율적이다.&lt;/p&gt;
+&lt;p&gt;MinHASH는 매우 역발상적인 방법으로, 일반적인 해시와 비교하면 다음과 같은 차이가 있다.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;해시&lt;/th&gt;
+&lt;th&gt;충돌 확률&lt;/th&gt;
+&lt;th&gt;민감도&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;좋은 해시&lt;/td&gt;
+&lt;td&gt;넉넉한 버킷 / 충돌이 적다&lt;/td&gt;
+&lt;td&gt;값이 비슷해도 해시값은 전혀 다르다&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;좋은 MinHASH&lt;/td&gt;
+&lt;td&gt;협소한 버킷 / 일부러 충돌시킨다&lt;/td&gt;
+&lt;td&gt;값이 비슷하면 해시값도 비슷하다&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;MinHASH의 결과값은 자카드 유사도의 결과값과 비례한다. 다만 정확도는 조금 떨어지는데, 사용할 해시함수를 늘려서 결과값의 길이를 늘려 정확도를 높일 수 있다.&lt;/p&gt;
+&lt;h3 id=&quot;I-O-작업-피하기&quot;&gt;&lt;a href=&quot;#I-O-작업-피하기&quot; class=&quot;headerlink&quot; title=&quot;I/O 작업 피하기&quot;&gt;&lt;/a&gt;I/O 작업 피하기&lt;/h3&gt;&lt;p&gt;그런데 MinHASH를 이용해 클러스터링을 하더라도 정석적인 방법을 쓰면 여전히 느리다. 대량의 데이터에 작업을 하다보면 I/O가 발생하여 느려지는 것이다.&lt;/p&gt;
+&lt;p&gt;I/O가 발생하는 이유는 상품과 유저의 부익부 빈익빈 현상 때문에 일어난다. 대부분의 서비스는 라이트 유저와 헤비 유저가 많고, 중간적인 유저는 별로 없다. 상품도 마찬가지다. 조금씩 팔리는 상품이 다양하게 존재하거나 히트상품에 많은 판매가 일어난다. 소셜 미디어를 예로 들면, 아이유는 130만 명이 팔로우하지만 평범한 사람은 100여명이 팔로우하는 것이다.&lt;/p&gt;
+&lt;p&gt;문제는 100여명만 팔로우하는 사람의 데이터를 읽을 때조차 그가 팔로우한 아이유의 데이터를 읽기 위해 130만 건의 데이터를 추가로 조회하게 된다는 것이다. 이 때마다 엄청난 메모리를 소모하며 I/O가 발생해 시스템이 느려지게 된다. 그런데 심지어 아이유는 너도나도 팔로우를 하고 있어 수없이 많이 조회되기까지 한다!&lt;/p&gt;
+&lt;p&gt;따라서, 인기 아이템과 보통 아이템의 데이터 길이를 똑같이 맞춰버리면 대량 I/O로 인한 속도 하락을 막을 수 있다. 이 길이를 맞추는 데에도 MinHASH를 이용할 수 있다. MinHASH를 이용해 스트림의 길이를 통일시켜 버린 후, 시그니처 값이 겹치는 비율이 곧 자카드 유사도 값이 된다.&lt;/p&gt;
+&lt;p&gt;물론 자카드 유사도와는 어느 정도 오차가 난다. 하지만 해시 함수를 늘려서 시그니처 값의 길이를 늘려버리면 오차가 줄어든다. 용량과 정확도 사이에서 어느 정도 균형을 잡아 사용하면 되는 것이다.&lt;/p&gt;
+&lt;p&gt;이 방법은 구글의 접근방법과 정반대의 방법이라고 한다. 구글은 시그니처를 소량 생성해 적절히 충돌시켜 미리 클러스터링하는 방법이다. 새로운 방법은 시그니처를 대량 생성해 충돌을 피하는 방법이다. 두 번째 역발상인 셈이다.&lt;/p&gt;
+&lt;p&gt;이렇게 하면 다량의 건수를 메모리상에 올려둔 채로 작업할 수 있어 훨씬 빠르게 동작한다. 게다가 메모리가 얼마나 필요한지를 예측하는 것도 가능하다. 상품 하나당 4바이트짜리 시그니처 100개가 있다고 계산하면, 메모리 1GB당 180만 개의 상품을 담을 수 있다. 엄청난 효율이다.&lt;/p&gt;
+&lt;h3 id=&quot;분할-상환-청소는-조금씩-미리미리&quot;&gt;&lt;a href=&quot;#분할-상환-청소는-조금씩-미리미리&quot; class=&quot;headerlink&quot; title=&quot;분할 상환 (청소는 조금씩 미리미리)&quot;&gt;&lt;/a&gt;분할 상환 (청소는 조금씩 미리미리)&lt;/h3&gt;&lt;p&gt;또 다른 성능 문제가 발생하는 구간이 있다. 바로 대량의 정보를 갱신해야 할 때다. 데이터가 쌓이다 보면 언젠가 변화를 반영해 시그니처를 새로 개인해야 한다. 이걸 대량으로 처리하게 되면 많은 성능 비용이 들 것이다.&lt;/p&gt;
+&lt;p&gt;하지만 이걸 틈틈이 그때끄때 처리한다면 그리 큰 비용이 들지 않는다. MinHASH는 min 함수와 마찬가지로 결합법칙과 멱등법칙이 성립한다. 따라서 새 데이터가 들어와도 기존에 계산한 값을 버릴 필요 없이 그대로 새 계산을 누적해 나가는 것이 가능하다. 따라서 새로운 값이 갱신될 때마다 간단히 연산해버리면 그만이다.&lt;/p&gt;
+&lt;h3 id=&quot;Secondary-Index&quot;&gt;&lt;a href=&quot;#Secondary-Index&quot; class=&quot;headerlink&quot; title=&quot;Secondary Index&quot;&gt;&lt;/a&gt;Secondary Index&lt;/h3&gt;&lt;p&gt;지금까지 설명한 방법은 자료의 길이를 짧게 줄여서 비교를 용이하게 한 것이다. 하지만 이 줄어든 자료의 비교를 비교하려면 여전히 O(n^2)의 연산증가량을 갖는 막대한 비용이 든다. 이를 해결하기 위해 Secondary Index를 쓸 수 있다.&lt;/p&gt;
+&lt;p&gt;Key-Value 저장소에 상품별로 계산해놓은 각 시그니처의 값들을 키로 하고 그 값을 시그니처로 가진 상품들을 값으로 집어넣는 것이다. 그러면 이 저장소를 검색하는 비용만으로 자카드 유사도를 계산할 수 있다.&lt;/p&gt;
+&lt;h3 id=&quot;사용하는-도구&quot;&gt;&lt;a href=&quot;#사용하는-도구&quot; class=&quot;headerlink&quot; title=&quot;사용하는 도구&quot;&gt;&lt;/a&gt;사용하는 도구&lt;/h3&gt;&lt;p&gt;새로운 값이 갱신될 때마다 MinHASH 계산값도 갱신하며, 따라서 Secondary Index도 갱신한다. 매우 잦은 갱신 처리를 속도 저하 없이 해결하려면 반드시 I/O를 피하고 메모리에서 모든 걸 처리해야만 한다. 이걸 하기 위한 적절한 도구는 Redis다.&lt;/p&gt;
+&lt;p&gt;Redis는 여러 가지 자료구조를 제공하는데 그 중 Strings(문자열 저장소)가 가장 좋다. 언뜻 보면 다양한 집합 연산을 지원하는 Sets(집합 저장소)가 더 좋아 보이지만 실제로는 아니다. Redis에서 값을 가져오는 Order! 연산비용이 Strings는 O(1)이지만 Sets는 O(n)이기 때문이다. 게다가 Redis는 Mget 명령을 지원하기 때문에 여러 요청을 모아서 한 번의 요청으로 처리하는 것도 가능하다.&lt;/p&gt;
+&lt;p&gt;Strings는 압축을 적용하기도 용이하다. Snappy를 쓰면 압축효율은 좀 낮지만 속도가 거의 압축하지 않는 때와 비슷한 수준으로 빠르다.&lt;/p&gt;
+&lt;h3 id=&quot;코끼리는-냉장고에-들어갔는가&quot;&gt;&lt;a href=&quot;#코끼리는-냉장고에-들어갔는가&quot; class=&quot;headerlink&quot; title=&quot;코끼리는 냉장고에 들어갔는가?&quot;&gt;&lt;/a&gt;코끼리는 냉장고에 들어갔는가?&lt;/h3&gt;&lt;p&gt;지금까지 설계한 구조를 실제 적용해보면 필요한 서버 사양은 다음과 같다.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;필요한 CPU&lt;/th&gt;
+&lt;th&gt;필요한 메모리&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;REDIS 1 core&lt;/td&gt;
+&lt;td&gt;MinHash 1GB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;MinHASH 계산 1 core&lt;/td&gt;
+&lt;td&gt;Secondary Index 2G&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;추천 계산 1 core&lt;/td&gt;
+&lt;td&gt;기타 1GB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;합계 3 core, 4 GB 다. 노트북 한 대면 충분한 사양이다.&lt;/p&gt;
+&lt;p&gt;진정한 추천엔진은 이보다 좀 더 많은 요소와 기능이 들어가야 하며, 이건 매우 단순한 메모리 기반 방식이라고 할 수 있다. 하지만 정확도는 약간 낮다 하더라도 훨씬 큰 효율을 취할 수 있기 때문에 유용한 방법이다. 고용량의 BMP도 가치가 있지만, 약간 손실이 있다 하더라도 훨씬 적은 용량으로 압축된 JPEG 파일도 가치가 있는 것이다. 99.9%의 정확도로 다른 큰 이익을 취하는 것이다.&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;회사의 지원으로 네이버 데뷰 2015에 참가할 수 있었다. 흥미로웠던 세션을 정리해 둔다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;2일차-세션-6-코끼리-냉장고에-집어넣기-실시간-추천엔진을-머신-한대에-구겨넣기&quot;&gt;&lt;
+    
+    </summary>
+    
+    
+      <category term="minhash" scheme="http://bakyeono.net/tag/minhash/"/>
+    
+      <category term="기계학습" scheme="http://bakyeono.net/tag/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5/"/>
+    
+      <category term="네이버 데뷰" scheme="http://bakyeono.net/tag/%EB%84%A4%EC%9D%B4%EB%B2%84-%EB%8D%B0%EB%B7%B0/"/>
+    
+      <category term="협력필터" scheme="http://bakyeono.net/tag/%ED%98%91%EB%A0%A5%ED%95%84%ED%84%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>네이버 데뷰 2015 참가기 2일차 - 와이파이로 실내 장소 인식하기</title>
+    <link href="http://bakyeono.net/post/2015-09-15-naver-deview-day-2-session-4-identify-indoor-location-using-wifi.html"/>
+    <id>http://bakyeono.net/post/2015-09-15-naver-deview-day-2-session-4-identify-indoor-location-using-wifi.html</id>
+    <published>2015-09-14T15:00:00.000Z</published>
+    <updated>2016-02-17T15:56:03.932Z</updated>
+    
+    <content type="html">&lt;blockquote&gt;
+&lt;p&gt;회사의 지원으로 네이버 데뷰 2015에 참가할 수 있었다. 흥미로웠던 세션을 정리해 둔다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;2일차-세션-4-WIFI를-이용한-실내-장소-인식하기&quot;&gt;&lt;a href=&quot;#2일차-세션-4-WIFI를-이용한-실내-장소-인식하기&quot; class=&quot;headerlink&quot; title=&quot;2일차 세션 4. WIFI를 이용한 실내 장소 인식하기&quot;&gt;&lt;/a&gt;2일차 세션 4. WIFI를 이용한 실내 장소 인식하기&lt;/h2&gt;&lt;p&gt;발표자: 구자형(로플랫)&lt;/p&gt;
+&lt;p&gt;슬라이드: &lt;a href=&quot;http://www.slideshare.net/deview/242-wifi&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://www.slideshare.net/deview/242-wifi&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;이 세션은 사용자(모바일 단말기)의 위치를 실내에서 인식하는 기술에 관한 것이었다. 와이파이로 어떻게 실내 장소를 구분하고 위치를 인식할 수 있을지, 제목만으로는 상상이 안 됐는데 발표를 듣고 보니 매우 복잡하거나 어려운 기술이 사용된 것은 아니었다. 연사 구자형 대표는 기초적인 내용부터 알기 쉽게 차근차근 설명해 줬다. 모든 행사가 끝난 후 있었던 약식 뒤풀이에서 구자형 대표의 설명을 좀 더 들을 수 있었다. 이 때 들은 내용도 포함했다.&lt;/p&gt;
+&lt;h3 id=&quot;실내-위치-인식-방법들&quot;&gt;&lt;a href=&quot;#실내-위치-인식-방법들&quot; class=&quot;headerlink&quot; title=&quot;실내 위치 인식 방법들&quot;&gt;&lt;/a&gt;실내 위치 인식 방법들&lt;/h3&gt;&lt;p&gt;모바일 단말기를 이용해 실내에서 위치를 인식하는 방법은 여러 가지가 있다. 모바일 단말기에 달린 센서가 다양하기 때문이다. 스마트폰의 센서들 중 다음과 같은 소스를 실내 위치 인식에 사용할 수 있다고 한다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;소리&lt;/li&gt;
+&lt;li&gt;블루투스&lt;/li&gt;
+&lt;li&gt;와이파이&lt;/li&gt;
+&lt;li&gt;자기&lt;/li&gt;
+&lt;li&gt;가속도&lt;/li&gt;
+&lt;li&gt;빛&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;이 중 소리를 이용하는 방식은 스타벅스가 대표적이다. 스타벅스는 최근 매장마다 천장에 검은 박스를 하나씩 설치했다. 이 장치는 인간이 들을 수 없는 20KHz의 초음파를 수 초마다 방송한다고 한다. 스타벅스 이용자의 스마트폰에 설치된 스타벅스 앱이 이 초음파를 수신하여 고객의 매장내 위치 인식을 할 수 있는 것이다.&lt;/p&gt;
+&lt;p&gt;발표에서 다뤄지지는 않았지만 행사 뒤풀이 자리에서 구자형 대표가 말해준 바에 따르면, 이 방법은 사용자가 명시적으로 와이파이나 블루투스를 켜지 않아도 앱이 마이크 센서를 이용하는데 큰 권한이 필요없다는 점이 장점이라고 한다. 다른 한 한 뒤풀이 참석자는 스타벅스 앱을 켤 때마다 이어폰으로 듣고 있던 음악이 멈춰서 의아했는데, 알고보니 마이크를 동작시키면서 생기는 문제라는 걸 이제 알게됐다고 한다. 이 점은 부작용이라고 할 수 있겠다.&lt;/p&gt;
+&lt;p&gt;2.4GHz 블루투스를 이용하는 방법으로 대표적인 것은 애플사의 아이비콘(iBeacon)이 있다. 그런데 이 장치는 생각보다 위치 인식률이 좋지 못하고 특히 인파가 많은 곳에서는 간섭을 많이 받는다고 한다. 대중화되는 데도 성공하지 못한 듯하다.&lt;/p&gt;
+&lt;p&gt;와이파이는 2.4GHz와 5GHz 주파수 대역을 이용한다. 기존에 설치된 수많은 와이파이 AP를 이용할 수 있어 새로운 설치 비용을 줄일 수 있으며 신호도 비교적 강한 편이라는 장점이 있다. 위치 측정 오차도 5M 반경 수준으로 다른 기술에 비해 크지 않은 편이라고 한다.&lt;/p&gt;
+&lt;p&gt;자기장을 이용하는 방법은 오차범위가 2M 반경 수준으로 정확도가 가장 높은 기술이며, 많은 주목과 투자를 받고 있다고 한다. 그런데 지구의 자기장이 건축물에 영향을 받고 단말기의 위치 기울기 등에 따라 측정에 왜곡이 발생한다고 한다. 이 문제를 해결하기 위해 가속도 감지 기술 등을 이용해 적절한 보정을 해주어야 한다.&lt;/p&gt;
+&lt;p&gt;다양한 방법들 중 어떤 기술을 이용할 것인가? 성능, 구축비용, 확장성 등을 고려해 선택해야 한다고 한다. 과거에는 여러 기술들 중 어느 하나를 선택해야 하는 상호배타적인 문제로 접근했다면, 현재는 여러 가지 기술을 결합하는 상호보완적인 관점을 가진다고 한다.&lt;/p&gt;
+&lt;h3 id=&quot;와이파이를-이용한-실내-위치-인식-방법&quot;&gt;&lt;a href=&quot;#와이파이를-이용한-실내-위치-인식-방법&quot; class=&quot;headerlink&quot; title=&quot;와이파이를 이용한 실내 위치 인식 방법&quot;&gt;&lt;/a&gt;와이파이를 이용한 실내 위치 인식 방법&lt;/h3&gt;&lt;p&gt;구자형 대표는 실내 위치 인식에 왜 와이파이를 이용하기로 했을까?&lt;/p&gt;
+&lt;p&gt;도시에는 수많은 실내 장소가 존재한다. 이 많은 장소에 다 설치할 수 있는 장비는 무엇일까? 음파 기기, 아이비콘 등을 이 많은 곳에 설치하려면 매우 많은 비용이 필요할 것이다. 반면, 와이파이 AP 장비는 이미 매우 많은 곳에 설치되어 있다. 새로운 장비를 설치하기보다 이미 설치된 와이파이 인프라를 활용하는 것이 훨씬 경제적이다.&lt;/p&gt;
+&lt;p&gt;어떻게 하면 와이파이를 이용해 실내 위치 인식을 할 수 있을까? 주로 삼각측량법과 장소지문을 만들어 식별하는 방법(핑거트린팅)이 사용된다고 한다.&lt;/p&gt;
+&lt;p&gt;단말기로 와이파이 AP를 스캔하여 각 AP로부터 얻을 수 있는 정보는 다음과 같다.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;정보&lt;/th&gt;
+&lt;th&gt;설명&lt;/th&gt;
+&lt;th&gt;예&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;BSSID&lt;/td&gt;
+&lt;td&gt;MAC 주소&lt;/td&gt;
+&lt;td&gt;0a:30:0d:88:dd:f2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SSID&lt;/td&gt;
+&lt;td&gt;무선네트워크 식별명&lt;/td&gt;
+&lt;td&gt;olleh_starbucks&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;RSS&lt;/td&gt;
+&lt;td&gt;신호 수신강도&lt;/td&gt;
+&lt;td&gt;-48 dBm&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;주파수&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;2462&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;이 정보만으로도 위치를 식별할 수 있다. 신호 수신강도를 이용해 삼각측량을 할 수 있으며, 이 정보들을 모두 종합해 장소별로 고유한 장소지문을 만드는 것이 가능하다.&lt;/p&gt;
+&lt;p&gt;단말기를 기준으로 주변에 세 개의 AP가 있다고 하면 각각의 AP에서 떨어진 거리에 따라 신호의 수신강도가 다를 것이다. 이 세 신호의 측정값을 통해 삼각측량 계산을 하면 현재 위치를 알 수 있다고 한다. 하지만 와이파이 AP 기기들의 신호 출력이나 장애물 등 다양한 요소를 고려해야하므로 그렇게 간단한 일만은 아닐 듯하다.&lt;/p&gt;
+&lt;p&gt;어? 삼각측량이라고? 내 스마트폰은 동시에 하나의 AP에만 접속할 수 있는데… 어떻게 한번에 세 개의 AP에서 신호를 수신할까? 하는 생각이 들 수 있다. AP에 접속하지 않아도 주변의 AP를 스캔하는 것만으로도 위치 식별에 필요한 정보를 수집할 수 있다. 와이파이 무선 장비들은 (켜져 있다면) 항상 다른 장비들과 통신하기 위해 주변에 신호를 보낸다고 한다. 주변에 있는 와이파이 장치들을 스캔하는 건 동시에 몇 개의 기기라도 할 수 있는 일이다.&lt;/p&gt;
+&lt;p&gt;핑거프린팅은 미리 스캔을 통해 수집할 수 있는 주변 AP의 정보들을 이용해 장소별로 고유값을 만들어두고 사전에 저장해 둔 뒤, 나중에 단말기가 측정한 값과 비교해서 실내 위치를 식별하는 방법이다. 이 방법은 실내 위치(좌표)를 정밀하게 측정하는 방법이라기보다는 현재 있는 장소가 어디인지(A 카페, XY 병원 …)를 개념적으로 구분하는 방법에 가까운 듯하다.&lt;/p&gt;
+&lt;h3 id=&quot;실제-적용한-경험&quot;&gt;&lt;a href=&quot;#실제-적용한-경험&quot; class=&quot;headerlink&quot; title=&quot;실제 적용한 경험&quot;&gt;&lt;/a&gt;실제 적용한 경험&lt;/h3&gt;&lt;p&gt;로플랫은 와이파이를 이용한 실내 위치 식별을 적용해 도서관 이용에 도움을 주는 Mute.ly 앱을 만들었다고 한다. 이 앱은 장소를 식별해서 사용자가 도서관에서 나오면 매너모드를 자동으로 해제해 준다고 한다. 구자형 대표는 이 앱을 만들면서 얻은 여러 노하우를 발표했다.&lt;/p&gt;
+&lt;p&gt;상식적으로 와이파이를 이용해 위치 인식을 하려면 단말기에서 와이파이 기능을 켜 둬야 한다. 하지만 이는 큰 문제는 아닌 듯하다. 안드로이드 최근 버전에는 ‘네트워크 항상 검색’이라는 옵션이 있어서 이 옵션이 켜져 있으면 사용자가 와이파이를 꺼 두더라도 와이파이 스캔은 할 수 있다고 한다. 게다가 이 옵션이 아니더라도 앱이 관련 권한만 받아 두면 와이파이 스캔만 하는 것은 사용자의 명시적인 와이파이 조작 없이 처리할 수 있다고 한다.&lt;/p&gt;
+&lt;p&gt;LG G2 단말기는 2.4GHz 대역만 스캔되고 5GHz는 스캔되지 않는 현상이 있다고 한다.&lt;/p&gt;
+&lt;p&gt;기기에 관계없이 아예 와이파이가 켜지지 않는 문제가 생기기도 하는데, 이 오류를 방지하려면 와이파이를 켠 후 바로 스캔을 하지 말고 와이파이가 켜진 것을 확인한 후에 스캔해야 한다.&lt;/p&gt;
+&lt;p&gt;배터리를 아끼기 위해 스캔을 할 때만 와이파이를 켰다가 다시 꺼 두는 것은 좋은 방법이 아니라고 한다. 와이파이를 켜고 끄는 과정에서 더 많은 전력이 소모되기 때문이다.&lt;/p&gt;
+&lt;p&gt;주변 모든 와이파이 신호가 갑자기 약해지는 현상이 종종 나타났다고 하는데 알고보니 ‘데스그립’ 문제였던 모양이다. 데스그립이 발생하면 사용자가 해당 장소를 벗어난 것으로 오인될 수 있으므로 적절한 보정이 필요하다.&lt;/p&gt;
+&lt;p&gt;무선 AP들 중에는 수시로 변동되는 것들이 있다. 사람들이 휴대용 단말기를 AP로 사용하는 경우다. 이런 AP들의 SSID에는 대부분 ‘android’, ‘iphone’, ‘ollehegg’와 같은 접두사, 접미사가 포함돼 있어 어느 정도 구별이 가능하다고 한다. 이런 장치를 잘 구별하지 못하면 장소지문을 만들 때 어려움이 많을 것이다.&lt;/p&gt;
+&lt;p&gt;또 주의해야 할 점으로 BSSID(MAC 주소)를 고유값으로 착각하는 문제가 있다. BSSID는 고유값으로 지정되는 경우가 대부분이지만 반드시 고유값인 것은 아니다. 02:e0:83:54:70:9X의 경우 서울시내에 수많은 장치가 검색된다. 어떤 칩셋에 똑같은 BSSID가 찍혀서 대량으로 납품된 것이다.&lt;/p&gt;
+&lt;h3 id=&quot;조금-다른-관점&quot;&gt;&lt;a href=&quot;#조금-다른-관점&quot; class=&quot;headerlink&quot; title=&quot;조금 다른 관점&quot;&gt;&lt;/a&gt;조금 다른 관점&lt;/h3&gt;&lt;p&gt;한편, 행사에 홍보부스를 차린 회사 중에 이 기술을 조금 다른 관점에서 적용하고 있는 회사도 있었다. 조이 코퍼레이션은 사용자의 단말기를 중심으로 위치를 인식하는 것이 아니라 매장에 설치된 AP장치를 기준으로 출입 고객의 정보를 수집하는 기술을 전시했다.&lt;/p&gt;
+&lt;p&gt;이 기술에는 한 가지 이슈가 있는 것 같다. 최근 아이폰은 스캔을 위한 와이파이 동작시 BSSID를 숨기는 기능을 도입했다. 이 기능은 안드로이드 스마트폰에도 점차 적용될 듯하다. 그렇게 되면 매장에 입장하는 고객 별 데이터는 누적하기가 어려워질 수 있다. 물론 BSSID를 수집하지 않는다 하더라도 여전히 의미있는 통계 자료를 수집할 수 있겠지만 매장 업주 입장에서는 좀 아쉬울 듯하다.&lt;/p&gt;
+&lt;p&gt;모든 사람이 단말기의 와이파이를 켜놓고 다니지는 않는다는 점도 문제가 될 수 있다. 하지만 스마트폰 사용자의 대략 절반 정도는 와이파이를 켜놓고 생활한다고 하며, 그렇다면 통계를 위한 자료로는 큰 하자는 아닐 듯하다.&lt;/p&gt;
+&lt;h3 id=&quot;전망&quot;&gt;&lt;a href=&quot;#전망&quot; class=&quot;headerlink&quot; title=&quot;전망&quot;&gt;&lt;/a&gt;전망&lt;/h3&gt;&lt;p&gt;구자형 대표는 실내 위치 인식 기술을 플랫폼화할 계획이라고 한다. 현재 여러 곳의 장소지문들을 수집하는 작업을 하고 있으며 이것이 완성되면 이 플랫폼을 이용해 사용자가 어떤 공공장소, 매장에 진입했는지 식별하는 것이 가능하다. 한 장소에 같이 있는 사람이 누구인지도 더 정확하게 구별할 수 있게 될 것이다.&lt;/p&gt;
+&lt;p&gt;세션 제목만 봤을 때는 무척 어렵고 마술 같은 기술로 생각됐지만 발표를 듣고 보니 상식적인 수준에서 이해할 수 있는 기술인 것 같다. 사용자가 자택에 들어가고 나가는 정도의 간단한 식별은 충분히 구현할 수 있을 것 같다. 관심 있는 사람은 사물인터넷과 접목해보는 것도 재미있는 도전이 되지 않을까? 물론 발표에도 나왔듯 까다롭고 귀찮은 문제들이 많이 튀어나오기 때문에 완성도 있게 구현하는 것은 쉽지 않을 듯하다.&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;회사의 지원으로 네이버 데뷰 2015에 참가할 수 있었다. 흥미로웠던 세션을 정리해 둔다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;2일차-세션-4-WIFI를-이용한-실내-장소-인식하기&quot;&gt;&lt;a href=&quot;#2일차-세션
+    
+    </summary>
+    
+    
+      <category term="wi-fi" scheme="http://bakyeono.net/tag/wi-fi/"/>
+    
+      <category term="네이버 데뷰" scheme="http://bakyeono.net/tag/%EB%84%A4%EC%9D%B4%EB%B2%84-%EB%8D%B0%EB%B7%B0/"/>
+    
+      <category term="위치인식" scheme="http://bakyeono.net/tag/%EC%9C%84%EC%B9%98%EC%9D%B8%EC%8B%9D/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>네이버 데뷰 2015 참가기 2일차 - 기계 번역을 이용한 검색어 수정 시스템</title>
+    <link href="http://bakyeono.net/post/2015-09-15-naver-deview-day-2-session-2-naver-query-correction-system.html"/>
+    <id>http://bakyeono.net/post/2015-09-15-naver-deview-day-2-session-2-naver-query-correction-system.html</id>
+    <published>2015-09-14T15:00:00.000Z</published>
+    <updated>2016-02-17T15:52:49.423Z</updated>
+    
+    <content type="html">&lt;blockquote&gt;
+&lt;p&gt;회사의 지원으로 네이버 데뷰 2015에 참가할 수 있었다. 흥미로웠던 세션을 정리해 둔다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;2일차-세션-2-기계-번역-모델-기반-질의-교정-시스템&quot;&gt;&lt;a href=&quot;#2일차-세션-2-기계-번역-모델-기반-질의-교정-시스템&quot; class=&quot;headerlink&quot; title=&quot;2일차 세션 2. 기계 번역 모델 기반 질의 교정 시스템&quot;&gt;&lt;/a&gt;2일차 세션 2. 기계 번역 모델 기반 질의 교정 시스템&lt;/h2&gt;&lt;p&gt;발표자: 김태일(NAVER)&lt;/p&gt;
+&lt;p&gt;슬라이드: &lt;a href=&quot;http://www.slideshare.net/deview/242-52779038&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://www.slideshare.net/deview/242-52779038&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;질의 교정 시스템은 네이버 검색 엔진에 입력된 검색어를 분석해 잘못 입력된 오타나 맞춤법 등을 자동 교정해주는 기능이다. 연사는 기계 번역 방식을 이용해 기존 방법보다 효율적인 교정 시스템을 만들었다고 한다.&lt;/p&gt;
+&lt;h3 id=&quot;질의-교정-유형과-방법&quot;&gt;&lt;a href=&quot;#질의-교정-유형과-방법&quot; class=&quot;headerlink&quot; title=&quot;질의 교정 유형과 방법&quot;&gt;&lt;/a&gt;질의 교정 유형과 방법&lt;/h3&gt;&lt;p&gt;질의 교정 기능으로는 다음과 같은 것이 제공되고 있다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;스펠링 교정&lt;/li&gt;
+&lt;li&gt;한-&amp;gt;영 / 영-&amp;gt;한 변환&lt;/li&gt;
+&lt;li&gt;바른말 추천&lt;/li&gt;
+&lt;li&gt;축약어 추천&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;이건 맞춤법 검사기와는 다르다. 맞춤법 검사기는 한국어 문법을 우선시해 교정하는 것이지만, 질의어 교정 시스템은 검색 결과의 품질을 우선시한다. 사람들은 엄격한 맞춤법보다는 사회적으로 용인되는 표현을 더 많이 사용하며, 웹 문서 중에는 올바른 맞춤법으로 검색했을 때 오히려 검색 결과가 더 나쁜 경우도 존재하기 때문이다.&lt;/p&gt;
+&lt;p&gt;오탈자의 유형에는 다음과 같은 것이 있다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;단순 입력 실수 (70% 이상)&lt;/li&gt;
+&lt;li&gt;한-&amp;gt;영 / 영-&amp;gt;한 실수 (20% 이상)&lt;/li&gt;
+&lt;li&gt;맞춤법 실수 (9% 미만)&lt;/li&gt;
+&lt;li&gt;잘못된 지식 (1% 미만)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;인간은 이런 오류를 교정하기 위해 형태적 특성(Signal), 앞뒤 문맥(Shallow Context), 지식과 개념(Deep Context)를 모두 활용한다. 컴퓨터가 이를 완전히 흉내낼 수 있는 알고리즘은 아직 존재하지 않는다.&lt;/p&gt;
+&lt;p&gt;이 중 단순 입력 실수와 맞춤법 실수 등은 Signa과 Shallow Context의 분석을 통해 상당히 해결할 수 있다. 하지만 잘못된 지식에 해당하는 교정은 Deep Context 모델링이 필요해 처리하기가 상당히 어렵다.&lt;/p&gt;
+&lt;h3 id=&quot;네이버-질의-교정-시스템의-개선&quot;&gt;&lt;a href=&quot;#네이버-질의-교정-시스템의-개선&quot; class=&quot;headerlink&quot; title=&quot;네이버 질의 교정 시스템의 개선&quot;&gt;&lt;/a&gt;네이버 질의 교정 시스템의 개선&lt;/h3&gt;&lt;p&gt;네이버의 기존 방식은 Noisy Channel 모델 기반이었는데, 단순한 방식이어서 학습 데이터를 많이 제공해도 정확도가 떨어졌다고 한다.&lt;/p&gt;
+&lt;p&gt;네이버는 번역 모델을 기반으로 질의 교정 시스템을 개선했다. 새로 도입한 방법은 통계학에 기반한 기계 번역 방법이다. 교정 시스템이 하는 일이 교정이 아니라 번역이라고 가정하고, 외국어를 한국어로 기계 번역하듯이 한국어를 한국어로 기계 번역하도록 한 것이다.&lt;/p&gt;
+&lt;p&gt;이 방법을 이용하면 새로운 질의가 입수될 때마다 자동 학습이 가능하며, 학습 데이터에 비례해 정확도도 높아지게 하기 위해 이 방법을 채택했다고 한다.&lt;/p&gt;
+&lt;p&gt;매일 대량의 데이터가 수집되고 엄청난 학습량을 처리해야 했는데, 오픈 소스 도구(GIZA++)는 느려서 사용할 수 없었고 교정 시스템을 직접 개발해야 했다고 한다.&lt;/p&gt;
+&lt;p&gt;새로 도입한 시스템은 성공적으로 개발됐고 품질이 검증됐다고 한다. 기존 시스템 대비 Recall이 2배~3배 향상됐고, 정확도 하락은 거의 없었으며, 속도 하락도 적었다고 한다. 학습량 증가에 따른 정확도 개선도 이뤄지고 있다. 현재 서비스를 실제 적용하고 있다고 한다.&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;회사의 지원으로 네이버 데뷰 2015에 참가할 수 있었다. 흥미로웠던 세션을 정리해 둔다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;2일차-세션-2-기계-번역-모델-기반-질의-교정-시스템&quot;&gt;&lt;a href=&quot;#2일차-세
+    
+    </summary>
+    
+    
+      <category term="네이버 데뷰" scheme="http://bakyeono.net/tag/%EB%84%A4%EC%9D%B4%EB%B2%84-%EB%8D%B0%EB%B7%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>네이버 데뷰 2015 참가기 2일차 - 네이버의 데이터 처리 기술</title>
+    <link href="http://bakyeono.net/post/2015-09-15-naver-deview-day-2-session-1-naver-data-mining.html"/>
+    <id>http://bakyeono.net/post/2015-09-15-naver-deview-day-2-session-1-naver-data-mining.html</id>
+    <published>2015-09-14T15:00:00.000Z</published>
+    <updated>2016-02-17T15:55:48.642Z</updated>
+    
+    <content type="html">&lt;blockquote&gt;
+&lt;p&gt;회사의 지원으로 네이버 데뷰 2015에 참가할 수 있었다. 흥미로웠던 세션을 정리해 둔다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;2일차-세션-1-네이버-검색과-데이터마이닝&quot;&gt;&lt;a href=&quot;#2일차-세션-1-네이버-검색과-데이터마이닝&quot; class=&quot;headerlink&quot; title=&quot;2일차 세션 1. 네이버 검색과 데이터마이닝&quot;&gt;&lt;/a&gt;2일차 세션 1. 네이버 검색과 데이터마이닝&lt;/h2&gt;&lt;p&gt;발표자: 최재걸(NAVER)&lt;/p&gt;
+&lt;p&gt;슬라이드: &lt;a href=&quot;http://www.slideshare.net/deview/211-52777946&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://www.slideshare.net/deview/211-52777946&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;연사는 2004년에 네이버에 입사해 네이버의 각종 검색/추천 서비스를 개발했다고 한다. 자신이 경험한 노하우를 들려 줬다.&lt;/p&gt;
+&lt;p&gt;네이버 사이트에는 연관검색어, 검색 결과의 랭킹, 인물 정보, 실시간 검색어, 뉴스추천, 성인이미지 차단, 이미지 검색 등 각종 데이터 마이닝 기능이 제공되고 있다.&lt;/p&gt;
+&lt;h3 id=&quot;연관-검색어&quot;&gt;&lt;a href=&quot;#연관-검색어&quot; class=&quot;headerlink&quot; title=&quot;연관 검색어&quot;&gt;&lt;/a&gt;연관 검색어&lt;/h3&gt;&lt;p&gt;그 중 2004년에 처음으로 개발해 서비스한 기능이 연관 검색어 기능이다. 이 기능은 원래 다음이 먼저 개발했고 네이버가 뒤따라서 개발했다. frequent set 알고리즘을 이용해 개발한 연관 검색어 기능이 처음에는 잘 작동하는 것 같았지만 곧 점점 사용률이 떨어지는 문제가 발견됐다고 한다.&lt;/p&gt;
+&lt;p&gt;예측과 결과가 다르게 나오자 당연히 프로그램에 버그가 있을 줄 알고 며칠동안 디버깅을 위해 노력했지만 애초에 버그는 없었다고 한다. 프로그램은 정상적으로 작동했다. 문제는 약한 evidence로부터 나온 결과물을 성급하게 전체로 해석하는 데서 생기는 것이었다.&lt;/p&gt;
+&lt;p&gt;연사는 이 일을 통해 잘못된 결정은 많은 손실을 가져오며, 기술을 단지 이해하는 것만으로는 부족하다는 교훈을 얻었다고 한다.&lt;/p&gt;
+&lt;h3 id=&quot;랭킹-시스템&quot;&gt;&lt;a href=&quot;#랭킹-시스템&quot; class=&quot;headerlink&quot; title=&quot;랭킹 시스템&quot;&gt;&lt;/a&gt;랭킹 시스템&lt;/h3&gt;&lt;p&gt;연사는 웹사이트 랭킹 시스템을 개발할 때 순수능력과 위치능력을 구분해 효과적으로 랭킹 시스템을 만들었다. 랭킹 시스템을 검정해 본 결과 분산이 작게 추정되어 성공적으로 만들었다고 판단했다. 하지만 실제 서비스를 개시하자 품질 저하 문제가 또 발견됐다고 한다. 또다시 기술에 진 것이다.&lt;/p&gt;
+&lt;p&gt;이 문제를 스스로 해결할 수 없어 통계분야 데이터 마이닝 전문가의 도움을 받아서야 랭킹 시스템을 완성할 수 있었다고 한다. 문제는 처음 사용한 알고리즘이 특성상 실제 측정의 질이 낮더라도 분산이 작은 값으로 표현되는 알고리즘이었기 때문에 생긴 것이었다고 한다.&lt;/p&gt;
+&lt;p&gt;좋은 랭킹 시스템을 만들기 위해서는 통계, KDD, 머신러닝의 상호 보완이 필요했다고 한다. 연사는 KDD 분야가 주전공이어서 다른 쪽을 잘 알지 못해 이런 어려움을 겪었던 것 같다.&lt;/p&gt;
+&lt;h3 id=&quot;협력필터&quot;&gt;&lt;a href=&quot;#협력필터&quot; class=&quot;headerlink&quot; title=&quot;협력필터&quot;&gt;&lt;/a&gt;협력필터&lt;/h3&gt;&lt;p&gt;2013년에는 협력필터를 이용해 추천 엔진을 만들었다. 이 기술을 처음 적용한 서비스는 네이버 뮤직 라디오다. 협력필터는 사용자가 즐겨 듣는 음악을 분석해 비슷한 음악을 추천해주는 기능을 제공했다. 이 기능은 성공적이었고 지금도 계속 서비스되고 있다고 한다.&lt;/p&gt;
+&lt;p&gt;문제는 같은 기능을 개인화 영화 추천 시스템에 적용했을 때 나타났다. 맞춤 영화 추천은 사용률이 매우 저조했고 서비스를 빠르게 중단해야 했다고 한다. 이 문제는 영화에 대한 도메인 지식이 부족했기 때문에 나타난 것이었다.&lt;/p&gt;
+&lt;p&gt;협력필터를 통해 추천을 하면 한 번 추천했던 것이 계속 추천되거나 사용자가 이미 감상했던 것을 또 추천하는 일이 많다고 한다. 그런데 음악의 경우엔 같은 음악을 여러 번 듣는 게 문제가 안 되지만 영화는 소모성 콘텐츠여서 한 번 본 영화를 다시 보는 일이 잘 없다. 따라서 같은 영화를 여러 번 추천하는 것은 잘못된 추천인 것이다.&lt;/p&gt;
+&lt;p&gt;이와 관련해 마크 주커버그는 “당신이 읽을법한 뉴스를 추천하지 않을 것이다”라는 말을 한 바 있다고 한다.&lt;/p&gt;
+&lt;h3 id=&quot;Naver-Realtime-Project&quot;&gt;&lt;a href=&quot;#Naver-Realtime-Project&quot; class=&quot;headerlink&quot; title=&quot;Naver Realtime Project&quot;&gt;&lt;/a&gt;Naver Realtime Project&lt;/h3&gt;&lt;p&gt;지금 네이버는 실시간 데이터마이닝 프로젝트를 진행하고 있다고 한다. 네이버에 수집되는 각종 데이터를 활용해 현재 이벤트, 이슈 등을 찾고 그에 실시간 점수를 매겨 랭킹화하는 것이다. 그러면 지금 일어나는 모든 일을 중요도 순으로 알 수 있게 되며, 여기에 개인화를 적용하는 것도 가능하다고 한다.&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;회사의 지원으로 네이버 데뷰 2015에 참가할 수 있었다. 흥미로웠던 세션을 정리해 둔다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;2일차-세션-1-네이버-검색과-데이터마이닝&quot;&gt;&lt;a href=&quot;#2일차-세션-1-네이버
+    
+    </summary>
+    
+    
+      <category term="네이버 데뷰" scheme="http://bakyeono.net/tag/%EB%84%A4%EC%9D%B4%EB%B2%84-%EB%8D%B0%EB%B7%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>네이버 데뷰 2015 참가기 1일차 - 라이엇게임스의 애자일 조직</title>
+    <link href="http://bakyeono.net/post/2015-09-14-naver-deview-day-1-session-4-agile-organization.html"/>
+    <id>http://bakyeono.net/post/2015-09-14-naver-deview-day-1-session-4-agile-organization.html</id>
+    <published>2015-09-13T15:00:00.000Z</published>
+    <updated>2016-02-17T15:51:31.293Z</updated>
+    
+    <content type="html">&lt;blockquote&gt;
+&lt;p&gt;회사의 지원으로 네이버 데뷰 2015에 참가할 수 있었다. 흥미로웠던 세션을 정리해 둔다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;세션-4-How-Riot-Works&quot;&gt;&lt;a href=&quot;#세션-4-How-Riot-Works&quot; class=&quot;headerlink&quot; title=&quot;세션 4. How Riot Works&quot;&gt;&lt;/a&gt;세션 4. How Riot Works&lt;/h2&gt;&lt;p&gt;발표자: 유석문(Riot Games)&lt;/p&gt;
+&lt;p&gt;슬라이드: &lt;a href=&quot;http://www.slideshare.net/deview/142-how-riot-works&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://www.slideshare.net/deview/142-how-riot-works&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;리그오브레전드 개발사인 라이엇게임스의 개발 문화를 소개하는 세션이었다.&lt;/p&gt;
+&lt;p&gt;요즘 유행하는 자유롭고 개방적이고 “쩌는” 사내 문화를 자랑하는 세션이 아닐까 예상했다. 그런 내용은 거의 없었고 주된 내용은 어떻게 개발자가 계속 성장해 나가는 조직이 가능한가에 관한 것이었다. 그리고 그 방법으로는 애자일 개발 방법론을 내세웠다. 꼭 개발 부서에 국한되는 내용은 아니고 우리 회사에서도 배울 점이 많다 생각돼 다른 직원들도 다같이 들었으면 좋았을 것 같다. 간단히 요약해본다.&lt;/p&gt;
+&lt;h3 id=&quot;조직의-종류&quot;&gt;&lt;a href=&quot;#조직의-종류&quot; class=&quot;headerlink&quot; title=&quot;조직의 종류&quot;&gt;&lt;/a&gt;조직의 종류&lt;/h3&gt;&lt;p&gt;조직은 주로 (바람직하지 못한) 두 가지 형태가 있다.&lt;/p&gt;
+&lt;p&gt;먼저, ‘혼돈의 조직’이다. 혼돈의 조직은&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;모두가 바쁘다.&lt;/li&gt;
+&lt;li&gt;완료되는 일은 없다.&lt;/li&gt;
+&lt;li&gt;헤매는 시간이 많다.&lt;/li&gt;
+&lt;li&gt;질문에 답하느라 일하는 시간이 부족하다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;이런 조직은 다들 열심히 일하지만 몇 달을 일해도 결과물을 내놓지 못한다.&lt;/p&gt;
+&lt;p&gt;다른 조직 형태는 ‘관리의 조직’이다. 관리의 조직은 혼돈의 조직의 문제점을 해결하기 위해 중앙집중적인 관리를 도입한 것이다. 여기에는&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;효율적인 업무 프로세스가 짜여 있다.&lt;/li&gt;
+&lt;li&gt;관리자가 업무 방식을 관리하고 지시한다.&lt;/li&gt;
+&lt;li&gt;관리자가 업무 방식을 분석하고 개선한다.&lt;/li&gt;
+&lt;li&gt;관리자가 모든 것을 독재하는 조직이다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;관리의 조직은 혼돈의 조직보다는 어떻게 일이 돌아가는 것 같지만 많은 문제가 있다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;재미가 없다!&lt;/li&gt;
+&lt;li&gt;느리다!&lt;/li&gt;
+&lt;li&gt;오해가 난무한다! (여러 단계의 지시와 보고를 거치는 과정에서)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;애자일-방법론과-애자일-조직&quot;&gt;&lt;a href=&quot;#애자일-방법론과-애자일-조직&quot; class=&quot;headerlink&quot; title=&quot;애자일 방법론과 애자일 조직&quot;&gt;&lt;/a&gt;애자일 방법론과 애자일 조직&lt;/h3&gt;&lt;p&gt;‘애자일(agile)’은 ‘민첩하다’, ‘재빠르다’라는 뜻을 가진 말이며 ‘애자일 개발 프로세스’는 클라이언트의 핵심 요구사항 일부를 빠르게 개발하고 다시 빠르게 피드백받는 짧은 개발 주기를 반복하여 시행착오를 줄이는 개발 방법이다. 연사에 따르면 애자일이란,&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;사용자가 가장 원하는 기능을&lt;/li&gt;
+&lt;li&gt;제공하여&lt;/li&gt;
+&lt;li&gt;피드백을 받아&lt;/li&gt;
+&lt;li&gt;서비스를 점짐적으로 발전시킨다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;기존의 일반적인 개발 방법은 폭포수 프로세스를 따른다. 이 방법은 요구 분석(기획) -&amp;gt; 디자인 -&amp;gt; 코드(프로그래밍) -&amp;gt; 테스트 과정을 차례차례 해나가는 방법이다.&lt;/p&gt;
+&lt;p&gt;이 방법의 문제점은 기획이 다 되기 전까지, 디자인이 다 되기 전까지는 실제 제품 제작이 시작되지 못한다는 것이다. 만일 정해진 기간동안 실제 작업이 절반밖에 이루어지지 못했다면, 실제로는 제품이 절반 정도 만들어진 것이 아니라, 기획과 디자인만 완성됐고 실 결과물은 전혀 만들어지지 않은 상태가 돼버릴 수도 있다.&lt;/p&gt;
+&lt;p&gt;그리고 제품이 완성되었을 때 알고보니 고객이 원하는 기능은 다른 것이었다는 걸 사용자가 써 본뒤에야 알게되는 경우도 있을 수 있다. 다시 긴 기획, 디자인, 코드, 테스트 과정을 거쳐야 해 사용자의 피드백을 받는 것이 어려워질 수 있다.&lt;/p&gt;
+&lt;p&gt;반면에 애자일 개발 방법은 기획, 디자인, 테스트, 코드할 내용을 작은 부분들로 나눠 빠르게 개발하고 빠르게 피드백, 수정 보완할 수 있게 한다. 개발 주기가 짧아짐으로써 각 개발 과정의 병목 현상이 줄어들고 사용자의 피드백을 빠르게 적용할 수 있다.&lt;/p&gt;
+&lt;p&gt;애자일을 적용하려면 다음과 같은 요소가 꼭 필요하다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;높은 품질의 코드를 개발할 수 있는 개발 조직 (필수적이다. 이게 없으면 안 된다.)&lt;/li&gt;
+&lt;li&gt;사용자 우선순위로 정렬된 기능 목록&lt;/li&gt;
+&lt;li&gt;짧은 개발 주기&lt;/li&gt;
+&lt;li&gt;잦은 피드백&lt;/li&gt;
+&lt;li&gt;애자일 조직&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;애자일 방법을 사용하려면 ‘혼돈의 조직’, ‘관리의 조직’이 아니라 ‘애자일 조직’이 필요하다고 한다. 연사는 라이엇게임스의 조직 문화를 예로 들어 애자일 조직을 설명했다. &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;고객의 경험이 최고의 가치: 라이엇게임스는 개발자가 게이머다. 제품을 개발하는 사람은 사용자의 입장에서 공감할 수 있어야 한다.&lt;/li&gt;
+&lt;li&gt;권한 위임1: 해당 문제는 담당자가 가장 잘 알고 있다. 그에게 충분한 권한이 있어야 불필요한 보고와 회의 과정을 줄이고 의사결정을 빠르게 할 수 있다. 이를 위해서는 신뢰가 필요하다.&lt;/li&gt;
+&lt;li&gt;권한 위임2: 직위가 아닌 역할과 책임을 준다. 직위가 있으면 사람들의 목표가 직위 그 자체가 된다. 라이엇게임스에는 직위가 없고 각자 적성에 맞는 역할을 주고 그에 따르는 책임을 갖도록 한다.&lt;/li&gt;
+&lt;li&gt;정보의 공유: 누구에게나 무엇이든 물어볼 수 있다. 대표에게도 직통으로 메일을 보내 물어볼 수 있다. 모든 회의는 공개되어 있으며 누구나 참석할 수(참석하지 않을 수) 있다.&lt;/li&gt;
+&lt;li&gt;지속적 발전: 실수는 실패가 아니라 배움의 기회다. 실패한 것을 즐겁게 설명하며 서로 배우는 문화. 문제가 되는 부분을 어떻게 발전시킬지 스스로 결정할 수 있게 한다. 관습에 저항한다.(더 나은 방법이 있으면 적용을 시도함)&lt;/li&gt;
+&lt;li&gt;가족이 아니라 스포츠 팀&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;애자일에-대한-오해&quot;&gt;&lt;a href=&quot;#애자일에-대한-오해&quot; class=&quot;headerlink&quot; title=&quot;애자일에 대한 오해&quot;&gt;&lt;/a&gt;애자일에 대한 오해&lt;/h3&gt;&lt;p&gt;애자일 방법론이 한국에 도입될 때는 오해를 낳으면서 잘못 적용되고 있다고 한다. 애자일이 단순히 빠르게 개발하는 방법이라는 오해가 있는데, 애자일이 기존 방법보다 개발기간을 단축시키는 것은 아니다. 그보다는, 빠르고 지속적인 피드백을 통해 삽질을 줄이는 방법이다.&lt;/p&gt;
+&lt;h3 id=&quot;소감&quot;&gt;&lt;a href=&quot;#소감&quot; class=&quot;headerlink&quot; title=&quot;소감&quot;&gt;&lt;/a&gt;소감&lt;/h3&gt;&lt;p&gt;개발자의 지속적인 성장을 강조하는 점은 라이엇게임스와 우리 회사가 크게 다를 것 없다고 느꼈다. 이것은 내가 우리 회사에서 내가 가장 자랑스러워하는 점이다. 연사의 발표를 보면서 우리 회사의 방향이 잘못되지 않았다는 생각이 들었다.&lt;/p&gt;
+&lt;p&gt;또, 회사 구성원 사이에 사내정치, 장벽, 의사소통의 어려움 같은 게 없다는 것도 우리 회사가 라이엇게임스의 장점과 비슷한 점으로 생각된다.&lt;/p&gt;
+&lt;p&gt;폭포수 방법이 무조건 잘못된 것은 아니다. 프로그래밍 교과서에 나오는 정석적인 개발 방법이며, 여전히 많은 대기업들이 이 방법을 채택하고 있다. 하지만 작은 스타트업 회사에서는 좀 더 민첩한 개발 프로세스를 적용하는게 합리적일 것 같다. 애자일 이야기가 나온지는 꽤 된 것 같은데 이렇게 한 세션을 할애해서 얘기하는 걸 보면 아직도 도입이 잘 되지 않은 모양이다.&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;회사의 지원으로 네이버 데뷰 2015에 참가할 수 있었다. 흥미로웠던 세션을 정리해 둔다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;세션-4-How-Riot-Works&quot;&gt;&lt;a href=&quot;#세션-4-How-Riot-Wo
+    
+    </summary>
+    
+    
+      <category term="agile" scheme="http://bakyeono.net/tag/agile/"/>
+    
+      <category term="네이버 데뷰" scheme="http://bakyeono.net/tag/%EB%84%A4%EC%9D%B4%EB%B2%84-%EB%8D%B0%EB%B7%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>네이버 데뷰 2015 참가기 1일차 - Open Compute Project (OCP)</title>
+    <link href="http://bakyeono.net/post/2015-09-14-naver-deview-day-1-session-5-ocp.html"/>
+    <id>http://bakyeono.net/post/2015-09-14-naver-deview-day-1-session-5-ocp.html</id>
+    <published>2015-09-13T15:00:00.000Z</published>
+    <updated>2016-02-17T15:55:34.452Z</updated>
+    
+    <content type="html">&lt;blockquote&gt;
+&lt;p&gt;회사의 지원으로 네이버 데뷰 2015에 참가할 수 있었다. 흥미로웠던 세션을 정리해 둔다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;1일차-세션-5-데이터-센터의-오픈-소스-Open-Compute-Project-OCP&quot;&gt;&lt;a href=&quot;#1일차-세션-5-데이터-센터의-오픈-소스-Open-Compute-Project-OCP&quot; class=&quot;headerlink&quot; title=&quot;1일차 세션 5. 데이터 센터의 오픈 소스, Open Compute Project (OCP)&quot;&gt;&lt;/a&gt;1일차 세션 5. 데이터 센터의 오픈 소스, Open Compute Project (OCP)&lt;/h2&gt;&lt;p&gt;발표자: 유명환(엑세스주식회사 연구소장)&lt;/p&gt;
+&lt;p&gt;슬라이드: &lt;a href=&quot;http://www.slideshare.net/deview/154-open-compute-project-ocp&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://www.slideshare.net/deview/154-open-compute-project-ocp&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;소셜 미디어 성장, 트래픽 증가, 빅 데이터 누적 등 현재 IT 트렌드로 인해 데이터 센터가 급격히 성장하고 있다.&lt;/p&gt;
+&lt;p&gt;이에 따른 문제도 만만치 않다. 어마어마한 사용량을 감당해 내야 하는 문제, 엄청난 전기료(+세금)를 부담해야 하는 문제, 클라우드 서비스의 확대로 더더욱 서버 수요가 많아지는 문제 등이 있다.&lt;/p&gt;
+&lt;p&gt;더 유연하고 저렴한 데이터 센터 구조가 필요했다. 새로운 서버를 잘 짓는 방법에 대한 연구로 OCP가 있으며, 기존 데이터 센터를 잘 활용하는 방법으로 엑세스주식회사의 V-Raptor가 있다.&lt;/p&gt;
+&lt;h3 id=&quot;OCP란&quot;&gt;&lt;a href=&quot;#OCP란&quot; class=&quot;headerlink&quot; title=&quot;OCP란?&quot;&gt;&lt;/a&gt;OCP란?&lt;/h3&gt;&lt;p&gt;OCP는 낮은 비용으로 최고의 컴퓨팅 성능을 제공하는 가장 효율적인 서버, 대규모 저장소/데이터 센터 인프라 개발을 위한 오픈소스 프로젝트다.&lt;/p&gt;
+&lt;p&gt;본래 대규모 서버 설비의 구성과 같은 지식은 각 회사의 주요 기술 노하우로 외부에 공개하지 않는 것이었다. 그런데 2011년 4월 페이스북이 자사의 데이터 센터 관련 기술을 모두 공개하며 이 프로젝트와 OCP 재단의 설립을 주도했다. 그 후 AMD, HP, DELL, ARM, ASUS, SanDisk, Baidu 등 여러 유명 기업들이 참여하고 있다.&lt;/p&gt;
+&lt;p&gt;페이스북이 이를 주도하게 된 배경은 사용자와 데이터가 폭발적으로 증가하고 있었던 페이스북 자신이 대규모 서버를 효과적으로 구성하는 기술이 절실하게 필요했기 때문이다. 페이스북에는 매일 하루에 500 테라바이트 이상의 데이터가 쌓인다. 페이스북은 OCP를 통해 12억 달러의 건립비용을 절감했고, 24%의 비용을 절감하는 데 성공했다.&lt;/p&gt;
+&lt;p&gt;OCP는 다양한 연구 성과를 내고 있으며 그 결과를 페이스북의 Prineville Data Center 페이지에 실시간으로 보고하고 있다. OCP를 통해 절감된 비용이 20억 달러에 달한다고 한다. 이 돈은 9만 5천 대의 차량이 내뿜는 탄소량에 맞먹는다.&lt;/p&gt;
+&lt;p&gt;서버를 효율화하는 방법 가운데 하나는 서버의 물리적 크기를 줄이는 것이다. 올해 초 페이스북은 Wedge라는 장치를 선보였는데 이것은 서버와 네트워크 스위치를 합쳐서 하나의 보드에 합쳐 공간을 절약하는 것이다. 공간을 절약하는 것이 중요한 이유는 데이터 센터를 위한 부지 비용도 막대하게 들기 때문에 이를 줄이기 위한 것인 듯하다.&lt;/p&gt;
+&lt;h3 id=&quot;ARM-프로세서-기반-서버&quot;&gt;&lt;a href=&quot;#ARM-프로세서-기반-서버&quot; class=&quot;headerlink&quot; title=&quot;ARM 프로세서 기반 서버&quot;&gt;&lt;/a&gt;ARM 프로세서 기반 서버&lt;/h3&gt;&lt;p&gt;ARM 프로세서는 테스크탑 PC나 서버에는 잘 사용되지 않았지만 여러 임베디드 장비나 스마트폰 등에 매우 폭넓게 사용되고 있다. 몇 해 전 초소형 PC 라즈베리 파이의 프로세서로 채택되면서 데스크탑 PC나 서버용 프로세서로 사용될 능력도 보여주고 있다.&lt;/p&gt;
+&lt;p&gt;엑세스주식회사는 효율적인 서버 개발을 위해 ARM 프로세서를 채택했다. ARM 프로세서가 다른 프로세서와 비교했을 때 최소 전력 소비로 같은 성능을 낼 수 있기 때문이다. 데이터 센터의 비용 가운데 서버 전기료가 차지하는 부분이 매우 크며, 서버 공간의 온도를 낮추기 위한 비용도 서버 전기료와 동급의 비용을 차지하고 있다. 따라서 저전력 ARM 프로세서를 이용하면 전기료와 냉각비용을 줄일 수 있을 것이다.&lt;/p&gt;
+&lt;p&gt;ARM 프로세서 중 64비트를 지원하고 성능이 좋은 ARM Cortex-A9 Quadcore가 서버용으로 가장 적절해 보여 채택했지만, ARM 자체가 원래 서버용으로 만들어진 장치는 아니다보니 하드웨어 가상화가 지원되지 않는 등 많은 어려움과 시행착오를 거쳤다고 한다. 우여곡절 끝에 V-Raptor를 개발해 냈다고 한다.&lt;/p&gt;
+&lt;h3 id=&quot;V-Rapter&quot;&gt;&lt;a href=&quot;#V-Rapter&quot; class=&quot;headerlink&quot; title=&quot;V-Rapter&quot;&gt;&lt;/a&gt;V-Rapter&lt;/h3&gt;&lt;p&gt;V-Raptor는 우분투나 도커를 구동할 수 있는 서버이며, 기기 하나하나의 성능은 낮지만 높은 전력효율을 통해 여러 대를 연결해서 높은 성능을 발휘할 수 있게 고안됐다. 이름도 다른 공룡보다 작지만 여러 마리가 함께 사냥하는 밸로시랩터에서 따왔다.&lt;/p&gt;
+&lt;p&gt;여러 개의 프로세서가 달린 장비 위에 리눅스 기반 가상화 플랫폼인 도커를 올릴 수 있어서 클라우드 서비스를 지원하기 위한 용도로 잘 어울릴 듯 했다.&lt;/p&gt;
+&lt;p&gt;엑세스주식회사 홍보 부스에서 V-Rapter 15대가 물려 있는 서버 스택을 구경할 수 있었다. “이거 한 대에 얼마쯤 하나요?”라고 조심스레 물어보니 직원 분께서 쑥쓰러워하며 “1억원은 안해요.”라고 답변했다. 원래 비싼건지 아직 양산화되지 않아서 그런건지 생각보다 꽤 비쌌다.&lt;/p&gt;
+&lt;h3 id=&quot;소감&quot;&gt;&lt;a href=&quot;#소감&quot; class=&quot;headerlink&quot; title=&quot;소감&quot;&gt;&lt;/a&gt;소감&lt;/h3&gt;&lt;p&gt;네트워크, 하드웨어, 서버에 관한 지식이 많지 않아서 꽤 어려운 세션이었지만 이런 것이 있구나하는 감을 어느 정도 잡을 수 있었다. 대규모 서버를 구성해 가동하는 것이 평소 생각만큼이나 비용이 많이 들고 기술적 어려움도 만만치 않다는 것을 느꼈다. 그리고 이런 프로젝트를 오픈소스로 이뤄지기도 한다는 것이 흥미로웠다.&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;회사의 지원으로 네이버 데뷰 2015에 참가할 수 있었다. 흥미로웠던 세션을 정리해 둔다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;1일차-세션-5-데이터-센터의-오픈-소스-Open-Compute-Project-OCP
+    
+    </summary>
+    
+    
+      <category term="ocp" scheme="http://bakyeono.net/tag/ocp/"/>
+    
+      <category term="네이버 데뷰" scheme="http://bakyeono.net/tag/%EB%84%A4%EC%9D%B4%EB%B2%84-%EB%8D%B0%EB%B7%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>네이버 데뷰 2015 참가기 1일차 - 네이버 효과툰</title>
+    <link href="http://bakyeono.net/post/2015-09-14-naver-deview-day-1-session-1-and-2-effect-toon.html"/>
+    <id>http://bakyeono.net/post/2015-09-14-naver-deview-day-1-session-1-and-2-effect-toon.html</id>
+    <published>2015-09-13T15:00:00.000Z</published>
+    <updated>2016-02-17T15:55:19.032Z</updated>
+    
+    <content type="html">&lt;blockquote&gt;
+&lt;p&gt;회사의 지원으로 네이버 데뷰 2015에 참가할 수 있었다. 흥미로웠던 세션을 정리해 둔다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;세션-1-네이버-효과툰은-어떻게-만들어졌나&quot;&gt;&lt;a href=&quot;#세션-1-네이버-효과툰은-어떻게-만들어졌나&quot; class=&quot;headerlink&quot; title=&quot;세션 1. 네이버 효과툰은 어떻게 만들어졌나?&quot;&gt;&lt;/a&gt;세션 1. 네이버 효과툰은 어떻게 만들어졌나?&lt;/h2&gt;&lt;p&gt;발표자: 김효(NAVER), 이현철(NAVER)&lt;/p&gt;
+&lt;p&gt;슬라이드: &lt;a href=&quot;http://www.slideshare.net/deview/111-52720751&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://www.slideshare.net/deview/111-52720751&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;세션-2-네이버-효과툰-구현-이야기&quot;&gt;&lt;a href=&quot;#세션-2-네이버-효과툰-구현-이야기&quot; class=&quot;headerlink&quot; title=&quot;세션 2. 네이버 효과툰 구현 이야기&quot;&gt;&lt;/a&gt;세션 2. 네이버 효과툰 구현 이야기&lt;/h2&gt;&lt;p&gt;발표자: 임대현(NAVER), 김지한(NAVER)&lt;/p&gt;
+&lt;p&gt;슬라이드: &lt;a href=&quot;http://www.slideshare.net/deview/121-52734801&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://www.slideshare.net/deview/121-52734801&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;세션 1과 세션 2는 이어지는 내용이어서 이 두 세션에 관한 소감을 같이 쓴다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;웹-기술에-대한-선입견&quot;&gt;&lt;a href=&quot;#웹-기술에-대한-선입견&quot; class=&quot;headerlink&quot; title=&quot;웹 기술에 대한 선입견&quot;&gt;&lt;/a&gt;웹 기술에 대한 선입견&lt;/h3&gt;&lt;p&gt;나는 네이버 효과툰이 나왔을 때 처음 보고 선입견을 가졌다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;자바스크립트 스크롤 이벤트를 이용해 만들 수 있는, 누구나 할 수 있는 별 것 아닌 기술인데 가장 먼저 웹툰에 도입했다는 이유만으로 필요 이상으로 주목 받고 있다.&lt;/li&gt;
+&lt;li&gt;웹툰 만화 작가들이 자바스크립트를 다룰 수 없을 것이므로 웹툰 한 편 한 편이 올라올 때마다 개발자들이 해야 할 부수작업이 생길 것이다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;오늘날 웹 기술이나 자바스크립트 기술이 결코 만만한 것이 아닌데도 나는 여전히 나도 모르는 새 이것들을 깔보고 있었나하는 생각이 든다. 하지만 이 세션을 통해 내 선입견이 완전히 잘못된 것이었음을 알게 됐다. 결론부터 말하면,&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;네이버 효과툰의 효과는 생각보다 꽤 질이 좋고(웹툰을 잘 보지 않아 몰랐던 부분), 이것이 나오기까지는 나름대로의 철학과 연구가 있었다.&lt;/li&gt;
+&lt;li&gt;네이버 효과툰의 기술은 구현하기가 그렇게 만만한 것이 아니다.&lt;/li&gt;
+&lt;li&gt;물론 웹툰 만화 작가들이 자바스크립트를 다루지는 않는다. 그렇다고 개발자들이 만화 한 편 한 편에 달라붙는 것도 아니다. 개발자들은 만화 작가들이 사용할 수 있는 매우 쉽고 효과적인 저작 도구를 개발해 제공했다. (가장 인상적이었던 부분이다.)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;네이버 효과툰을 개발한 팀은 3.5명 정도로 구성됐고, 구상부터 첫 버전을 릴리즈하는데까지 두세달밖에 걸리지 않았다고 한다. 굉장한 기술력, 집행력, 팀워크라고 생각한다.&lt;/p&gt;
+&lt;h3 id=&quot;네이버-효과툰의-철학&quot;&gt;&lt;a href=&quot;#네이버-효과툰의-철학&quot; class=&quot;headerlink&quot; title=&quot;네이버 효과툰의 철학&quot;&gt;&lt;/a&gt;네이버 효과툰의 철학&lt;/h3&gt;&lt;p&gt;연사는 네이버 효과툰을 개발할 때의 마음가짐으로 몇 가지를 얘기했다. 그 중 기억나는 것은 이 세 가지다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;네이버 효과툰은 모든 사용자가 즐길 수 있어야 한다.&lt;/li&gt;
+&lt;li&gt;작가들에게 적극적으로 수요 조사를 하고 피드백을 받는다.&lt;/li&gt;
+&lt;li&gt;효과툰은 웹툰이다. (애니메이션이 아니라)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;단순한-웹뷰-자바스크립트-프로그래밍이-아니다&quot;&gt;&lt;a href=&quot;#단순한-웹뷰-자바스크립트-프로그래밍이-아니다&quot; class=&quot;headerlink&quot; title=&quot;단순한 웹뷰 자바스크립트 프로그래밍이 아니다.&quot;&gt;&lt;/a&gt;단순한 웹뷰 자바스크립트 프로그래밍이 아니다.&lt;/h3&gt;&lt;p&gt;네이버 효과툰 팀은 모든 사용자가 효과툰을 즐기도록 하기 위해 많은 노력을 했다고 한다. 이 한 가지 목표 때문에 많은 기술 이슈가 있었던 모양이다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;여전히 매우 다양한(비표준적이고, 낡은) 환경들이 있다.&lt;/li&gt;
+&lt;li&gt;모든 브라우저, 웹뷰가 스크롤 이벤트를 지원하는 것은 아니다.&lt;/li&gt;
+&lt;li&gt;PC의 마우스 휠을 이용한 스크롤은 연속적이지 않다.&lt;/li&gt;
+&lt;li&gt;사운드 재생 지원/제약도 제각각이다.&lt;/li&gt;
+&lt;li&gt;효과툰이 “죽어도” 구현되지 않는 환경도 있다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;효과툰 팀은 이 한 가지 목표를 위해 cocos2dx를 통한 네이티브 지원, 다양한 웹뷰 지원, 자바스크립트 해킹 등 온갖 노력을 했다고 한다.&lt;/p&gt;
+&lt;h3 id=&quot;작가들이-쉽게-쓸-수-있는-저작-도구&quot;&gt;&lt;a href=&quot;#작가들이-쉽게-쓸-수-있는-저작-도구&quot; class=&quot;headerlink&quot; title=&quot;작가들이 쉽게 쓸 수 있는 저작 도구&quot;&gt;&lt;/a&gt;작가들이 쉽게 쓸 수 있는 저작 도구&lt;/h3&gt;&lt;p&gt;가장 인상적이었던 것이 저작 도구였다. 나는 멍청해서 작가들이 만화를 업로드할 때마다 개발자들이 자바스크립트를 입힐 줄 알았는데, 네이버 효과툰 팀은 작가들이 쉽게 쓸 수 있는 저작 도구를 만들었다.&lt;/p&gt;
+&lt;p&gt;저작도구의 레이아웃은 포토샵과 비슷했다. 언뜻 생각하면 애니메이션을 다루는 프로그램이므로 포토샵보다 더 복잡할 것 같다. 그런데 이 도구는 매우 쉬워서 작가들이 웹툰 한 편에 효과를 입히는 데 한 시간도 안 걸린다고 한다.&lt;/p&gt;
+&lt;p&gt;저작도구의 기능은 효과툰 서비스에 최적화되어 있다고 한다. 불필요한 이미지 제거, 용량, 이미지 사이즈 조절, PSD(포토샵) 파일 파싱/출력, 다국어 지원, 스틸컷 버전 출력 등을 자동화해 놓았다.&lt;/p&gt;
+&lt;p&gt;매우 어렵고 복잡한 개발 과정이 필요할 것 같지만 발표자들은 웹킷과 여러 라이브러리들을 이용해서 비교적 쉽게 개발한 듯하다.&lt;/p&gt;
+&lt;h3 id=&quot;어떻게-만들었나&quot;&gt;&lt;a href=&quot;#어떻게-만들었나&quot; class=&quot;headerlink&quot; title=&quot;어떻게 만들었나?&quot;&gt;&lt;/a&gt;어떻게 만들었나?&lt;/h3&gt;&lt;p&gt;두번째 세션은 네이버 효과툰이 구현된 기술적 내용을 좀 더 자세히 소개했다. 내 자신이 프론트엔드 개발 경험이 많지 않아서 발표된 내용을 많이 흡수할 수는 없었지만 기억나는 것을 남겨 본다.&lt;/p&gt;
+&lt;h3 id=&quot;저작-도구-개발&quot;&gt;&lt;a href=&quot;#저작-도구-개발&quot; class=&quot;headerlink&quot; title=&quot;저작 도구 개발&quot;&gt;&lt;/a&gt;저작 도구 개발&lt;/h3&gt;&lt;p&gt;효과툰 팀이 개발한 제품은 웹툰 뷰어와 저작 도구이며, 이것은 (프론트엔드) 웹 기술로 제작됐다. 웹툰 뷰어는 웹 환경이니 당연히 웹 기술이 필요했겠지만 저작 도구는 다른 방식으로도 만들 수 있었을 텐데도 웹 기술을 채택했다.&lt;/p&gt;
+&lt;p&gt;웹 기술을 채택한 이유는 무엇일까? 당연히 네이버가 웹 기술을 중심으로 한 회사니까 그렇겠지만… 세션 내용에 따르면 다양한 환경을 지원하기 위한 목적이 컸고 오늘날에는 다양한 라이브러리와 웹킷을 이용해 빠르게 개발해 패키지화하는 것도 가능했기 때문인 듯하다.&lt;/p&gt;
+&lt;p&gt;특히 Angular.js를 적극 활용해 적은 코드로 빠르게 개발할 수 있었다고 한다. 물론 Angular.js를 쓸 때도 잘못된 구조로 설계하면 코드가 복잡해질 수 있다고 한다. 또, Angular.js 자체의 버그나 잘못된 사용법으로 인해 성능 문제도 발생할 수 있다고 한다. 연사는 이를 피하기 위한 노하우들을 소개했다.&lt;/p&gt;
+&lt;p&gt;효과툰 저작 도구는 내부적으로 데이터를 저장할 때 JSON 형식으로 저장하며 여기에 각종 이미지 바이너리를 묶어 패키지화한다고 한다. &lt;/p&gt;
+&lt;p&gt;Undo/Redo 기능은 구현하기가 꽤 어려울 것 같이 생각되는데, 효과툰 팀은 그냥 작업별로 전체 상태를 저장하는 방식으로 간단히 구현했다고 한다.&lt;/p&gt;
+&lt;p&gt;PSD 파싱 방법도 흥미로웠다. 나 같으면 아마도 라이선스가 걸려 있을 듯해 보이는 PSD 포맷을 파싱하겠다는 생각 자체를 잘 안 하게 됐을 것 같은데, 효과툰 팀은 만화 작가들의 요구에 부응해 PSD 파싱을 시도했다. 그런데 생각보다 간단한 문제였던 모양이다. PSD 파싱 라이브러리가 많이 나와있었기 때문이다.&lt;/p&gt;
+&lt;p&gt;그 중 자바스크립트용 라이브러리인 psd.js가 좋지만, 자바스크립트 라이브러리는 환경 자체로 인한 메모리 문제가 있어 대용량 파일을 처리할 수 없다고 한다. 효과툰 팀은 그 대신에 Node.js의 자식 프로세스 실행 기능을 이용해 파이썬용 라이브러리인 python psd-tools를 사용했다고 한다.&lt;/p&gt;
+&lt;p&gt;효과툰을 만들 때 사용한 테스트 자동화 도구에 관해서도 소개됐다. 여러 가지 도구가 소개됐는데 그 가운데 End-to-End 테스트 도구인 Jasmine이 신기했다. 마치 매크로처럼 GUI 도구를 컴퓨터가 자동으로 작동시켜 테스트하는 방식인 것 같다.&lt;/p&gt;
+&lt;h3 id=&quot;뷰어-개발&quot;&gt;&lt;a href=&quot;#뷰어-개발&quot; class=&quot;headerlink&quot; title=&quot;뷰어 개발&quot;&gt;&lt;/a&gt;뷰어 개발&lt;/h3&gt;&lt;p&gt;뷰어 개발에서는 역시 다양한 환경에 동일한 애니메이션/사운드 동작을 지원하도록 하는 것이 가장 큰 문제였던 모양이다. 성능 문제도 있었던 것 같다. 기기별로 상이한 동작에 대해 알려주고 부족한 부분을 어떻게, 어떤 기술로, 어떤 해킹으로 땜빵했는지에 관한 내용이었다. 유용한 노하우일 수는 있지만 나는 이 부분에선 큰 흥미를 느끼진 못했다.&lt;/p&gt;
+&lt;h3 id=&quot;소감&quot;&gt;&lt;a href=&quot;#소감&quot; class=&quot;headerlink&quot; title=&quot;소감&quot;&gt;&lt;/a&gt;소감&lt;/h3&gt;&lt;p&gt;네이버 효과툰 팀은 효과툰을 더 발전시켜 이미지 번역을 통해 다국어 지원을 더 강화하는 기술적 도전을 할 예정이며 플래시의 대체재로서의 모션 플랫폼으로 성장시킬 포부라고 한다.&lt;/p&gt;
+&lt;p&gt;이 세션에서 훌륭한 개발 철학과 여러 가지 노하우를 접할 수 있었다. 웹 개발이 흥미진진한 이슈가 많은 녹록치 않은 분야라는 것도 새삼 느낄 수 있었고 프론트엔드 개발에도 더 많은 관심을 갖게 될 것 같다.&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;회사의 지원으로 네이버 데뷰 2015에 참가할 수 있었다. 흥미로웠던 세션을 정리해 둔다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;세션-1-네이버-효과툰은-어떻게-만들어졌나&quot;&gt;&lt;a href=&quot;#세션-1-네이버-효과툰
+    
+    </summary>
+    
+    
+      <category term="javascript" scheme="http://bakyeono.net/tag/javascript/"/>
+    
+      <category term="web" scheme="http://bakyeono.net/tag/web/"/>
+    
+      <category term="네이버 데뷰" scheme="http://bakyeono.net/tag/%EB%84%A4%EC%9D%B4%EB%B2%84-%EB%8D%B0%EB%B7%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>.profile에 설정한 내용이 터미널 에뮬레이터에서 안 먹힐 때</title>
+    <link href="http://bakyeono.net/post/2015-09-05-source-profile-in-x-window-terminal.html"/>
+    <id>http://bakyeono.net/post/2015-09-05-source-profile-in-x-window-terminal.html</id>
+    <published>2015-09-05T12:49:00.000Z</published>
+    <updated>2016-02-17T15:50:42.984Z</updated>
+    
+    <content type="html">&lt;p&gt;내가 겪은 문제다. X-윈도우에서 터미널 에뮬레이터(XTERM, Terminator, GNOME Terminal 등)를 사용할 때 &lt;code&gt;~/.profile&lt;/code&gt;, &lt;code&gt;~/.bash_profile&lt;/code&gt; 같은 사용자 쉘 설정 파일이 적용되지 않는 것이다. &lt;code&gt;PATH&lt;/code&gt; 환경변수 설정이 내 뜻대로 되지 않아서 매우 답답했다.&lt;/p&gt;
+&lt;p&gt;더 당혹스러운 것은 X-윈도우가 아닌 CUI 모드[^1]나 SSH에서는 쉘 설정이 로드되는 것이다. 왜 그때그때 동작이 다른 것일까?&lt;/p&gt;
+&lt;p&gt;알고 보면 별 거 아니지만 누군가 나처럼 삽질을 경험할 수 있으니 원인과 해결방법을 남겨둔다.&lt;/p&gt;
+&lt;h2 id=&quot;원인&quot;&gt;&lt;a href=&quot;#원인&quot; class=&quot;headerlink&quot; title=&quot;원인&quot;&gt;&lt;/a&gt;원인&lt;/h2&gt;&lt;p&gt;이 문제는 &lt;code&gt;~/.profile&lt;/code&gt;, &lt;code&gt;~/.bash_profile&lt;/code&gt;, &lt;code&gt;~/.bashrc&lt;/code&gt; 파일의 용도가 다르기 때문에 발생한다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;~/.profile&lt;/code&gt;, &lt;code&gt;~/.bash_profile&lt;/code&gt;은 세션에 로그인할 때 로드된다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;~/.bashrc&lt;/code&gt;는 bash가 실행될 때 로드된다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;X-윈도우에서 터미널 에뮬레이터를 실행하면 X-윈도우의 현재 세션을 유지할 뿐 별도로 로그인 과정을 거치지 않는다. 그래서 에뮬레이터에서는 &lt;code&gt;~/.bashrc&lt;/code&gt;만이 로드되는 것이다.&lt;/p&gt;
+&lt;h2 id=&quot;해결방법&quot;&gt;&lt;a href=&quot;#해결방법&quot; class=&quot;headerlink&quot; title=&quot;해결방법&quot;&gt;&lt;/a&gt;해결방법&lt;/h2&gt;&lt;h3 id=&quot;방법-1-그냥-bashrc에-설정-넣기&quot;&gt;&lt;a href=&quot;#방법-1-그냥-bashrc에-설정-넣기&quot; class=&quot;headerlink&quot; title=&quot;방법 1: 그냥 .bashrc에 설정 넣기&quot;&gt;&lt;/a&gt;방법 1: 그냥 .bashrc에 설정 넣기&lt;/h3&gt;&lt;p&gt;설정할 내용을 &lt;code&gt;~/.profile&lt;/code&gt; 또는 &lt;code&gt;~/.bash_profile&lt;/code&gt; 말고, 그냥 &lt;code&gt;~/.bashrc&lt;/code&gt;에 넣는다.&lt;/p&gt;
+&lt;h3 id=&quot;방법-2-bashrc가-세션-설정-파일을-로드하도록-하기&quot;&gt;&lt;a href=&quot;#방법-2-bashrc가-세션-설정-파일을-로드하도록-하기&quot; class=&quot;headerlink&quot; title=&quot;방법 2: .bashrc가 세션 설정 파일을 로드하도록 하기&quot;&gt;&lt;/a&gt;방법 2: .bashrc가 세션 설정 파일을 로드하도록 하기&lt;/h3&gt;&lt;p&gt;&lt;code&gt;~/.bashrc&lt;/code&gt;에 &lt;code&gt;~/.profile&lt;/code&gt; 또는 &lt;code&gt;~/.bash_profile&lt;/code&gt;을 로드하도록 하는 명령을 추가한다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;주의: &lt;code&gt;~/.profile&lt;/code&gt; 또는 &lt;code&gt;~/.bash_profile&lt;/code&gt;이 &lt;code&gt;~/.bashrc&lt;/code&gt;를 로드하도록 설정되어 있을 가능성이 높다. 이렇게 되면 순환 재귀가 발생하여 bash를 쓸 수 없게 된다. [ctrl] + [c]를 누르면 순환 재귀가 취소되긴 한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;방법-3-추천-에뮬레이터로-로그인-쉘-사용&quot;&gt;&lt;a href=&quot;#방법-3-추천-에뮬레이터로-로그인-쉘-사용&quot; class=&quot;headerlink&quot; title=&quot;방법 3 (추천): 에뮬레이터로 로그인 쉘 사용&quot;&gt;&lt;/a&gt;방법 3 (추천): 에뮬레이터로 로그인 쉘 사용&lt;/h3&gt;&lt;p&gt;터미널 에뮬레이터의 환경 설정에서 쉘을 로그인 상태로 시작하도록 하는 옵션을 켠다.&lt;/p&gt;
+&lt;p&gt;SSH 같은 별도 세션과 터미널 에뮬레이터의 동작이 달랐던 원인이 바로 이거다. 터미널 에뮬레이터를 별도의 로그인 세션으로 동작하게 하는 방법이다. 이 방법이 제일 무난한 것 같다.&lt;/p&gt;
+&lt;h2 id=&quot;참고-문서&quot;&gt;&lt;a href=&quot;#참고-문서&quot; class=&quot;headerlink&quot; title=&quot;참고 문서&quot;&gt;&lt;/a&gt;참고 문서&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://askubuntu.com/questions/121073/why-bash-profile-is-not-getting-sourced-when-opening-a-terminal&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;ask ubuntu 121073번 글&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/415403/whats-the-difference-between-bashrc-bash-profile-and-environment&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;stack overflow 415403번 글&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;[^1]: [ctrl] + [alt] + [1]-[6]&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;내가 겪은 문제다. X-윈도우에서 터미널 에뮬레이터(XTERM, Terminator, GNOME Terminal 등)를 사용할 때 &lt;code&gt;~/.profile&lt;/code&gt;, &lt;code&gt;~/.bash_profile&lt;/code&gt; 같은 사용자 쉘 설
+    
+    </summary>
+    
+    
+      <category term="bash" scheme="http://bakyeono.net/tag/bash/"/>
+    
+      <category term="linux" scheme="http://bakyeono.net/tag/linux/"/>
+    
+      <category term="x-window" scheme="http://bakyeono.net/tag/x-window/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>삽질 없이 라즈베리 파이 2 모델 B에 와이파이와 블루투스 키보드 연결하기 (커맨드 라인으로)</title>
+    <link href="http://bakyeono.net/post/2015-08-30-connect-to-wifi-and-bluetooth-keyboard-on-raspberry-pi.html"/>
+    <id>http://bakyeono.net/post/2015-08-30-connect-to-wifi-and-bluetooth-keyboard-on-raspberry-pi.html</id>
+    <published>2015-08-30T11:57:00.000Z</published>
+    <updated>2016-02-17T15:50:29.794Z</updated>
+    
+    <content type="html">&lt;p&gt;라즈베리 파이에는 아직 무선 환경을 위한 장치가 달려 있지 않다. 그래서 와이파이와 블루투스 장치를 연결하려면 별도의 장치를 설치해야 하고 몇 가지 설정 작업도 해야 한다.&lt;/p&gt;
+&lt;p&gt;인터넷에 이와 관련한 가이드가 많이 올라와 있다. 그런데 많은 가이드가 그 내용이 영원히 적용될 듯이 씌어 있지만 라즈베리 파이와 리눅스 버전이 올라갈 때마다 맞지 않는 내용들이 생긴다. 특히 와이파이 잡는 방법은 여러 글마다 다르게 설명돼 있어 나도 어려움을 많이 겪었다.&lt;/p&gt;
+&lt;p&gt;이 글은 라즈비안 2015-05-05 버전이 설치된 라즈베리 파이 2 모델 B에 와이파이와 블루투스 키보드를 연결하는 (아마도) 가장 간단한 방법이다.&lt;/p&gt;
+&lt;p&gt;이 글은 2015년 8월 30일에 썼다. 이 글도 시간이 흐르면 맞지 않게 될 테니 시간이 많이 지났다면 다른 가이드를 찾아 보기 바란다.&lt;/p&gt;
+&lt;h2 id=&quot;1-와이파이-연결하기&quot;&gt;&lt;a href=&quot;#1-와이파이-연결하기&quot; class=&quot;headerlink&quot; title=&quot;1. 와이파이 연결하기&quot;&gt;&lt;/a&gt;1. 와이파이 연결하기&lt;/h2&gt;&lt;p&gt;무선네트워크 보안 설정은 WPA-PSK 또는 WPA2-PSK 로 설정돼 있는 걸 전제로 한다. 만일 다른 방식으로 보안이 설정돼 있다면 보안이 취약한 네트워크이니 사용하지 말고, 보안 설정을 변경할 수 있다면 안전한 방식으로 바꿔라.&lt;/p&gt;
+&lt;p&gt;그리고 당연한 이야기지만 라즈베리 파이 2 모델 B에는 무선 랜카드가 내장되어있지 않기 때문에 USB 무선 랜카드를 장착해야 한다. 드라이버 설치하는 방법까지는까지 이 글에서 설명하기 어렵다. 왠만한 USB 무선 랜카드는 자동으로 드라이버가 잡힐 것이다.&lt;/p&gt;
+&lt;h3 id=&quot;etc-network-interfaces-파일은-건드리지-마라&quot;&gt;&lt;a href=&quot;#etc-network-interfaces-파일은-건드리지-마라&quot; class=&quot;headerlink&quot; title=&quot;/etc/network/interfaces 파일은 건드리지 마라!&quot;&gt;&lt;/a&gt;/etc/network/interfaces 파일은 건드리지 마라!&lt;/h3&gt;&lt;p&gt;인터넷 글을 보면 &lt;code&gt;/etc/network/interfaces&lt;/code&gt; 파일을 수정하라는 글이 많을 것이다. 아니다. 건드리지 마라. 라즈베리 파이 2는 이미 무선 네트워크를 쉽게 연결할 수 있도록 미리 설정이 돼 있다. 그러니까, 그 파일을 건드리지 마라!&lt;/p&gt;
+&lt;p&gt;혹시 이 파일을 이미 수정했다면, 원래 상태로 돌려라. 원래 상태는 아래 내용과 같다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;auto lo
+
+iface lo inet loopback
+iface eth0 inet dhcp
+
+allow-hotplug wlan0
+iface wlan0 inet manual
+wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
+iface default inet dhcp
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;이 설정은 wpa roaming을 이용해 자동으로 무선 네트워크에 접속하도록 한다.&lt;/p&gt;
+&lt;h3 id=&quot;etc-wpa-supplicant-파일만-수정하면-된다&quot;&gt;&lt;a href=&quot;#etc-wpa-supplicant-파일만-수정하면-된다&quot; class=&quot;headerlink&quot; title=&quot;/etc/wpa_supplicant 파일만 수정하면 된다&quot;&gt;&lt;/a&gt;/etc/wpa_supplicant 파일만 수정하면 된다&lt;/h3&gt;&lt;p&gt;무선 네트워크 설정은 &lt;code&gt;/etc/wpa_supplicant/wpa_supplicant.conf&lt;/code&gt; 파일에 하면 된다.&lt;/p&gt;
+&lt;p&gt;관리자 권한으로 이 파일을 수정한다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo vi /etc/wpa_supplicant/wpa_supplicant.conf
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;그러면 파일 내용은 아래와 같을 것이다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;그 아래 줄에 접속한 무선 네트워크를 설정해두면 된다. 아래와 같이 한다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+
+network={ 
+    ssid=&amp;quot;접속할 AP ID&amp;quot;
+    psk=&amp;quot;비밀번호&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;스마트폰을 쓸 때처럼 무선 네트워크를 여러 개 설정해두고 싶다면? network를 여러 개 지정해두면 된다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+
+network={ 
+    ssid=&amp;quot;접속할 AP ID&amp;quot;
+    psk=&amp;quot;비밀번호&amp;quot;
+}
+network={ 
+    ssid=&amp;quot;회사 AP&amp;quot;
+    psk=&amp;quot;비밀번호&amp;quot;
+}
+network={ 
+    ssid=&amp;quot;카페 AP&amp;quot;
+    psk=&amp;quot;비밀번호&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;변경한-설정-적용하기&quot;&gt;&lt;a href=&quot;#변경한-설정-적용하기&quot; class=&quot;headerlink&quot; title=&quot;변경한 설정 적용하기&quot;&gt;&lt;/a&gt;변경한 설정 적용하기&lt;/h3&gt;&lt;p&gt;이제 시스템을 재시작하거나&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo reboot
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;그냥 네트워크만 다시 연결하도록 해도 된다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo ifdown wlan0
+$ sudo ifup wlan0
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;(인트라넷이 아니라면) 인터넷이 잘 되는지 확인해본다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ ping google.com
+PING google.com (59.18.49.251) 56(84) bytes of data.
+64 bytes from cache.google.com (59.18.49.251): icmp_req=1 ttl=56 time=6.80 ms
+64 bytes from cache.google.com (59.18.49.251): icmp_req=2 ttl=56 time=3.77 ms
+64 bytes from cache.google.com (59.18.49.251): icmp_req=3 ttl=56 time=7.92 ms
+
+--- google.com ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2002ms
+rtt min/avg/max/mdev = 3.777/6.168/7.927/1.752 ms
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;2-블루투스-키보드-연결하기-라즈비안-2015-05-05-버전-기준&quot;&gt;&lt;a href=&quot;#2-블루투스-키보드-연결하기-라즈비안-2015-05-05-버전-기준&quot; class=&quot;headerlink&quot; title=&quot;2. 블루투스 키보드 연결하기 (라즈비안 2015-05-05 버전 기준)&quot;&gt;&lt;/a&gt;2. 블루투스 키보드 연결하기 (라즈비안 2015-05-05 버전 기준)&lt;/h2&gt;&lt;p&gt;라즈베리 파이 2 모델 B에는 무선 랜카드뿐 아니라 블루투스 동글도 달려있지 않다. 따라서 블루투스 장치를 쓰고 싶다면 별도로 USB 동글을 장착해줘야 한다. 이 글은 USB 동글을 설치했고, 드라이버도 정상적으로 작동한다는 것을 전제로 한다. 일반적인 블루투스 동글은 USB를 연결하면 드라이버가 바로 잡힐 것이니 걱정하지 않아도 된다.&lt;/p&gt;
+&lt;h3 id=&quot;필요한-패키지-설치&quot;&gt;&lt;a href=&quot;#필요한-패키지-설치&quot; class=&quot;headerlink&quot; title=&quot;필요한 패키지 설치&quot;&gt;&lt;/a&gt;필요한 패키지 설치&lt;/h3&gt;&lt;p&gt;라즈비안에는 블루투스 장치 연결에 필요한 소프트웨어가 기본 설치되어 있지 않다. 따라서 블루투스 장치 지원을 위한 몇 가지 패키지를 설치해야 한다.&lt;/p&gt;
+&lt;p&gt;우선 apt 저장소 업데이트를 안했다면 해 둔다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo apt-get update
+$ sudo apt-get upgrade
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;다음 명령으로 블루투스 지원 패키지를 설치한다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo apt-get install bluetooth blue-utils
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;dBus를 활성화한다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo update-rc.d -f dBus defaults
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;라즈베리 파이를 재시작한다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo reboot
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;장치-검색&quot;&gt;&lt;a href=&quot;#장치-검색&quot; class=&quot;headerlink&quot; title=&quot;장치 검색&quot;&gt;&lt;/a&gt;장치 검색&lt;/h3&gt;&lt;p&gt;블루투스 키보드의 페어링 버튼을 몇 초 동안 꾹~ 누르고, 아래 명령으로 장치를 검색한다. (장치를 찾지 못하거나 오류가 발생하면 페어링 버튼을 다시 누르고 해보라.)&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo hcitool scan
+Scanning ...
+        00:0D:F0:8B:12:33 LG-PC
+        00:1F:20:F0:20:12 Logitech Keyboard K480
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;이런 식으로 장치가 나오면 성공이다. 연결하려는 장치의 MAC 주소를 확인해둔다. (이 경우엔 &lt;code&gt;00:1F:20:F0:20:12&lt;/code&gt;)&lt;/p&gt;
+&lt;h3 id=&quot;장치-연결&quot;&gt;&lt;a href=&quot;#장치-연결&quot; class=&quot;headerlink&quot; title=&quot;장치 연결&quot;&gt;&lt;/a&gt;장치 연결&lt;/h3&gt;&lt;p&gt;다시 블루투스 키보드의 페어링 버튼을 꾹 누르고, 아래 명령으로 장치를 연결한다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo bluez-simple-agent hci0 00:1F:20:F0:20:12
+&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;
+&lt;p&gt;주의: 여러분은 &lt;code&gt;00:1F:20:f0:20:12&lt;/code&gt;가 아니라, 위에서 발견한 MAC 주소를 입력해야 한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;PIN 번호를 입력하는 다이얼로그가 다오면 &lt;code&gt;0000&lt;/code&gt;을 입력하고 엔터 키를 누른다. 그 후 블루투스 키보드로 &lt;code&gt;0000&lt;/code&gt;을 입력하고 엔터 키를 누르면 된다.&lt;/p&gt;
+&lt;p&gt;오류가 발생하면 블루투스 키보드의 페어링 버튼을 다시 꾹~ 누르고 다시 시도해보라.&lt;/p&gt;
+&lt;p&gt;장치를 신뢰할 수 있는 장치로 연결해 둔다. 그래야 앞으로 연결 작업을 반복하지 않는다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo bluez-test-device trusted 00:1F:20:F0:20:12 yes
+&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;
+&lt;p&gt;주의: 여러분은 &lt;code&gt;00:1F:20:f0:20:12&lt;/code&gt;가 아니라, 위에서 발견한 MAC 주소를 입력해야 한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;아직 블루투스 키보드가 작동하지 않을 것이다. 아직 한 단계가 더 남았다. 아래 명령을 입력한다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo bluez-test-input connect 00:1F:20:F0:20:12
+&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;
+&lt;p&gt;주의: 여러분은 &lt;code&gt;00:1F:20:f0:20:12&lt;/code&gt;가 아니라, 위에서 발견한 MAC 주소를 입력해야 한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;이제 시스템을 재시작한다. 부팅 과정이 끝나고 몇 초 뒤 블루투스 키보드를 사용할 수 있을 것이다.&lt;/p&gt;
+&lt;h2 id=&quot;3-2016-02-16에-내용-추가-블루투스-키보드-연결하기-라즈비안-JESSIE-2016-02-09-버전-기준&quot;&gt;&lt;a href=&quot;#3-2016-02-16에-내용-추가-블루투스-키보드-연결하기-라즈비안-JESSIE-2016-02-09-버전-기준&quot; class=&quot;headerlink&quot; title=&quot;3. (2016-02-16에 내용 추가) 블루투스 키보드 연결하기 (라즈비안 JESSIE 2016-02-09 버전 기준)&quot;&gt;&lt;/a&gt;3. (2016-02-16에 내용 추가) 블루투스 키보드 연결하기 (라즈비안 JESSIE 2016-02-09 버전 기준)&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;오랜만에 확인해 보니 라즈비안 버전이 갱신되어 이전 방법으로는 블루투스를 연결할 수 없다. 이전 방법에 필요한 blue-utils 패키지가 아예 저장소에서 삭제되었다. 대신 bluez-tools 패키지의 유틸리티를 이용해야 한다. 따라서 2번 항목에 소개한 방법을 따르지 말고 여기 쓴 새로운 방법을 따르기 바란다. 이것도 날짜가 많이 경과했다면 배포판 버전이 달라 안 먹힐 수 있으니 유의하라.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;라즈베리 파이 2 모델 B에는 무선 랜카드뿐 아니라 블루투스 동글도 달려있지 않다. 따라서 블루투스 장치를 쓰고 싶다면 별도로 USB 동글을 장착해줘야 한다. 이 글은 USB 동글을 설치했고, 드라이버도 정상적으로 작동한다는 것을 전제로 한다. 일반적인 블루투스 동글은 USB를 연결하면 드라이버가 바로 잡힐 것이니 걱정하지 않아도 된다.&lt;/p&gt;
+&lt;h3 id=&quot;필요한-패키지-설치-1&quot;&gt;&lt;a href=&quot;#필요한-패키지-설치-1&quot; class=&quot;headerlink&quot; title=&quot;필요한 패키지 설치&quot;&gt;&lt;/a&gt;필요한 패키지 설치&lt;/h3&gt;&lt;p&gt;라즈비안에는 블루투스 장치 연결에 필요한 소프트웨어가 기본 설치되어 있지 않다. 따라서 블루투스 장치 지원을 위한 몇 가지 패키지를 설치해야 한다.&lt;/p&gt;
+&lt;p&gt;우선 apt 저장소 업데이트를 안했다면 해 둔다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo apt-get update
+$ sudo apt-get upgrade
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;다음 명령으로 블루투스 지원 패키지를 설치한다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo apt-get install bluetooth bluez-tools
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;라즈베리 파이를 재시작한다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo reboot
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;장치-검색-1&quot;&gt;&lt;a href=&quot;#장치-검색-1&quot; class=&quot;headerlink&quot; title=&quot;장치 검색&quot;&gt;&lt;/a&gt;장치 검색&lt;/h3&gt;&lt;p&gt;블루투스 키보드의 페어링 버튼을 몇 초 동안 꾹~ 누르고, 아래 명령으로 장치를 검색한다. (장치를 찾지 못하거나 오류가 발생하면 페어링 버튼을 다시 누르고 해보라.)&lt;/p&gt;
+&lt;h3 id=&quot;장치-연결-1&quot;&gt;&lt;a href=&quot;#장치-연결-1&quot; class=&quot;headerlink&quot; title=&quot;장치 연결&quot;&gt;&lt;/a&gt;장치 연결&lt;/h3&gt;&lt;p&gt;커맨드라인에서 다음 명령을 실행한다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ bluetoothctl -a KeyboardOnly
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;그러면 블루투스 동글을 직접 조작할 수 있는 대화식 프로그램이 실행된다. &lt;code&gt;help&lt;/code&gt;를 입력하면 사용 가능한 명령어 목록이 나오니 참고하자. 명령어에는 블루투스 동글의 상태를 조작하는 명령어와 접속 대상 장치와 관련된 명령어가 있어서 처음에는 헷갈리기 쉽다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[bluetooth]# help
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;자세한 내용은 프로그램 매뉴얼을 참고하고, 블루투스 키보드 연결을 위해서는 아래 명령어를 따라 입력하면 된다. 먼저 라즈베리 파이에 연결된 블루투스 동글을 확인한다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[bluetooth]# list
+Controller 00:15:83:12:12:E7
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;이 때 나오는 Contoller의 MAC 주소가 블루투스 동글의 MAC 주소다. 이 MAC 주소를 입력해 이 장치를 선택하고, 전원을 켜고, 페어링 모드를 켜고, 스캔을 활성화한다. (&lt;code&gt;discoverable&lt;/code&gt;은 켜지 않아도 되는 듯한데, 혹시 안 되면 &lt;code&gt;discoverable on&lt;/code&gt; 으로 켜고 해본다.)&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[bluetooth]# select 00:15:83:12:12:E7
+[bluetooth]# power on
+Changing power on succeded
+[bluetooth]# pairable on
+Changing pairable on succeded
+[bluetooth]# scan on
+Discovery started
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;Discovery started&lt;/code&gt; 메시지가 나오면 블루투스 키보드의 연결 버튼을 꾹 눌러 키보드가 발견되도록 한다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[New] 00:1F:20:F0:20:12 Device Logitech Keyboard K480
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;키보드가 발견되었으면 연결할 키보드의 MAC 주소로 페어 명령을 실행한다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;주의: 여러분은 &lt;code&gt;00:1F:20:f0:20:12&lt;/code&gt;가 아니라, 위에서 발견한 MAC 주소를 입력해야 한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code&gt;[bluetooth]# pair 00:1F:20:F0:20:12
+Attempting to pair with 00:1F:20:F0:20:12
+[agent] PIN code: 123456
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;출력된 PIN을 &lt;strong&gt;블루투스 키보드로&lt;/strong&gt; 입력하고 엔터키를 누른다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Pairing successful
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;장치를 신뢰할 수 있는 장치로 연결해 둔다. 그래야 앞으로 연결 작업을 반복하지 않는다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[bluetooth]# trust 00:1F:20:F0:20:12
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;마지막으로, 장치에 접속시킨다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[bluetooth]# connect 00:1F:20:F0:20:12
+Connection successful
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;quit&lt;/code&gt;를 입력해 설정 프로그램을 종료한다. &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[bluetooth]# quit
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;이제 키보드를 사용할 수 있을 것이다. 또한, 시스템을 재시작하더라도 부팅 과정이 끝나고 몇 초 뒤 블루투스 키보드를 사용할 수 있을 것이다.&lt;/p&gt;
+&lt;h2 id=&quot;보너스&quot;&gt;&lt;a href=&quot;#보너스&quot; class=&quot;headerlink&quot; title=&quot;보너스&quot;&gt;&lt;/a&gt;보너스&lt;/h2&gt;&lt;h3 id=&quot;루비-설치&quot;&gt;&lt;a href=&quot;#루비-설치&quot; class=&quot;headerlink&quot; title=&quot;루비 설치&quot;&gt;&lt;/a&gt;루비 설치&lt;/h3&gt;&lt;p&gt;apt 저장소에 있는 루비를 설치하면 멘붕을 경험하게 된다. 멘붕없이 설치하려면 아래 가이드를 따르면 된다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://bigmatch.i-um.net/2013/12/%EB%A9%98%EB%B6%95%EC%97%86%EC%9D%B4-rvm%EA%B3%BC-%EB%A3%A8%EB%B9%84-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;멘붕없이 RVM과 루비 설치하기&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;Node-js-설치&quot;&gt;&lt;a href=&quot;#Node-js-설치&quot; class=&quot;headerlink&quot; title=&quot;Node.js 설치&quot;&gt;&lt;/a&gt;Node.js 설치&lt;/h3&gt;&lt;p&gt;라즈베리 파이의 apt 저장소에 있는 Node.js는 낡은 버전이다. 최신 버전 Node.js를 설치하고 싶으면 아래 사이트에 나온 방법을 따르면 된다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://node-arm.herokuapp.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;node-arm&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;라즈베리 파이에는 아직 무선 환경을 위한 장치가 달려 있지 않다. 그래서 와이파이와 블루투스 장치를 연결하려면 별도의 장치를 설치해야 하고 몇 가지 설정 작업도 해야 한다.&lt;/p&gt;
+&lt;p&gt;인터넷에 이와 관련한 가이드가 많이 올라와 있다. 그런데 많
+    
+    </summary>
+    
+    
+      <category term="bluetooth" scheme="http://bakyeono.net/tag/bluetooth/"/>
+    
+      <category term="linux" scheme="http://bakyeono.net/tag/linux/"/>
+    
+      <category term="raspberry pi" scheme="http://bakyeono.net/tag/raspberry-pi/"/>
+    
+      <category term="wi-fi" scheme="http://bakyeono.net/tag/wi-fi/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>무료 다국어 사전 Glosbe API 사용하기</title>
+    <link href="http://bakyeono.net/post/2015-08-27-glosbe-api-client.html"/>
+    <id>http://bakyeono.net/post/2015-08-27-glosbe-api-client.html</id>
+    <published>2015-08-26T17:30:00.000Z</published>
+    <updated>2016-02-17T15:54:54.672Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;다국어-사전-Glosbe-API&quot;&gt;&lt;a href=&quot;#다국어-사전-Glosbe-API&quot; class=&quot;headerlink&quot; title=&quot;다국어 사전 Glosbe API&quot;&gt;&lt;/a&gt;다국어 사전 Glosbe API&lt;/h2&gt;&lt;p&gt;Glosbe는 다국어 온라인 사전이다. 사용자들이 직접 데이터베이스를 보완해 만드는 사전이며 무료다. 아쉽게도 사전의 질은 상용 사전만큼 좋지는 못한 듯하다.&lt;/p&gt;
+&lt;p&gt;Glosbe는 무료로 웹 API도 제공하기 때문에 다국어 사전이 필요한 경우 이용할 수 있다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Glosbe: &lt;a href=&quot;https://glosbe.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://glosbe.com&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Glosbe API 페이지: &lt;a href=&quot;https://glosbe.com/a-api&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://glosbe.com/a-api&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;Glosbe-API-사용하기&quot;&gt;&lt;a href=&quot;#Glosbe-API-사용하기&quot; class=&quot;headerlink&quot; title=&quot;Glosbe API 사용하기&quot;&gt;&lt;/a&gt;Glosbe API 사용하기&lt;/h2&gt;&lt;p&gt;Glosbe API 를 사용하려면 다음과 같이 요청을 보내면 된다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;https://glosbe.com/gapi/translate?from=eng&amp;amp;dest=kor&amp;amp;format=json&amp;amp;pretty=true&amp;amp;phrase=phrase
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;요청을 보낼 프로토콜과 주소는 &lt;code&gt;https://glosbe.com/gapi/translate&lt;/code&gt; 이다.&lt;/p&gt;
+&lt;p&gt;위 예에서 쓰인 매개변수는 다음과 같다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;from&lt;/code&gt;: 번역해야 할 단어의 언어 (ISO 693-3 코드)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;dest&lt;/code&gt;: ~으로 번역되어야 할 언어 (ISO 693-3 코드)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;format&lt;/code&gt;: 응답 받은 데이터의 유형 (JSON 또는 XML)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pretty&lt;/code&gt;: 응답을 사람이 보기 좋게 출력할 것인지 여부 (Boolean)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;phrase&lt;/code&gt;: 번역해야 할 단어 (대소문자 구분)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;언어를 지정할 때는 ISO 693-3 코드로 지정해야 한다. &lt;a href=&quot;https://en.wikipedia.org/wiki/List_of_ISO_639-3_codes&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;ISO 693-3 코드 문서&lt;/a&gt;에서 해당 언어를 찾아보면 된다.&lt;/p&gt;
+&lt;p&gt;문제는 응답인데 사전에 실린 여러 개의 번역어가 모두 담겨서 오기 때문에 처리하기 약간 복잡할 수 있다. (직접 뜯어보길 바라며, 자세한 설명은 생략한다.)&lt;/p&gt;
+&lt;p&gt;파이썬 사용자는 바로 아래에 내가 짠 스크립트가 있으니 이걸 사용하면 요청과 응답 모두 해결할 수 있다.&lt;/p&gt;
+&lt;h2 id=&quot;glosbe-api-client&quot;&gt;&lt;a href=&quot;#glosbe-api-client&quot; class=&quot;headerlink&quot; title=&quot;glosbe-api-client&quot;&gt;&lt;/a&gt;glosbe-api-client&lt;/h2&gt;&lt;p&gt;내가 Glosbe API 사용을 위해 만든 파이썬 스크립트다. 아래 주소에서 다운로드하거나 클론하면 된다.&lt;/p&gt;
+&lt;p&gt;GitHub: &lt;a href=&quot;https://github.com/bakyeono/glosbe-api-client&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/bakyeono/glosbe-api-client&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;사용법&quot;&gt;&lt;a href=&quot;#사용법&quot; class=&quot;headerlink&quot; title=&quot;사용법&quot;&gt;&lt;/a&gt;사용법&lt;/h3&gt;&lt;p&gt;사용법은 아래와 같다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ python glosbe.py 원래언어 목적언어 번역어
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;즉, 한-&amp;gt;영 사전으로 ‘딸기’를 검색하고 싶다면 아래와 같이 실행한다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ python glosbe.py kor eng 딸기
+딸기
+========
+strawberry
+berry
+strawberries
+&lt;/code&gt;&lt;/pre&gt;</content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;다국어-사전-Glosbe-API&quot;&gt;&lt;a href=&quot;#다국어-사전-Glosbe-API&quot; class=&quot;headerlink&quot; title=&quot;다국어 사전 Glosbe API&quot;&gt;&lt;/a&gt;다국어 사전 Glosbe API&lt;/h2&gt;&lt;p&gt;Glosbe는 다국
+    
+    </summary>
+    
+    
+      <category term="glosbe" scheme="http://bakyeono.net/tag/glosbe/"/>
+    
+      <category term="python" scheme="http://bakyeono.net/tag/python/"/>
+    
+      <category term="사전" scheme="http://bakyeono.net/tag/%EC%82%AC%EC%A0%84/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>텔레그램 로봇, 공식 API로 만들기 (파이썬, 구글 앱 엔진)</title>
+    <link href="http://bakyeono.net/post/2015-08-24-using-telegram-bot-api.html"/>
+    <id>http://bakyeono.net/post/2015-08-24-using-telegram-bot-api.html</id>
+    <published>2015-08-24T03:21:00.000Z</published>
+    <updated>2016-02-17T15:49:45.254Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;telegram-cli와-공식-봇-API의-비교&quot;&gt;&lt;a href=&quot;#telegram-cli와-공식-봇-API의-비교&quot; class=&quot;headerlink&quot; title=&quot;telegram-cli와 공식 봇 API의 비교&quot;&gt;&lt;/a&gt;telegram-cli와 공식 봇 API의 비교&lt;/h2&gt;&lt;p&gt;2015년 6월 24일 텔레그램이 봇 API를 공식 발표했다. 메신저마다 비공식 봇을 만드는 사람들이 있고, 타사 메신저 서비스는 비공식 봇들을 단속하는 경향이 있다. 텔레그램은 이와 반대로 공식적으로 봇을 지원하고 나선 것이 돋보인다. 텔레그램은 봇 API를 발표하기 전에도 텔레그램 API를 지원했기 때문에 봇을 만들기 쉬웠고 특히 telegram-cli로 만들어진 봇이 많았다. 그렇다면 앞으로 어떤 방식으로 봇을 만드는 게 좋을까? 기존 telegram-cli로 만든 봇을 공식 API로 포팅해야 할까?&lt;/p&gt;
+&lt;p&gt;생각나는 대로 몇 가지 특징을 비교해 봤다.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;분류&lt;/th&gt;
+&lt;th&gt;telegram-cli 봇&lt;/th&gt;
+&lt;th&gt;텔레그램 봇&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;지원&lt;/td&gt;
+&lt;td&gt;오픈소스 커뮤니티&lt;/td&gt;
+&lt;td&gt;텔레그램&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;합법성&lt;/td&gt;
+&lt;td&gt;비공식&lt;/td&gt;
+&lt;td&gt;공식&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;통신 API&lt;/td&gt;
+&lt;td&gt;텔레그램 API&lt;/td&gt;
+&lt;td&gt;봇 API&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;별도 서버&lt;/td&gt;
+&lt;td&gt;필요&lt;/td&gt;
+&lt;td&gt;필요&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;계정&lt;/td&gt;
+&lt;td&gt;실제 사용자 계정&lt;/td&gt;
+&lt;td&gt;봇 계정&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;UI&lt;/td&gt;
+&lt;td&gt;메시지&lt;/td&gt;
+&lt;td&gt;메시지, 커스텀 키보드&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;주 용도&lt;/td&gt;
+&lt;td&gt;개인용 스크립트&lt;/td&gt;
+&lt;td&gt;봇 서비스&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;개인용으로 봇 스크립트는 telegram-cli로 사용하던 게 있다면 그냥 계속 쓰면 될 것 같고, 사용자들을 대상으로 서비스하는 봇은 공식 API로 새로 제작하는 게 UI, 신뢰도, 법률적인 면에서 유리할 것 같다.&lt;/p&gt;
+&lt;h2 id=&quot;참고-문서&quot;&gt;&lt;a href=&quot;#참고-문서&quot; class=&quot;headerlink&quot; title=&quot;참고 문서&quot;&gt;&lt;/a&gt;참고 문서&lt;/h2&gt;&lt;p&gt;이 글을 쓰면서 참고한 문서/프로젝트다. 따라하다가 잘 모르겠으면 아래 문서를 찾아보자.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://core.telegram.org/bots&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;봇 설명 문서&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://core.telegram.org/bots/api&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;봇 API 문서&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://cloud.google.com/appengine/docs/developers-console&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;구글 앱 엔진 문서&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/yukuku/telebot&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;yukuku의 텔레그램 봇 스타터킷&lt;/a&gt;: 아래에 나오는 봇 서버 프로그램은 이 스타터킷을 수정해 만들었다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;봇-제작-과정&quot;&gt;&lt;a href=&quot;#봇-제작-과정&quot; class=&quot;headerlink&quot; title=&quot;봇 제작 과정&quot;&gt;&lt;/a&gt;봇 제작 과정&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;@BotFather를 통한 봇 등록 / 토큰 발급 / 설정&lt;/li&gt;
+&lt;li&gt;서버 준비&lt;/li&gt;
+&lt;li&gt;봇 기능 프로그램&lt;/li&gt;
+&lt;li&gt;테스트 / 디버그&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;1-BotFather를-통한-봇-등록-토큰-발급&quot;&gt;&lt;a href=&quot;#1-BotFather를-통한-봇-등록-토큰-발급&quot; class=&quot;headerlink&quot; title=&quot;1. @BotFather를 통한 봇 등록 / 토큰 발급&quot;&gt;&lt;/a&gt;1. @BotFather를 통한 봇 등록 / 토큰 발급&lt;/h2&gt;&lt;p&gt;텔레그램 봇은 @BotFather 봇을 통해 관리된다.&lt;/p&gt;
+&lt;p&gt;텔레그램 클라이언트에서 @botfather 사용자를 채팅 목록에 추가한다. 텔레그램 클라이언트에서 @BotFather를 검색하거나 웹 브라우저에서 &lt;a href=&quot;https://telegram.me/botfather&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://telegram.me/botfather&lt;/a&gt; 주소로 접속해도 @BotFather 사용자를 추가할 수 있다.&lt;/p&gt;
+&lt;p&gt;@BotFather 사용자를 채팅 목록에 추가하면 아래와 같은 화면이 나온다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/telegram-bot-botfather.png&quot; alt=&quot;BotFather 채팅 화면&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;START&lt;/strong&gt;를 누른 후 @BotFather에게 &lt;code&gt;/help&lt;/code&gt; 메시지를 보내면 사용가능한 명령어를 알려준다. 명령어에 대한 자세한 설명은 텔레그램 봇 API 문서에 있다.&lt;/p&gt;
+&lt;h3 id=&quot;newbot&quot;&gt;&lt;a href=&quot;#newbot&quot; class=&quot;headerlink&quot; title=&quot;/newbot&quot;&gt;&lt;/a&gt;/newbot&lt;/h3&gt;&lt;p&gt;@BotFather에게 &lt;code&gt;/newbot&lt;/code&gt; 메시지를 보내면 봇을 등록할 수 있다.&lt;/p&gt;
+&lt;p&gt;봇을 만드는 과정은 아래와 같다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;/newbot&lt;/code&gt; 메시지를 보낸다.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;봇의 이름을 입력한다. 한글도 쓸 수 있다. 예) &lt;code&gt;시험용 로봇&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;봇의 아이디를 입력한다. 한글은 쓸 수 없으며, 반드시 bot, Bot 등으로 끝나야 한다. 예) &lt;code&gt;my_testing_bot&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;@BotFather가 봇이 생성되었다고 알려주며 봇 주소와 토큰을 알려준다. 토큰은 봇 API를 사용하기 위해 꼭 필요하므로 잘 챙겨두고, 유출되지 않도록 한다.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/telegram-bot-botfather-newbot1.png&quot; alt=&quot;BotFather newbot 명령 1&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/telegram-bot-botfather-newbot2.png&quot; alt=&quot;BotFather newbot 명령 2&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;2-봇을-위한-서버-준비&quot;&gt;&lt;a href=&quot;#2-봇을-위한-서버-준비&quot; class=&quot;headerlink&quot; title=&quot;2. 봇을 위한 서버 준비&quot;&gt;&lt;/a&gt;2. 봇을 위한 서버 준비&lt;/h2&gt;&lt;p&gt;사실 봇을 위한 별도의 서버 없이 그냥 봇을 등록해두기만 하는 것도 가능하다. 하지만 그냥 놔두면 의미 없는 대포 계정에 불과하다. 봇이 제대로 봇 구실을 할 수 있도록 봇의 동작을 정의하거나 데이터를 기록하려면 서버가 필요하다.&lt;/p&gt;
+&lt;p&gt;이 글에서는 구글 앱 엔진을 사용해 봇 서버를 개발하고 호스팅 받는다. 아래 주소에서 구글 계정에 로그인하면 앱 엔진을 사용할 수 있다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://appengine.google.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;구글 앱 엔진&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;간단한 봇 서버를 운영하는 데는 거의 비용이 들 일이 없지만 혹시라도 요금이 청구될 수 있으니 이용 약관과 결제 설정을 잘 확인하기 바란다.&lt;/p&gt;
+&lt;h3 id=&quot;프로젝트-생성&quot;&gt;&lt;a href=&quot;#프로젝트-생성&quot; class=&quot;headerlink&quot; title=&quot;프로젝트 생성&quot;&gt;&lt;/a&gt;프로젝트 생성&lt;/h3&gt;&lt;p&gt;구글 앱 엔진 &lt;a href=&quot;https://console.developers.google.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;관리자 콘솔 페이지&lt;/a&gt;에서 ‘프로젝트 생성…’ 버튼을 찾아 프로젝트를 만든다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/telegram-bot-google-app-engine-new-project1.png&quot; alt=&quot;구글 앱 엔진 프로젝트 생성 1&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/telegram-bot-google-app-engine-new-project2.png&quot; alt=&quot;구글 앱 엔진 프로젝트 생성 2&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/telegram-bot-google-app-engine-new-project3.png&quot; alt=&quot;구글 앱 엔진 프로젝트 생성 3&quot;&gt;&lt;/p&gt;
+&lt;p&gt;이 때 프로젝트 ID를 잘 정해야 한다. 나중에 app.yaml에 기록해야 하며, 앱 접속 주소에도 반영되기 때문이다.&lt;/p&gt;
+&lt;h3 id=&quot;구글-앱-엔진-SDK-설치&quot;&gt;&lt;a href=&quot;#구글-앱-엔진-SDK-설치&quot; class=&quot;headerlink&quot; title=&quot;구글 앱 엔진 SDK 설치&quot;&gt;&lt;/a&gt;구글 앱 엔진 SDK 설치&lt;/h3&gt;&lt;p&gt;윈도우 / 맥 환경 용으로는 구글 앱 엔진 GUI 툴이 제공되는 듯하다. 리눅스 용은 커맨드라인 툴이 제공된다. 이 글은 리눅스 환경을 대상으로 한 글이다. 리눅스 환경에서는 아래와 같이 설치한다.&lt;/p&gt;
+&lt;p&gt;먼저, 파이썬 2.7이 설치돼있나 확인해 본다. 아마 이미 설치돼 있을 것이다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ python -V
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;만일 파이썬 버전이 2.7.x가 아니거나, 파이썬이 설치돼있지 않으면 아래 페이지를 참고해 파이썬을 2.7을 설치한다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.python.org/downloads&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;파이썬 다운로드 페이지&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;구글 앱 엔진을 다운로드하고 압축을 풀어 둔다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ cd ~
+$ curl https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.25.zip &amp;gt; google_appengine_1.9.25.zip
+$ unzip google_appengine_1.9.25.zip
+&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;
+&lt;p&gt;주의: 이 글을 보는 사람에게는 1.9.25.zip이 최신 버전이 아닐 가능성이 높으므로 다운로드 페이지에서 버전을 확인하기 바란다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;잘 실행되는지 확인해본다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ ~/google_appengine/appcfg.py help help
+Usage: appcfg.py help &amp;lt;action&amp;gt;
+
+Print help for a specific action.
+
+
+Options:
+  -h, --help            Show the help message and exit.
+  -q, --quiet           Print errors only.
+  -v, --verbose         Print info level logs.
+  --noisy               Print all logs.
+  -s SERVER, --server=SERVER
+                        The App Engine server.
+  -e EMAIL, --email=EMAIL
+                        The username to use. Will prompt if omitted.
+  -H HOST, --host=HOST  Overrides the Host header sent with all RPCs.
+  --no_cookies          Do not save authentication cookies to local disk.
+  --skip_sdk_update_check
+                        Do not check for SDK updates.
+  -A APP_ID, --application=APP_ID
+                        Set the application, overriding the application value
+                        from app.yaml file.
+  -M MODULE, --module=MODULE
+                        Set the module, overriding the module value from
+                        app.yaml.
+  -V VERSION, --version=VERSION
+                        Set the (major) version, overriding the version value
+                        from app.yaml file.
+  -r RUNTIME, --runtime=RUNTIME
+                        Override runtime from app.yaml file.
+  -E NAME:VALUE, --env_variable=NAME:VALUE
+                        Set an environment variable, potentially overriding an
+                        env_variable value from app.yaml file (flag may be
+                        repeated to set multiple variables).
+  -R, --allow_any_runtime
+                        Do not validate the runtime in app.yaml
+  --oauth2              Ignored (OAuth2 is the default).
+  --oauth2_refresh_token=OAUTH2_REFRESH_TOKEN
+                        An existing OAuth2 refresh token to use. Will not
+                        attempt interactive OAuth approval.
+  --oauth2_access_token=OAUTH2_ACCESS_TOKEN
+                        An existing OAuth2 access token to use. Will not
+                        attempt interactive OAuth approval.
+  --authenticate_service_account
+                        Authenticate using the default service account for the
+                        Google Compute Engine VM in which appcfg is being
+                        called
+  --noauth_local_webserver
+                        Do not run a local web server to handle redirects
+                        during OAuth authorization.
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;여러 가지 도구가 있지만 앱을 업로드할 때 쓰이는 &lt;code&gt;appcfg&lt;/code&gt; 정도만 알아도 된다.&lt;/p&gt;
+&lt;h2 id=&quot;3-서버-프로그램-만들기&quot;&gt;&lt;a href=&quot;#3-서버-프로그램-만들기&quot; class=&quot;headerlink&quot; title=&quot;3. 서버 프로그램 만들기&quot;&gt;&lt;/a&gt;3. 서버 프로그램 만들기&lt;/h2&gt;&lt;p&gt;그러면 구글 앱 엔진으로 봇 서버 프로그램을 만들어보자.&lt;/p&gt;
+&lt;p&gt;딱 두 개의 파일만 만들면 된다. &lt;code&gt;app.yaml&lt;/code&gt;과 &lt;code&gt;main.py&lt;/code&gt;다.&lt;/p&gt;
+&lt;h3 id=&quot;app-yaml-앱과-요청에-대한-정의&quot;&gt;&lt;a href=&quot;#app-yaml-앱과-요청에-대한-정의&quot; class=&quot;headerlink&quot; title=&quot;app.yaml - 앱과 요청에 대한 정의&quot;&gt;&lt;/a&gt;app.yaml - 앱과 요청에 대한 정의&lt;/h3&gt;&lt;p&gt;디렉토리를 하나 만들고&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ mkdir ~/my-testing-bot
+$ cd ~/my-testing-bot
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;이곳에 &lt;code&gt;app.yaml&lt;/code&gt; 이라는 이름으로 파일을 만들어 아래 내용을 넣는다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;application: my-testing-bot
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /set-webhook
+  login: admin
+  script: main.app
+- url: .*
+  script: main.app
+
+libraries:
+- name: webapp2
+  version: 2.5.2
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;app.yaml&lt;/code&gt;은 구글 앱 엔진 프로젝트를 정의하는 파일이다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;application 항목에는 &lt;strong&gt;아까 등록한 구글 앱 엔진 프로젝트의 ID&lt;/strong&gt;를 입력한다. &lt;code&gt;my-testing-bot&lt;/code&gt;을 입력하는 게 아니다.&lt;/li&gt;
+&lt;li&gt;handlers 항목은 URL 매개변수에 따른 처리기를 지정하는 항목이다. &lt;code&gt;/set-webhook&lt;/code&gt;은 구글 계정 로그인을 통해 권한을 검사한 후 main.app을 통해 처리하도록 하였고 기타 url은 로그인 없이 main.app을 통해 처리하도록 했다. 웹훅에 관해서는 나중에 설명하겠다.&lt;/li&gt;
+&lt;li&gt;libraries 항목에는 구글 앱 엔진이 로드할 라이브러리와 버전을 지정한다. webapp2는 앱 엔진을 쓰기 위해 추가해야 하는 기본 라이브러리다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;main-py-요청을-수행할-파이썬-코드&quot;&gt;&lt;a href=&quot;#main-py-요청을-수행할-파이썬-코드&quot; class=&quot;headerlink&quot; title=&quot;main.py - 요청을 수행할 파이썬 코드&quot;&gt;&lt;/a&gt;main.py - 요청을 수행할 파이썬 코드&lt;/h3&gt;&lt;p&gt;그 다음으로 핸들러를 정의할 &lt;code&gt;main.py&lt;/code&gt; 파일을 만들고 아래 내용을 넣는다. 그대로 복사해 넣으면 된다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;일러두기: 이 소스코드는 &lt;a href=&quot;https://github.com/yukuku/telebot&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;yukuku의 텔레그램 봇 스타터킷&lt;/a&gt;을 수정해 만든 것이다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code&gt;#-*- coding: utf-8 -*-
+#
+# original:    https://github.com/yukuku/telebot
+# modified by: Bak Yeon O @ http://bakyeono.net
+# description: http://bakyeono.net/post/2015-08-24-using-telegram-bot-api.html
+# github:      https://github.com/bakyeono/using-telegram-bot-api
+#
+
+# 구글 앱 엔진 라이브러리 로드
+from google.appengine.api import urlfetch
+from google.appengine.ext import ndb
+import webapp2
+
+# URL, JSON, 로그, 정규표현식 관련 라이브러리 로드
+import urllib
+import urllib2
+import json
+import logging
+import re
+
+# 봇 토큰, 봇 API 주소
+TOKEN = &amp;apos;137007641:AAFVXObeODnKcyDrbcBfEAHzYFGhcFeVlVk&amp;apos;
+BASE_URL = &amp;apos;https://api.telegram.org/bot&amp;apos; + TOKEN + &amp;apos;/&amp;apos;
+
+# 봇이 응답할 명령어
+CMD_START     = &amp;apos;/start&amp;apos;
+CMD_STOP      = &amp;apos;/stop&amp;apos;
+CMD_HELP      = &amp;apos;/help&amp;apos;
+CMD_BROADCAST = &amp;apos;/broadcast&amp;apos;
+
+# 봇 사용법 &amp;amp; 메시지
+USAGE = u&amp;quot;&amp;quot;&amp;quot;[사용법] 아래 명령어를 메시지로 보내거나 버튼을 누르시면 됩니다.
+/start - (봇 활성화)
+/stop  - (봇 비활성화)
+/help  - (이 도움말 보여주기)
+&amp;quot;&amp;quot;&amp;quot;
+MSG_START = u&amp;apos;봇을 시작합니다.&amp;apos;
+MSG_STOP  = u&amp;apos;봇을 정지합니다.&amp;apos;
+
+# 커스텀 키보드
+CUSTOM_KEYBOARD = [
+        [CMD_START],
+        [CMD_STOP],
+        [CMD_HELP],
+        ]
+
+# 채팅별 봇 활성화 상태
+# 구글 앱 엔진의 Datastore(NDB)에 상태를 저장하고 읽음
+# 사용자가 /start 누르면 활성화
+# 사용자가 /stop  누르면 비활성화
+class EnableStatus(ndb.Model):
+    enabled = ndb.BooleanProperty(required=True, indexed=True, default=False,)
+
+def set_enabled(chat_id, enabled):
+    u&amp;quot;&amp;quot;&amp;quot;set_enabled: 봇 활성화/비활성화 상태 변경
+    chat_id:    (integer) 봇을 활성화/비활성화할 채팅 ID
+    enabled:    (boolean) 지정할 활성화/비활성화 상태
+    &amp;quot;&amp;quot;&amp;quot;
+    es = EnableStatus.get_or_insert(str(chat_id))
+    es.enabled = enabled
+    es.put()
+
+def get_enabled(chat_id):
+    u&amp;quot;&amp;quot;&amp;quot;get_enabled: 봇 활성화/비활성화 상태 반환
+    return: (boolean)
+    &amp;quot;&amp;quot;&amp;quot;
+    es = EnableStatus.get_by_id(str(chat_id))
+    if es:
+        return es.enabled
+    return False
+
+def get_enabled_chats():
+    u&amp;quot;&amp;quot;&amp;quot;get_enabled: 봇이 활성화된 채팅 리스트 반환
+    return: (list of EnableStatus)
+    &amp;quot;&amp;quot;&amp;quot;
+    query = EnableStatus.query(EnableStatus.enabled == True)
+    return query.fetch()
+
+# 메시지 발송 관련 함수들
+def send_msg(chat_id, text, reply_to=None, no_preview=True, keyboard=None):
+    u&amp;quot;&amp;quot;&amp;quot;send_msg: 메시지 발송
+    chat_id:    (integer) 메시지를 보낼 채팅 ID
+    text:       (string)  메시지 내용
+    reply_to:   (integer) ~메시지에 대한 답장
+    no_preview: (boolean) URL 자동 링크(미리보기) 끄기
+    keyboard:   (list)    커스텀 키보드 지정
+    &amp;quot;&amp;quot;&amp;quot;
+    params = {
+        &amp;apos;chat_id&amp;apos;: str(chat_id),
+        &amp;apos;text&amp;apos;: text.encode(&amp;apos;utf-8&amp;apos;),
+        }
+    if reply_to:
+        params[&amp;apos;reply_to_message_id&amp;apos;] = reply_to
+    if no_preview:
+        params[&amp;apos;disable_web_page_preview&amp;apos;] = no_preview
+    if keyboard:
+        reply_markup = json.dumps({
+            &amp;apos;keyboard&amp;apos;: keyboard,
+            &amp;apos;resize_keyboard&amp;apos;: True,
+            &amp;apos;one_time_keyboard&amp;apos;: False,
+            &amp;apos;selective&amp;apos;: (reply_to != None),
+            })
+        params[&amp;apos;reply_markup&amp;apos;] = reply_markup
+    try:
+        urllib2.urlopen(BASE_URL + &amp;apos;sendMessage&amp;apos;, urllib.urlencode(params)).read()
+    except Exception as e: 
+        logging.exception(e)
+
+def broadcast(text):
+    u&amp;quot;&amp;quot;&amp;quot;broadcast: 봇이 켜져 있는 모든 채팅에 메시지 발송
+    text:       (string)  메시지 내용
+    &amp;quot;&amp;quot;&amp;quot;
+    for chat in get_enabled_chats():
+        send_msg(chat.key.string_id(), text)
+
+# 봇 명령 처리 함수들
+def cmd_start(chat_id):
+    u&amp;quot;&amp;quot;&amp;quot;cmd_start: 봇을 활성화하고, 활성화 메시지 발송
+    chat_id: (integer) 채팅 ID
+    &amp;quot;&amp;quot;&amp;quot;
+    set_enabled(chat_id, True)
+    send_msg(chat_id, MSG_START, keyboard=CUSTOM_KEYBOARD)
+
+def cmd_stop(chat_id):
+    u&amp;quot;&amp;quot;&amp;quot;cmd_stop: 봇을 비활성화하고, 비활성화 메시지 발송
+    chat_id: (integer) 채팅 ID
+    &amp;quot;&amp;quot;&amp;quot;
+    set_enabled(chat_id, False)
+    send_msg(chat_id, MSG_STOP)
+
+def cmd_help(chat_id):
+    u&amp;quot;&amp;quot;&amp;quot;cmd_help: 봇 사용법 메시지 발송
+    chat_id: (integer) 채팅 ID
+    &amp;quot;&amp;quot;&amp;quot;
+    send_msg(chat_id, USAGE, keyboard=CUSTOM_KEYBOARD)
+
+def cmd_broadcast(chat_id, text):
+    u&amp;quot;&amp;quot;&amp;quot;cmd_broadcast: 봇이 활성화된 모든 채팅에 메시지 방송
+    chat_id: (integer) 채팅 ID
+    text:    (string)  방송할 메시지
+    &amp;quot;&amp;quot;&amp;quot;
+    send_msg(chat_id, u&amp;apos;메시지를 방송합니다.&amp;apos;, keyboard=CUSTOM_KEYBOARD)
+    broadcast(text)
+
+def cmd_echo(chat_id, text, reply_to):
+    u&amp;quot;&amp;quot;&amp;quot;cmd_echo: 사용자의 메시지를 따라서 답장
+    chat_id:  (integer) 채팅 ID
+    text:     (string)  사용자가 보낸 메시지 내용
+    reply_to: (integer) 답장할 메시지 ID
+    &amp;quot;&amp;quot;&amp;quot;
+    send_msg(chat_id, text, reply_to=reply_to)
+
+def process_cmds(msg):
+    u&amp;quot;&amp;quot;&amp;quot;사용자 메시지를 분석해 봇 명령을 처리
+    chat_id: (integer) 채팅 ID
+    text:    (string)  사용자가 보낸 메시지 내용
+    &amp;quot;&amp;quot;&amp;quot;
+    msg_id = msg[&amp;apos;message_id&amp;apos;]
+    chat_id = msg[&amp;apos;chat&amp;apos;][&amp;apos;id&amp;apos;]
+    text = msg.get(&amp;apos;text&amp;apos;)
+    if (not text):
+        return
+    if CMD_START == text:
+        cmd_start(chat_id)
+        return
+    if (not get_enabled(chat_id)):
+        return
+    if CMD_STOP == text:
+        cmd_stop(chat_id)
+        return
+    if CMD_HELP == text:
+        cmd_help(chat_id)
+        return
+    cmd_broadcast_match = re.match(&amp;apos;^&amp;apos; + CMD_BROADCAST + &amp;apos; (.*)&amp;apos;, text)
+    if cmd_broadcast_match:
+        cmd_broadcast(chat_id, cmd_broadcast_match.group(1))
+        return
+    cmd_echo(chat_id, text, reply_to=msg_id)
+    return
+
+# 웹 요청에 대한 핸들러 정의
+# /me 요청시
+class MeHandler(webapp2.RequestHandler):
+    def get(self):
+        urlfetch.set_default_fetch_deadline(60)
+        self.response.write(json.dumps(json.load(urllib2.urlopen(BASE_URL + &amp;apos;getMe&amp;apos;))))
+
+# /updates 요청시
+class GetUpdatesHandler(webapp2.RequestHandler):
+    def get(self):
+        urlfetch.set_default_fetch_deadline(60)
+        self.response.write(json.dumps(json.load(urllib2.urlopen(BASE_URL + &amp;apos;getUpdates&amp;apos;))))
+
+# /set-wehook 요청시
+class SetWebhookHandler(webapp2.RequestHandler):
+    def get(self):
+        urlfetch.set_default_fetch_deadline(60)
+        url = self.request.get(&amp;apos;url&amp;apos;)
+        if url:
+            self.response.write(json.dumps(json.load(urllib2.urlopen(BASE_URL + &amp;apos;setWebhook&amp;apos;, urllib.urlencode({&amp;apos;url&amp;apos;: url})))))
+
+# /webhook 요청시 (텔레그램 봇 API)
+class WebhookHandler(webapp2.RequestHandler):
+    def post(self):
+        urlfetch.set_default_fetch_deadline(60)
+        body = json.loads(self.request.body)
+        self.response.write(json.dumps(body))
+        process_cmds(body[&amp;apos;message&amp;apos;])
+
+# 구글 앱 엔진에 웹 요청 핸들러 지정
+app = webapp2.WSGIApplication([
+    (&amp;apos;/me&amp;apos;, MeHandler),
+    (&amp;apos;/updates&amp;apos;, GetUpdatesHandler),
+    (&amp;apos;/set-webhook&amp;apos;, SetWebhookHandler),
+    (&amp;apos;/webhook&amp;apos;, WebhookHandler),
+], debug=True)
+&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;
+&lt;p&gt;주의: 소스코드 중 20번째 줄에 정의된 &lt;code&gt;TOKEN&lt;/code&gt;은 자신의 봇 토큰으로 바꿔줘야 한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;주석도 열심히 달아 놓았으니 파이썬 코드를 읽을 수 있다면 소스코드를 한 번 읽어보면 좋다. 소스코드에 관해서는 잠시 뒤에 설명하겠다.&lt;/p&gt;
+&lt;h3 id=&quot;서버-프로그램-업로드&quot;&gt;&lt;a href=&quot;#서버-프로그램-업로드&quot; class=&quot;headerlink&quot; title=&quot;서버 프로그램 업로드&quot;&gt;&lt;/a&gt;서버 프로그램 업로드&lt;/h3&gt;&lt;p&gt;아래 명령어로 프로그램을 구글 앱 엔진에 업로드한다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ ~/google_appengine/appcfg.py update .
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;그러면 브라우저에 구글 앱 엔진 계정 인증 화면이 나올 것이다. 인증을 거치면 프로그램이 업로드된다.&lt;/p&gt;
+&lt;p&gt;만일 구글 앱 엔진 계정이 여러 개여서 인증 문제가 발생할 경우엔 아래 명령어로 쿠키를 지우고 업로드하면 된다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ ~/google_appengine/appcfg.py --no_cookies update .
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;프로그램이 정상 업로드 되었는지 확인하려면 웹 브라우저로 아래 주소에 접속한다. 단, &lt;code&gt;my-testing-bot&lt;/code&gt; 부분을 &lt;strong&gt;아까 등록한 구글 앱 엔진 프로젝트의 ID&lt;/strong&gt;로 바꿔 입력해야 한다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;https://my-testing-bot.appspot.com/me
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;아래와 같은 유형의 JSON 문서가 반환되면 성공이다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+  &amp;quot;ok&amp;quot;: true,
+  &amp;quot;result&amp;quot;: {
+              &amp;quot;username&amp;quot;: &amp;quot;my_testing_bot&amp;quot;,
+              &amp;quot;first_name&amp;quot;: &amp;quot;\uc2dc\ud5d8\uc6a9 \ub85c\ubd07&amp;quot;,
+              &amp;quot;id&amp;quot;: 137007641
+            }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;웹훅-설정&quot;&gt;&lt;a href=&quot;#웹훅-설정&quot; class=&quot;headerlink&quot; title=&quot;웹훅 설정&quot;&gt;&lt;/a&gt;웹훅 설정&lt;/h3&gt;&lt;p&gt;봇 서버를 사용하기 전에 먼저 웹훅을 설정해 봇 서버가 텔레그램 API와 통신할 수 있게 해야 한다.&lt;/p&gt;
+&lt;p&gt;봇이 API와 통신하는 방식을 간단하게 나타내면 이렇다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;봇이 메시지 수신할 때&lt;/p&gt;
+&lt;p&gt;  텔레그램 웹 API -&amp;gt; 봇 서버 웹훅 -&amp;gt; 스크립트 실행 -&amp;gt; 응답&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;봇이 메시지 발신할 때&lt;/p&gt;
+&lt;p&gt;  봇 서버 스크립트 -&amp;gt; 텔레그램 웹 API&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;따라서, 발신만 할 때는 상관없지만 메시지를 받아 처리하기 위해서는 웹훅을 설정해둬야 한다.&lt;/p&gt;
+&lt;p&gt;웹훅을 설정하기 위해 웹 브라우저로 아래 주소에 접속한다. 단, &lt;code&gt;my-testing-bot&lt;/code&gt; 부분을 &lt;strong&gt;아까 등록한 구글 앱 엔진 프로젝트의 ID&lt;/strong&gt;로 바꿔 입력해야 한다. 두 번 나오니 둘 다 고쳐라.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;https://my-testing-bot.appspot.com/set-webhook?url=https://my-testing-bot.appspot.com/webhook
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;구글 앱 엔진 인증을 마치면 웹훅이 설정된다. 아래와 같은 유형의 JSON 문서가 반환되면 성공이다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+  &amp;quot;ok&amp;quot;: true,
+  &amp;quot;result&amp;quot;: true,
+  &amp;quot;description&amp;quot;: &amp;quot;Webhook was set&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;봇-사용하기&quot;&gt;&lt;a href=&quot;#봇-사용하기&quot; class=&quot;headerlink&quot; title=&quot;봇 사용하기&quot;&gt;&lt;/a&gt;봇 사용하기&lt;/h3&gt;&lt;p&gt;이제 봇에게 말을 걸어보자.&lt;/p&gt;
+&lt;p&gt;텔레그램 클라이언트로 봇 이름이나 ID로 검색해 채팅 목록에 추가한다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/telegram-bot-test-search.png&quot; alt=&quot;봇 검색하기&quot;&gt;&lt;/p&gt;
+&lt;p&gt;웹 브라우저로 &lt;a href=&quot;https://telegram.me/my_testing_bot&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://telegram.me/my_testing_bot&lt;/a&gt; 주소로 접속해도 봇을 추가할 수 있다. 물론 주소에서 봇 ID는 자신의 봇 ID로 바꿔야 한다. 사용자들에게 봇을 제공할 때는 이 방법이 더 좋을 것이다.&lt;/p&gt;
+&lt;p&gt;봇을 추가하면 다음과 같은 화면과 &lt;strong&gt;START&lt;/strong&gt; 버튼이 나온다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/telegram-bot-test-start1.png&quot; alt=&quot;봇 시작하기 1&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;START&lt;/strong&gt; 버튼을 누르면 아래와 같이 봇을 시작한다는 메시지가 나오고 커스텀 키보드도 쓸 수 있게 된다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/telegram-bot-test-start2.png&quot; alt=&quot;봇 시작하기 2&quot;&gt;&lt;/p&gt;
+&lt;p&gt;커스텀 키보드를 눌러 모든 기능이 잘 동작하는지 확인해보자.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;/broadcast 방송할 내용&lt;/code&gt; 명령을 입력하면 봇이 활성화된 모든 채팅방에 봇이 메시지를 보낸다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/telegram-bot-test-broadcast.png&quot; alt=&quot;봇 시작하기 2&quot;&gt;&lt;/p&gt;
+&lt;p&gt;명령어가 아닌 문장을 입력하면, 봇이 그 말을 똑같이 따라한다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/telegram-bot-test-echo.png&quot; alt=&quot;봇 시작하기 2&quot;&gt;&lt;/p&gt;
+&lt;p&gt;이제 &lt;code&gt;main.py&lt;/code&gt;를 수정해 위 기능들 중 불필요한 기능을 없애고 필요한 기능을 추가하면 된다. 자신만의 봇을 만들어 서비스해 보자.&lt;/p&gt;
+&lt;h2 id=&quot;봇-서버-코드-설명&quot;&gt;&lt;a href=&quot;#봇-서버-코드-설명&quot; class=&quot;headerlink&quot; title=&quot;봇 서버 코드 설명&quot;&gt;&lt;/a&gt;봇 서버 코드 설명&lt;/h2&gt;&lt;p&gt;코드에 달린 주석과 텔레그램 API 문서를 참고하면 이해하기 어려운 부분은 없을 것이다. &lt;code&gt;main.py&lt;/code&gt; 코드 중 몇 가지만 설명한다.&lt;/p&gt;
+&lt;h3 id=&quot;봇-토큰-지정&quot;&gt;&lt;a href=&quot;#봇-토큰-지정&quot; class=&quot;headerlink&quot; title=&quot;봇 토큰 지정&quot;&gt;&lt;/a&gt;봇 토큰 지정&lt;/h3&gt;&lt;p&gt;20번째 줄에 봇의 토큰과 API URL이 정의돼 있다. 여기서 토큰은 자신의 봇 토큰으로 지정해주어야 하며, 노출해서는 안된다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;TOKEN = &amp;apos;137007641:AAFVXObeODnKcyDrbcBfEAHzYFGhcFeVlVk&amp;apos;
+BASE_URL = &amp;apos;https://api.telegram.org/bot&amp;apos; + TOKEN + &amp;apos;/&amp;apos;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;메시지-발송-함수&quot;&gt;&lt;a href=&quot;#메시지-발송-함수&quot; class=&quot;headerlink&quot; title=&quot;메시지 발송 함수&quot;&gt;&lt;/a&gt;메시지 발송 함수&lt;/h3&gt;&lt;p&gt;79번 줄에 메시지 발송 함수를 정의해 놓았다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;def send_msg(chat_id, text, reply_to=None, no_preview=True, keyboard=None):
+    u&amp;quot;&amp;quot;&amp;quot;send_msg: 메시지 발송
+    chat_id:    (integer) 메시지를 보낼 채팅 ID
+    text:       (string)  메시지 내용
+    reply_to:   (integer) ~메시지에 대한 답장
+    no_preview: (boolean) URL 자동 링크(미리보기) 끄기
+    keyboard:   (list)    커스텀 키보드 지정
+    &amp;quot;&amp;quot;&amp;quot;
+    params = {
+        &amp;apos;chat_id&amp;apos;: str(chat_id),
+        &amp;apos;text&amp;apos;: text.encode(&amp;apos;utf-8&amp;apos;),
+        }
+    if reply_to:
+        params[&amp;apos;reply_to_message_id&amp;apos;] = reply_to
+    if no_preview:
+        params[&amp;apos;disable_web_page_preview&amp;apos;] = no_preview
+    if keyboard:
+        reply_markup = json.dumps({
+            &amp;apos;keyboard&amp;apos;: keyboard,
+            &amp;apos;resize_keyboard&amp;apos;: True,
+            &amp;apos;one_time_keyboard&amp;apos;: False,
+            &amp;apos;selective&amp;apos;: (reply_to != None),
+            })
+        params[&amp;apos;reply_markup&amp;apos;] = reply_markup
+    try:
+        urllib2.urlopen(BASE_URL + &amp;apos;sendMessage&amp;apos;, urllib.urlencode(params)).read()
+    except Exception as e:
+        logging.exception(e)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;봇이 메시지를 보내게 하려면 &lt;code&gt;sendMessage&lt;/code&gt; API를 이용한다. 각 매개변수에 대한 설명은 함수 주석을 참고하라.&lt;/p&gt;
+&lt;h3 id=&quot;커스텀-키보드&quot;&gt;&lt;a href=&quot;#커스텀-키보드&quot; class=&quot;headerlink&quot; title=&quot;커스텀 키보드&quot;&gt;&lt;/a&gt;커스텀 키보드&lt;/h3&gt;&lt;p&gt;커스텀 키보드는 문자열을 담은 2차원 리스트로 돼 있다. 바깥 리스트의 각 항목(안쪽 리스트)이 키보드의 한 줄을 나타내고, 안쪽 리스트의 각 항목(문자열)은 키보드의 한 줄에 담긴 각 버튼을 나타낸다.&lt;/p&gt;
+&lt;p&gt;따라서 소스코드에 쓰인 이 키보드 배열은,&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;CUSTOM_KEYBOARD = [
+        [CMD_START],
+        [CMD_STOP],
+        [CMD_HELP],
+        ]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;다음과 같이 출력된다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://bakyeono.net/img/telegram-bot-test-start2.png&quot; alt=&quot;커스텈 키보드 출력 예&quot;&gt;&lt;/p&gt;
+&lt;p&gt;봇을 위한 명령어와 커스텀 키보드 버튼에는 한글도 사용할 수 있으며, 심지어 슬래시(&lt;code&gt;/&lt;/code&gt;)를 붙이지 않아도 된다. 명령어와 키보드를 잘 만들어 편리하고 배우기 쉬운 UI를 제공해보자.&lt;/p&gt;
+&lt;p&gt;사용자에게 커스텀 키보드를 보여주려면 메시지를 발송할 때 &lt;code&gt;reply_markup&lt;/code&gt; 매개변수의 값으로 키보드 옵션 JSON 객체를 보내줘야 한다. 위의 메시지 발송 함수 설명을 참고하라.&lt;/p&gt;
+&lt;p&gt;커스텀 키보드를 끄는 방법은 이 소스코드에 정의해두지 않았다. 키보드를 출력하는 방법과 별로 다를 것 없으니 텔레그램 봇 API 문서를 참고하기 바란다.&lt;/p&gt;
+&lt;h3 id=&quot;방송-기능&quot;&gt;&lt;a href=&quot;#방송-기능&quot; class=&quot;headerlink&quot; title=&quot;방송 기능&quot;&gt;&lt;/a&gt;방송 기능&lt;/h3&gt;&lt;p&gt;여러 사용자에게 방송하는 기능이다. 다양한 사용자를 쿼리할 수 있겠지만 여기서는 봇을 작동시켜둔 모든 채팅에 방송하도록 했다.&lt;/p&gt;
+&lt;p&gt;방송 함수 자체에는 별 내용이 없다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;def broadcast(text):
+    u&amp;quot;&amp;quot;&amp;quot;broadcast: 봇이 켜져 있는 모든 채팅에 메시지 발송
+    text:       (string)  메시지 내용
+    &amp;quot;&amp;quot;&amp;quot;
+    for chat in get_enabled_chats():
+        send_msg(chat.key.string_id(), text)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;방송 함수가 참고하는 &lt;code&gt;get_enabled_chats&lt;/code&gt; 함수가 좀더 중요하다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;def get_enabled_chats():
+    u&amp;quot;&amp;quot;&amp;quot;get_enabled: 봇이 활성화된 채팅 리스트 반환
+    return: (list of EnableStatus)
+    &amp;quot;&amp;quot;&amp;quot;
+    query = EnableStatus.query(EnableStatus.enabled == True)
+    return query.fetch()
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;이 함수는 구글 앱 엔진의 Datastore에 쿼리를 보내 결과값을 돌려준다. 자세한 내용은 구글 앱 엔진 Datastore API를 참고하라.&lt;/p&gt;
+&lt;p&gt;방송 기능을 실제로 서비스 할 때는 아무나 방송을 하지 못하도록 방송을 할 수 있는 사용자를 지정해두고 체크하도록 해야 할 것이다.&lt;/p&gt;
+&lt;h3 id=&quot;웹훅-핸들러&quot;&gt;&lt;a href=&quot;#웹훅-핸들러&quot; class=&quot;headerlink&quot; title=&quot;웹훅 핸들러&quot;&gt;&lt;/a&gt;웹훅 핸들러&lt;/h3&gt;&lt;p&gt;202번째 줄에 정의된 웹훅 핸들러는 텔레그램 API가 보내오는 모든 메시지를 처리한다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;class WebhookHandler(webapp2.RequestHandler):
+    def post(self):
+        urlfetch.set_default_fetch_deadline(60)
+        body = json.loads(self.request.body)
+        self.response.write(json.dumps(body))
+        process_cmds(body[&amp;apos;message&amp;apos;])
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;핸들러는 구글 앱 엔진의 &lt;code&gt;webapp2.RequestHandler&lt;/code&gt; 객체를 확장해서 정의한다.&lt;/p&gt;
+&lt;p&gt;텔레그램 API는 POST 방식으로 오므로, 핸들러에 &lt;code&gt;post&lt;/code&gt; 메소드를 정의했다.&lt;/p&gt;
+&lt;p&gt;이 메소드는 텔레그램이 보내온 JSON 객체를 해석해 &lt;code&gt;process_cmds&lt;/code&gt; 함수가 메시지를 처리하도록 전달한다.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;process_cmd()&lt;/code&gt; 함수는 152번째 줄에 아래와 같이 정의돼 있다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;def process_cmds(msg):
+    u&amp;quot;&amp;quot;&amp;quot;사용자 메시지를 분석해 봇 명령을 처리
+    chat_id: (integer) 채팅 ID
+    text:    (string)  사용자가 보낸 메시지 내용
+    &amp;quot;&amp;quot;&amp;quot;
+    msg_id = msg[&amp;apos;message_id&amp;apos;]
+    chat_id = msg[&amp;apos;chat&amp;apos;][&amp;apos;id&amp;apos;]
+    text = msg.get(&amp;apos;text&amp;apos;)
+    if (not text):
+        return
+    if CMD_START == text:
+        cmd_start(chat_id)
+        return
+    if (not get_enabled(chat_id)):
+        return
+    if CMD_STOP == text:
+        cmd_stop(chat_id)
+        return
+    if CMD_HELP == text:
+        cmd_help(chat_id)
+        return
+    cmd_broadcast_match = re.match(&amp;apos;^&amp;apos; + CMD_BROADCAST + &amp;apos; (.*)&amp;apos;, text)
+    if cmd_broadcast_match:
+        cmd_broadcast(chat_id, cmd_broadcast_match.group(1))
+        return
+    cmd_echo(chat_id, text, reply_to=msg_id)
+    return
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;단순히 메시지 텍스트가 명령어에 해당되는지 비교하는 분기들이다.&lt;/p&gt;
+&lt;p&gt;눈여겨 봐둘 만한 부분은 봇 상태가 활성화되지 않았을 때는 &lt;code&gt;CMD_START&lt;/code&gt; 명령 외에는 처리하지 않도록 한 부분이다.&lt;/p&gt;
+&lt;p&gt;또, 방송 명령&lt;code&gt;CMD_BROADCAST&lt;/code&gt;의 경우에는 정규표현식 처리를 하여 명령과 매개변수(방송할 메시지)를 구분하였다.&lt;/p&gt;
+&lt;p&gt;그리고,&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;app = webapp2.WSGIApplication([
+    (&amp;apos;/me&amp;apos;, MeHandler),
+    (&amp;apos;/updates&amp;apos;, GetUpdatesHandler),
+    (&amp;apos;/set-webhook&amp;apos;, SetWebhookHandler),
+    (&amp;apos;/webhook&amp;apos;, WebhookHandler),
+], debug=True)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;새로운 핸들러를 지정할 때는 &lt;code&gt;webapp2.WSGIApplication&lt;/code&gt; 객체를 생성할 때 매개변수에 추가해 둬야 한다.&lt;/p&gt;
+&lt;h2 id=&quot;기타&quot;&gt;&lt;a href=&quot;#기타&quot; class=&quot;headerlink&quot; title=&quot;기타&quot;&gt;&lt;/a&gt;기타&lt;/h2&gt;&lt;h3 id=&quot;봇-서버-프로젝트-다운로드&quot;&gt;&lt;a href=&quot;#봇-서버-프로젝트-다운로드&quot; class=&quot;headerlink&quot; title=&quot;봇 서버 프로젝트 다운로드&quot;&gt;&lt;/a&gt;봇 서버 프로젝트 다운로드&lt;/h3&gt;&lt;p&gt;이 글에서 작성한 봇 서버 프로젝트는 아래 GitHub에 올려두었다. 필요하면 아래 주소에서 다운로드 할 수 있다.&lt;/p&gt;
+&lt;p&gt;GitHub URL: &lt;a href=&quot;https://github.com/bakyeono/using-telegram-bot-api&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/bakyeono/using-telegram-bot-api&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;favicon-ico-에러-해결&quot;&gt;&lt;a href=&quot;#favicon-ico-에러-해결&quot; class=&quot;headerlink&quot; title=&quot;favicon.ico 에러 해결&quot;&gt;&lt;/a&gt;favicon.ico 에러 해결&lt;/h3&gt;&lt;p&gt;웹 브라우저는 웹사이트에 접속할 때 웹사이트 아이콘(파비콘)을 표시하기 위해 &lt;code&gt;/favicon.ico&lt;/code&gt; 파일을 요청한다. 제공하지 않아도 무방하지만 에러 로그가 쌓이는 걸 보기 싫다면 적당한 파일을 하나 넣어두고 URL 핸들러를 지정해주면 된다.&lt;/p&gt;
+&lt;p&gt;파비콘으로 사용할 &lt;code&gt;favicon.ico&lt;/code&gt; 파일을 봇 서버 디렉토리에 넣은 후, &lt;code&gt;app.yaml&lt;/code&gt; 파일에 다음 내용을 추가하면 된다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;하지만 봇 서버이므로 굳이 파비콘을 제공할 필요 없다. 어차피 웹 브라우저를 통한 접근은 비정상 접근이기 때문이다.&lt;/p&gt;
+&lt;h3 id=&quot;cron-yaml-작업-스케줄-cron-job-등록&quot;&gt;&lt;a href=&quot;#cron-yaml-작업-스케줄-cron-job-등록&quot; class=&quot;headerlink&quot; title=&quot;cron.yaml - 작업 스케줄 (cron job) 등록&quot;&gt;&lt;/a&gt;cron.yaml - 작업 스케줄 (cron job) 등록&lt;/h3&gt;&lt;p&gt;봇이 매시간 사용자에게 시간을 알려준다든지, 특정 웹사이트를 분석해 시간대별 상태를 메시지로 보낸다든지 하는, 지정된 시간대에 작업을 반복하도록 하는 것도 가능하다.&lt;/p&gt;
+&lt;p&gt;반복 작업을 등록하려면 봇 서버가 있는 디렉토리에 &lt;code&gt;cron.yaml&lt;/code&gt; 파일을 만들고 아래와 같은 내용을 넣으면 된다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cron:
+- description: broadcast wspaper.org news
+  url: /broadcast-news
+  schedule: every 30 mins from 09:00 to 20:00
+  timezone: Asia/Seoul
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;이렇게 지정해두면 서울 시간대로 오전 9시 ~ 오후 8시 사이에 30분에 한 번씩 작업이 요청된다.&lt;/p&gt;
+&lt;p&gt;물론, &lt;code&gt;main.py&lt;/code&gt;를 수정해 작업 요청을 수행하기 위한 핸들러(이 경우 ‘/broadcast-news`)와 기능을 추가해 줘야 한다.&lt;/p&gt;
+&lt;h3 id=&quot;telegram-cli로-로봇-만들기&quot;&gt;&lt;a href=&quot;#telegram-cli로-로봇-만들기&quot; class=&quot;headerlink&quot; title=&quot;telegram-cli로 로봇 만들기&quot;&gt;&lt;/a&gt;telegram-cli로 로봇 만들기&lt;/h3&gt;&lt;p&gt;telegram-cli로 로봇을 만드는 방법은 &lt;a href=&quot;http://bakyeono.net/post/2015-06-10-tg-broadcast.html&quot;&gt;이 글&lt;/a&gt;에 나와 있다.&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;telegram-cli와-공식-봇-API의-비교&quot;&gt;&lt;a href=&quot;#telegram-cli와-공식-봇-API의-비교&quot; class=&quot;headerlink&quot; title=&quot;telegram-cli와 공식 봇 API의 비교&quot;&gt;&lt;/a&gt;telegram
+    
+    </summary>
+    
+    
+      <category term="google app engine" scheme="http://bakyeono.net/tag/google-app-engine/"/>
+    
+      <category term="python" scheme="http://bakyeono.net/tag/python/"/>
+    
+      <category term="telegram" scheme="http://bakyeono.net/tag/telegram/"/>
+    
+      <category term="봇" scheme="http://bakyeono.net/tag/%EB%B4%87/"/>
+    
+  </entry>
+  
+</feed>
