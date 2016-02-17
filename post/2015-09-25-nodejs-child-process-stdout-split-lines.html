@@ -1,0 +1,38 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="박연오의 개인 웹 페이지. 컴퓨터 프로그래밍 등."><title>Node.js - 자식 프로세스에서 데이터 출력이 불규칙하게 들어올 때 한 줄씩 나누기 | 박연오</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/very-simple.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><!-- include the sidebar--><!-- include ./includes/sidebar.jade--><!-- Blog title and subtitle--><header><div class="container header"><a id="logo" href="/." class="title">박연오</a><span class="subtitle">bakyeono.net</span><label id="toggle-menu" for="menu" onclick><i class="fa fa-bars"></i></label></div></header><!-- use checkbox hack for toggle nav-bar on small screens--><input id="menu" type="checkbox"><!-- Navigation Links--><nav id="nav"><div class="container"><a href="/" class="sidebar-nav-item active">home</a><a href="/archive" class="sidebar-nav-item">archive</a></div></nav><div id="header-margin-bar"></div><!-- gallery that comes before the header--><div class="wrapper"><div class="container post-header"><h1>Node.js - 자식 프로세스에서 데이터 출력이 불규칙하게 들어올 때 한 줄씩 나누기</h1></div></div><div class="wrapper"><div class="container meta"><div class="post-time">2015-09-25</div><div class="post-tags"><a class="post-tag-link" href="/tag/javascript/">javascript</a>/<a class="post-tag-link" href="/tag/node-js/">node.js</a></div></div></div><article><div class="container post"><h2 id="자식-프로세스-실행"><a href="#자식-프로세스-실행" class="headerlink" title="자식 프로세스 실행"></a>자식 프로세스 실행</h2><p>Node.js에서 child_process 모듈을 이용해 외부 프로그램을 자식 프로세스로 실행할 수 있다. 자식 프로세스가 보내주는 데이터는 표준출력(STDOUT) 이벤트에 콜백을 걸어 받을 수 있다. 다음과 같이 한다.</p>
+<pre><code>var spawn = require(&apos;child_process&apos;).spawn,
+    subprocess;
+function on_child_stdout(data) {
+  console.log(data.toString());
+};
+function on_child_exit(exit_code) {
+  console.log(&apos;the child is no more: &apos; + exit_code);
+};
+
+// 자식 프로세서 실행
+subprocess = spawn(&apos;some_process&apos;, &apos;parameter&apos;);
+subprocess.stdout.setEncoding(&apos;utf8&apos;);
+subprocess.stdout.on(&apos;data&apos;, on_child_stdout);
+subprocess.on(&apos;exit&apos;, on_child_exit);
+</code></pre><h2 id="데이터가-불규칙하게-들어올-때"><a href="#데이터가-불규칙하게-들어올-때" class="headerlink" title="데이터가 불규칙하게 들어올 때"></a>데이터가 불규칙하게 들어올 때</h2><p>보통은 한 줄당 한 번씩 STDOUT data 이벤트가 발생하여 한 줄씩 콜백에 전달된다. 그런데 종종 데이터가 불규칙하게 들어오기도 한다.</p>
+<p>예를 들어 한 줄에 URL 데이터가 하나씩 들어오는 상황이라고 하면,</p>
+<pre><code>aaa.com
+bbb.com
+ccc.com
+ddd.com\neee.com\nfff.com\nggg.com
+hhh.com
+</code></pre><p>4번째 줄처럼 여러 줄이 한꺼번에 입력되는 경우가 불규칙하게 있는 것이다.</p>
+<p>정확히 언제 무슨 이유로 이런 문제가 생기는지는 알 수 없지만 이렇게 될 때가 있다. 아마 비동기 I/O 때문인 듯하다.</p>
+<h2 id="해결방법"><a href="#해결방법" class="headerlink" title="해결방법"></a>해결방법</h2><p>해결방법은 STDOUT data 이벤트에 대한 콜백에서 여러 줄을 각각 분리해주는 것이다. 이 때, 빈 줄이 추가되는 경우도 있으므로 이에 대한 처리도 해주는 것이 좋다. 위의 <code>on_child_stdout</code> 함수를 아래와 같이 수정하면 된다.</p>
+<pre><code>function on_child_stdout(data) {
+     var str = data.toString(),
+        lines = str.split(/\n/g);
+    for (var i in lines) {
+      if (! lines[i]) {
+        console.log(lines[i]);
+      }
+    }
+};
+</code></pre><p>이 해결방법은 <a href="http://stackoverflow.com/questions/9781214/parse-output-of-spawned-node-js-child-process-line-by-line" target="_blank" rel="external">스택오버플로 문서</a>에서 본 것을 조금 수정한 것이다.</p>
+</div><!-- comment system--><div class="container"><hr></div></article><footer id="footer"><div class="container"><div class="bar"><div class="social"><a href="mailto:bakyeono@gmail.com" target="_blank"><i class="fa fa-envelope-o"></i></a><a href="https://github.com/bakyeono" target="_blank"><i class="fa fa-github"></i></a><a href="/atom.xml" target="_blank"><i class="fa fa-rss"></i></a></div><div class="footer">© 2016 <a href="/" rel="nofollow">박연오</a>. Powered by <a rel="nofollow" target="_blank" href="https://hexo.io">Hexo</a>. Theme <a target="_blank" href="https://github.com/lotabout/very-simple">very-simple</a>.</div></div></div></footer><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+    $(".fancybox").fancybox();
+});</script></body></html>

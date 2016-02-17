@@ -1,0 +1,103 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="박연오의 개인 웹 페이지. 컴퓨터 프로그래밍 등."><title>xmllint --xpath 로 XML 문서 탐색하기 | 박연오</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/very-simple.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><!-- include the sidebar--><!-- include ./includes/sidebar.jade--><!-- Blog title and subtitle--><header><div class="container header"><a id="logo" href="/." class="title">박연오</a><span class="subtitle">bakyeono.net</span><label id="toggle-menu" for="menu" onclick><i class="fa fa-bars"></i></label></div></header><!-- use checkbox hack for toggle nav-bar on small screens--><input id="menu" type="checkbox"><!-- Navigation Links--><nav id="nav"><div class="container"><a href="/" class="sidebar-nav-item active">home</a><a href="/archive" class="sidebar-nav-item">archive</a></div></nav><div id="header-margin-bar"></div><!-- gallery that comes before the header--><div class="wrapper"><div class="container post-header"><h1>xmllint --xpath 로 XML 문서 탐색하기</h1></div></div><div class="wrapper"><div class="container meta"><div class="post-time">2015-06-01</div><div class="post-tags"><a class="post-tag-link" href="/tag/bash/">bash</a>/<a class="post-tag-link" href="/tag/linux/">linux</a>/<a class="post-tag-link" href="/tag/xml/">xml</a>/<a class="post-tag-link" href="/tag/xmllint/">xmllint</a>/<a class="post-tag-link" href="/tag/xpath/">xpath</a></div></div></div><article><div class="container post"><p><code>libxml2</code> 패키지에 포함된 <code>xmllint</code>를 이용하면 리눅스 커맨드라인에서 XML 문서를 쉽게 탐색할 수 있다.</p>
+<h2 id="xmllint-초간단-사용법"><a href="#xmllint-초간단-사용법" class="headerlink" title="xmllint 초간단 사용법"></a>xmllint 초간단 사용법</h2><h3 id="설치"><a href="#설치" class="headerlink" title="설치"></a>설치</h3><p>apt</p>
+<pre><code>$ sudo apt-get install libxml2-utils
+</code></pre><p>yum</p>
+<pre><code>$ sudo yum install libxml2
+</code></pre><h3 id="사용"><a href="#사용" class="headerlink" title="사용"></a>사용</h3><pre><code>$ xmllint --xpath &apos;XPath표현식&apos; 파일경로
+</code></pre><p>XPath표현식이 무엇인지 모른다면 아래 내용을 읽어보라.</p>
+<h2 id="XPath-XML-Path-Language"><a href="#XPath-XML-Path-Language" class="headerlink" title="XPath (XML Path Language)"></a>XPath (XML Path Language)</h2><ul>
+<li><a href="http://ko.wikipedia.org/wiki/XPath" target="_blank" rel="external">위키백과의 설명</a></li>
+<li><a href="http://www.w3.org/TR/xpath" target="_blank" rel="external">W3C 공식 문서</a></li>
+</ul>
+<p>공식 문서는 조금 복잡하지만 XML 문서에서 필요한 정보를 읽어오는 데는 몇 가지만 알면 된다.</p>
+<h3 id="몇-가지-기능"><a href="#몇-가지-기능" class="headerlink" title="몇 가지 기능"></a>몇 가지 기능</h3><table>
+<thead>
+<tr>
+<th>기능</th>
+<th>표현식 예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>노드 선택</td>
+<td><code>/root/node/node/node</code></td>
+</tr>
+<tr>
+<td>노드 바로 선택</td>
+<td><code>//node</code></td>
+</tr>
+<tr>
+<td>n번째 노드 선택</td>
+<td><code>/root/node[n]</code></td>
+</tr>
+<tr>
+<td>속성 선택</td>
+<td><code>/root/node/@attribute</code></td>
+</tr>
+<tr>
+<td>텍스트 읽기</td>
+<td><code>/root/node/text()</code></td>
+</tr>
+<tr>
+<td>노드 수 세기</td>
+<td><code>count(/root/node)</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="예제"><a href="#예제" class="headerlink" title="예제"></a>예제</h3><pre><code>&lt;breakfast_menu&gt;
+  &lt;food&gt;
+    &lt;name&gt;Belgian Waffles&lt;/name&gt;
+    &lt;price&gt;$5.95&lt;/price&gt;
+    &lt;description&gt;Two of our famous Belgian Waffles with plenty of real maple
+        syrup&lt;/description&gt;
+    &lt;calories&gt;650&lt;/calories&gt;
+  &lt;/food&gt;
+  &lt;food&gt;
+    &lt;name&gt;Strawberry Belgian Waffles&lt;/name&gt;
+    &lt;price&gt;$7.95&lt;/price&gt;
+    &lt;description&gt;Light Belgian waffles covered with strawberries and whipped
+        cream&lt;/description&gt;
+    &lt;calories&gt;900&lt;/calories&gt;
+  &lt;/food&gt;
+  &lt;food&gt;
+    &lt;name&gt;Berry-Berry Belgian Waffles&lt;/name&gt;
+    &lt;price&gt;$8.95&lt;/price&gt;
+    &lt;description&gt;Light Belgian waffles covered with an assortment of fresh
+        berries and whipped cream&lt;/description&gt;
+    &lt;calories&gt;900&lt;/calories&gt;
+  &lt;/food&gt;
+  &lt;!-- 중략 --&gt;
+&lt;/breakfast_menu&gt;
+</code></pre><p>위 문서는 w3schools.com에 올라와 있는 XML 예제다.(<a href="http://www.w3schools.com/xml/simple.xml" target="_blank" rel="external">출처</a>) xmllint를 써보기 위해 문서를 다운로드한다.</p>
+<pre><code>$ curl http://www.w3schools.com/xml/simple.xml &gt; simple.xml
+</code></pre><p>다음은 이 문서에서 노드와 데이터를 읽기 위한 XPath 표현식이다.</p>
+<p>모든 food 태그 선택: <code>/breakfast_menu/food</code></p>
+<pre><code>$ xmllint --xpath &apos;/breakfast_menu/food&apos; simple.xml
+&lt;food&gt;
+  &lt;name&gt;Belgian Waffles&lt;/name&gt;
+  &lt;price&gt;$5.95&lt;/price&gt;
+  &lt;description&gt;Two of our famous Belgian Waffles with plenty of real maple
+      syrup&lt;/description&gt;
+  &lt;calories&gt;650&lt;/calories&gt;
+&lt;/food&gt;
+&lt;food&gt;
+  &lt;name&gt;Strawberry Belgian Waffles&lt;/name&gt;
+(중략)
+</code></pre><p>첫번째 food 태그 선택: <code>/breakfast_menu/food[1]</code></p>
+<pre><code>$ xmllint --xpath &apos;/breakfast_menu/food[1]&apos; simple.xml
+&lt;food&gt;
+  &lt;name&gt;Belgian Waffles&lt;/name&gt;
+  &lt;price&gt;$5.95&lt;/price&gt;
+  &lt;description&gt;Two of our famous Belgian Waffles with plenty of real maple
+      syrup&lt;/description&gt;
+  &lt;calories&gt;650&lt;/calories&gt;
+&lt;/food&gt;
+</code></pre><p>첫번째 food/price 태그의 텍스트 읽기: <code>/breakfast_menu/food[1]/price/text()</code></p>
+<pre><code>$ xmllint --xpath &apos;/breakfast_menu/food[1]/price/text()&apos; simple.xml
+5.95$
+</code></pre><p>food 태그가 몇 개인지 세기: <code>count(/breakfast_menu/food)</code></p>
+<pre><code>$ xmllint --xpath &apos;count(/breakfast_menu/food)&apos; simple.xml
+5
+</code></pre></div><!-- comment system--><div class="container"><hr></div></article><footer id="footer"><div class="container"><div class="bar"><div class="social"><a href="mailto:bakyeono@gmail.com" target="_blank"><i class="fa fa-envelope-o"></i></a><a href="https://github.com/bakyeono" target="_blank"><i class="fa fa-github"></i></a><a href="/atom.xml" target="_blank"><i class="fa fa-rss"></i></a></div><div class="footer">© 2016 <a href="/" rel="nofollow">박연오</a>. Powered by <a rel="nofollow" target="_blank" href="https://hexo.io">Hexo</a>. Theme <a target="_blank" href="https://github.com/lotabout/very-simple">very-simple</a>.</div></div></div></footer><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+    $(".fancybox").fancybox();
+});</script></body></html>

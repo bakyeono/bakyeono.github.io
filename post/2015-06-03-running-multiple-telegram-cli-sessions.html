@@ -1,0 +1,54 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="박연오의 개인 웹 페이지. 컴퓨터 프로그래밍 등."><title>telegram-cli 여러 세션을 동시에 실행하기 | 박연오</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/very-simple.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><!-- include the sidebar--><!-- include ./includes/sidebar.jade--><!-- Blog title and subtitle--><header><div class="container header"><a id="logo" href="/." class="title">박연오</a><span class="subtitle">bakyeono.net</span><label id="toggle-menu" for="menu" onclick><i class="fa fa-bars"></i></label></div></header><!-- use checkbox hack for toggle nav-bar on small screens--><input id="menu" type="checkbox"><!-- Navigation Links--><nav id="nav"><div class="container"><a href="/" class="sidebar-nav-item active">home</a><a href="/archive" class="sidebar-nav-item">archive</a></div></nav><div id="header-margin-bar"></div><!-- gallery that comes before the header--><div class="wrapper"><div class="container post-header"><h1>telegram-cli 여러 세션을 동시에 실행하기</h1></div></div><div class="wrapper"><div class="container meta"><div class="post-time">2015-06-03</div><div class="post-tags"><a class="post-tag-link" href="/tag/sudo/">sudo</a>/<a class="post-tag-link" href="/tag/telegram/">telegram</a></div></div></div><article><div class="container post"><p>이 글은 커맨드라인 텔레그램 클라이언트인 <a href="https://github.com/vysheng/tg" target="_blank" rel="external">telegram-cli(unofficial)</a>로 여러 세션을 동시에 실행하는 방법이다.</p>
+<h2 id="문제"><a href="#문제" class="headerlink" title="문제"></a>문제</h2><p>텔레그램은 하나의 인증(authorization)에 하나의 접속만을 허용한다. 같은 인증으로 새로운 세션이 생성되면 기존의 세션은 종료된다. telegram-cli로 자동 스크립트를 실행하는 도중에 직접 메시지를 보내기 위해 telegram-cli를 새로 실행하면 원래 실행되고 있던 스크립트는 멈추게 된다. 스크립트를 여러 개 함께 실행하는 것도 안 된다.</p>
+<p>telegram-cli의 <a href="https://github.com/vysheng/tg/issues/341" target="_blank" rel="external">341번 이슈</a>에 이 문제가 언급돼 있다. 이 이슈 페이지에는 세션마다 다른 프로파일을 지정해서 문제를 해결하라고 한다. 하지만 환경에 따라 안 되는 경우가 있는 것 같다. 나는 프로파일 기능이 잘 작동하지 않아서 다른 방법으로 문제를 해결했다.</p>
+<h2 id="우회법"><a href="#우회법" class="headerlink" title="우회법"></a>우회법</h2><p>가장 직관적인 방법은 물리적으로 또는 가상화 기술로 분리된 다른 기계로 telegram-cli를 실행하는 것이다. 하지만 리눅스는 다중 사용자 환경이므로 그렇게까지 할 필요가 없다. 그냥 각 세션마다 별도의 리눅스 사용자 계정을 줘 실행하면 된다.</p>
+<h3 id="예"><a href="#예" class="headerlink" title="예"></a>예</h3><p>현재 사용자가 bakyeono라고 할 때, tg-daemon 이라는 사용자를 만들어 telegram-cli 스크립트를 실행한다고 해 보자. 데비안 기반 리눅스를 기준으로 했다.</p>
+<p>먼저 사용자를 만든다.</p>
+<pre><code>$ adduser tg-daemon
+Adding user `tg-daemon&apos; ...
+Adding new group `tg-daemon&apos; (1006) ...
+Adding new user `tg-daemon&apos; (1003) with group `tg-daemon&apos; ...
+Creating home directory `/home/tg-daemon&apos; ...
+Copying files from `/etc/skel&apos; ...
+Enter new UNIX password:
+Retype new UNIX password:
+passwd: password updated successfully
+Changing the user information for tg-daemon
+Enter the new value, or press ENTER for the default
+        Full Name []:
+        Room Number []:
+        Work Phone []:
+        Home Phone []:
+        Other []:
+Is the information correct? [Y/n]
+</code></pre><p>telegram-cli 바이너리가 <code>/home/bakyeono/telegram-cli</code>에 있고, 실행할 스크립트는 <code>/home/bakyeono/telegram-cli-script</code>에 있다고 하자. tg-daemon 사용자 계정으로 접속해 이들에 대한 링크를 걸어 준다. 로그인은 간단히 ssh로 하면 된다.</p>
+<pre><code>$ ssh tg-daemon@localhost
+tg-daemon@localhost&apos;s password:
+Linux antares-pi2 3.18.11-v7+ #781 SMP PREEMPT Tue Apr 21 18:07:59 BST 2015 armv7l
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Wed Jun  3 10:53:34 2015 from localhost
+
+$ ln -s /home/bakyeono/telegram-cli
+$ ln -s /home/bakyeono/telegram-cli-script
+$ logout
+Connection to localhost closed.
+</code></pre><p>tg-daemon 사용자가 이 경로들에 접근할 수 있도록 이 경로의 소속 그룹(bakyeono)에 포함시킨다.</p>
+<pre><code>$ sudo addgroup tg-daemon bakyeono
+</code></pre><p>같은 그룹 구성원이 작업을 할 수도록 권한을 주는 것도 잊지 말자.</p>
+<pre><code>$ chmod -R g+w /home/bakyeono/telegram-cli /home/bakyeono/telegram-cli-script
+</code></pre><p>이제 tg-daemon 사용자가 telegram-cli와 스크립트에 접근하고 실행할 수 있다. 하지만 매번 tg-daemon 사용자 계정으로 로그인해서 실행하는 것은 번거롭다. 이럴 때 <code>sudo</code>를 쓰면 된다. <code>sudo</code>는 root 계정으로 작업할 때만 쓰이는 게 아니다. <code>-u</code> 옵션으로 root 외에 다른 사용자로도 작업할 수 있다.</p>
+<p>tg-daemon 계정으로 telegram-cli 를 실행하려면 이렇게 한다.</p>
+<pre><code>$ sudo -u tg-daemon /home/tg-daemon/telegram-cli/telegram-cli
+</code></pre><p>tg-daemon 계정으로는 처음 실행하는 것이므로 안내 메시지에 따라 인증 절차를 거쳐야 한다. 인증을 거친 후 자유롭게 사용할 수 있다.</p>
+<p>백그라운드에서 telegram cli 스크립트가 실행되도록 하려면 다음과 같이 한다.</p>
+<pre><code>$ sudo -u tg-daemon nohup /home/tg-daemon/telegram-cli/telegram-cli -s &amp;
+</code></pre><p>이제 원래의 사용자 계정인 bakyeono 계정으로 telegram-cli를 실행해도 tg-daemon이 접속한 세션이 종료되지 않는다.</p>
+</div><!-- comment system--><div class="container"><hr></div></article><footer id="footer"><div class="container"><div class="bar"><div class="social"><a href="mailto:bakyeono@gmail.com" target="_blank"><i class="fa fa-envelope-o"></i></a><a href="https://github.com/bakyeono" target="_blank"><i class="fa fa-github"></i></a><a href="/atom.xml" target="_blank"><i class="fa fa-rss"></i></a></div><div class="footer">© 2016 <a href="/" rel="nofollow">박연오</a>. Powered by <a rel="nofollow" target="_blank" href="https://hexo.io">Hexo</a>. Theme <a target="_blank" href="https://github.com/lotabout/very-simple">very-simple</a>.</div></div></div></footer><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+    $(".fancybox").fancybox();
+});</script></body></html>

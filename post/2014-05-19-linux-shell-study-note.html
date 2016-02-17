@@ -1,0 +1,1874 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="박연오의 개인 웹 페이지. 컴퓨터 프로그래밍 등."><title>리눅스 쉘 학습 노트 | 박연오</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/very-simple.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><!-- include the sidebar--><!-- include ./includes/sidebar.jade--><!-- Blog title and subtitle--><header><div class="container header"><a id="logo" href="/." class="title">박연오</a><span class="subtitle">bakyeono.net</span><label id="toggle-menu" for="menu" onclick><i class="fa fa-bars"></i></label></div></header><!-- use checkbox hack for toggle nav-bar on small screens--><input id="menu" type="checkbox"><!-- Navigation Links--><nav id="nav"><div class="container"><a href="/" class="sidebar-nav-item active">home</a><a href="/archive" class="sidebar-nav-item">archive</a></div></nav><div id="header-margin-bar"></div><!-- gallery that comes before the header--><div class="wrapper"><div class="container post-header"><h1>리눅스 쉘 학습 노트</h1></div></div><div class="wrapper"><div class="container meta"><div class="post-time">2014-05-19</div><div class="post-tags"><a class="post-tag-link" href="/tag/bash/">bash</a>/<a class="post-tag-link" href="/tag/linux/">linux</a></div></div></div><article><div class="container post"><p>리눅스 쉘 학습하면서 남긴 노트다.</p>
+<p>[《리눅스 커맨드라인 완벽 입문서》 (BJ퍼블릭)][the-linux-command-line-book]로 학습했기 때문에 주로 이 책에 나오는 내용이 많다. 명령어를 참고하기 위한 용도로 남긴 노트이므로 설명은 대부분 생략했다.</p>
+<p>쉘을 학습하려는 분은 책을 한 번 읽어보는 것이 좋을 것이다. 이 책에는 쉘에 관한 설명 뿐 아니라 리눅스와 해커들의 역사, 쉘에서 유의해야 할 점(압축을 두 번 세 번 씩 하지 말라거나) 등 흥미로운 읽을 거리도 많다. 쉘 입문용으로 매우 좋은 책인 듯하다.</p>
+<h2 id="주요-경로"><a href="#주요-경로" class="headerlink" title="주요 경로"></a>주요 경로</h2><table>
+<thead>
+<tr>
+<th>경로</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/</code></td>
+<td>루트</td>
+</tr>
+<tr>
+<td><code>/bin</code></td>
+<td>시스템 부팅, 실행 바이너리</td>
+</tr>
+<tr>
+<td><code>/boot</code></td>
+<td>리눅스 커널, 시작 RAM 디스크 이미지, 부트로더</td>
+</tr>
+<tr>
+<td><code>/dev</code></td>
+<td>커널이 인식하는 모든 디바이스 노드</td>
+</tr>
+<tr>
+<td><code>/etc</code></td>
+<td>시스템 전반의 환경설정 파일</td>
+</tr>
+<tr>
+<td><code>/etc/crontab</code></td>
+<td>자동 실행 업무(job) 정의 파일</td>
+</tr>
+<tr>
+<td><code>/etc/fstab</code></td>
+<td>저장장치 테이블과 마운트 정보</td>
+</tr>
+<tr>
+<td><code>/etc/passwd</code></td>
+<td>사용자 계정 정보</td>
+</tr>
+<tr>
+<td><code>/etc/shadow</code></td>
+<td>사용자 비밀번호 정보</td>
+</tr>
+<tr>
+<td><code>/etc/group</code></td>
+<td>사용자 그룹 정보</td>
+</tr>
+<tr>
+<td><code>/home</code></td>
+<td>사용자 홈 디렉토리</td>
+</tr>
+<tr>
+<td><code>/lib</code></td>
+<td>시스템 프로그램이 사용하는 공유 라이브러리</td>
+</tr>
+<tr>
+<td><code>/lost+found</code></td>
+<td>파일시스템에 문제가 생겼을 때 파일이 복구되는 위치</td>
+</tr>
+<tr>
+<td><code>/media</code></td>
+<td>CD-ROM, USB 저장장치 등 휴대용 장치 (자동) 마운트 포인트</td>
+</tr>
+<tr>
+<td><code>/mnt</code></td>
+<td>구식 리눅스 시스템의 휴대용 장치 (수동) 마운트 포인트</td>
+</tr>
+<tr>
+<td><code>/opt</code></td>
+<td>(상업용) 추가 소프트웨어 설치 위치</td>
+</tr>
+<tr>
+<td><code>/proc</code></td>
+<td>커널 정보를 담은 가상 파일 시스템</td>
+</tr>
+<tr>
+<td><code>/proc/cpuinfo</code></td>
+<td>cpu 정보</td>
+</tr>
+<tr>
+<td><code>/proc/</code><em>pid</em></td>
+<td><em>pid</em>에 해당하는 프로세스의 정보</td>
+</tr>
+<tr>
+<td><code>/root</code></td>
+<td>루트 계정의 홈 디렉토리</td>
+</tr>
+<tr>
+<td><code>/sbin</code></td>
+<td>슈퍼유저의 시스템 작업을 위한 시스템 바이너리 파일</td>
+</tr>
+<tr>
+<td><code>/tmp</code></td>
+<td>임시 저장용 디렉토리</td>
+</tr>
+<tr>
+<td><code>/usr</code></td>
+<td>일반 사용자가 사용하는 모든 프로그램과 지원 파일</td>
+</tr>
+<tr>
+<td><code>/usr/bin</code></td>
+<td>리눅스 배포판이 설치한 실행 프로그램들</td>
+</tr>
+<tr>
+<td><code>/usr/lib</code></td>
+<td><code>/usr/bin</code>을 위한 공유 라이브러리</td>
+</tr>
+<tr>
+<td><code>/usr/local</code></td>
+<td>시스템 전반에 걸쳐 사용되는 프로그램, 주로 직접 컴파일한 프로그램</td>
+</tr>
+<tr>
+<td><code>/usr/sbin</code></td>
+<td>시스템 관리 프로그램</td>
+</tr>
+<tr>
+<td><code>/usr/share</code></td>
+<td><code>/usr/bin</code>의 공유 데이터 저장, 디폴트 설정 파일, 리소스 파일 등</td>
+</tr>
+<tr>
+<td><code>/usr/share/dict/words</code></td>
+<td>사전</td>
+</tr>
+<tr>
+<td><code>/usr/share/doc</code></td>
+<td>패키지 문서 파일</td>
+</tr>
+<tr>
+<td><code>/var</code></td>
+<td>가변 데이터. 데이터베이스, 스풀 파일, 사용자 메일, 로그 파일 등</td>
+</tr>
+<tr>
+<td><code>/var/log</code></td>
+<td>시스템 활동 기록하는 로그 파일</td>
+</tr>
+<tr>
+<td><code>/var/log/auth.log</code></td>
+<td>로그인 기록</td>
+</tr>
+</tbody>
+</table>
+<h2 id="명령"><a href="#명령" class="headerlink" title="명령"></a>명령</h2><h3 id="도움말"><a href="#도움말" class="headerlink" title="도움말"></a>도움말</h3><ul>
+<li>명령어 찾기: <code>whereis</code></li>
+<li>명령어 목록: <code>apropos</code></li>
+<li>명령어 도움말: <code>help</code></li>
+<li>명령어 메뉴얼: <code>man</code></li>
+<li>명령어 정보 보기: <code>info</code></li>
+<li>명령어 간단 설명: <code>whatis</code></li>
+<li>명령어 전체경로 표시: <code>which</code></li>
+<li>명령어 종류 확인: <code>type</code></li>
+<li>핵심 유틸리티 안내: <code>info coreutils</code></li>
+</ul>
+<h3 id="명령어의-종류"><a href="#명령어의-종류" class="headerlink" title="명령어의 종류"></a>명령어의 종류</h3><ol>
+<li>실행 프로그램 (binary or script)</li>
+<li>쉘 내장 명령어</li>
+<li>쉘 함수</li>
+<li>별칭 (alias)</li>
+</ol>
+<ul>
+<li><code>type</code>: 명령어 종류 확인</li>
+</ul>
+<h3 id="man-페이지"><a href="#man-페이지" class="headerlink" title="man 페이지"></a>man 페이지</h3><p><code>man section search-term</code></p>
+<ol>
+<li>사용자 명령어</li>
+<li>커널 시스템 콜 API</li>
+<li>C 라이브러리 API</li>
+<li>장치 노드 및 드라이버와 같은 특수 파일</li>
+<li>파일 포맷</li>
+<li>스크린세이버, 게임, 미디어 파일</li>
+<li>그 외</li>
+<li>시스템 관리용 명령어</li>
+</ol>
+<h3 id="apropos-man-페이지-목록-검색"><a href="#apropos-man-페이지-목록-검색" class="headerlink" title="apropos - man 페이지 목록 검색"></a>apropos - man 페이지 목록 검색</h3><p>명령어 찾기에 사용</p>
+<h3 id="info-프로그램-정보-표시"><a href="#info-프로그램-정보-표시" class="headerlink" title="info - 프로그램 정보 표시"></a>info - 프로그램 정보 표시</h3><p>GNU 프로젝트에서 제공하는, man 페이지의 대안. 하이퍼링크 지원.</p>
+<h3 id="alias"><a href="#alias" class="headerlink" title="alias"></a>alias</h3><ul>
+<li><code>alias</code></li>
+<li><code>which</code></li>
+</ul>
+<h2 id="파일-시스템"><a href="#파일-시스템" class="headerlink" title="파일 시스템"></a>파일 시스템</h2><h3 id="하드-링크와-아이노드-inode"><a href="#하드-링크와-아이노드-inode" class="headerlink" title="하드 링크와 아이노드(inode)"></a>하드 링크와 아이노드(inode)</h3><p>파일을 생성할 할 때,</p>
+<ul>
+<li>데이터 영역 (inode로 가리킴?)</li>
+<li>이름 영역</li>
+</ul>
+<p>을 나누어 생성한다.</p>
+<p>각 하드 링크는 파일 내용을 담은 각각의 아이노드를 참조한다.</p>
+<h3 id="심볼릭-링크"><a href="#심볼릭-링크" class="headerlink" title="심볼릭 링크"></a>심볼릭 링크</h3><p><code>ln -s src dst</code></p>
+<ul>
+<li>src는 dst의 위치를 기준으로 해야 함.</li>
+<li>src는 절대 경로이어도 됨.</li>
+<li>디렉토리도 참조 가능. (하드 링크는 불가능)</li>
+</ul>
+<h2 id="쉘-사용"><a href="#쉘-사용" class="headerlink" title="쉘 사용"></a>쉘 사용</h2><h3 id="쉘-확장"><a href="#쉘-확장" class="headerlink" title="쉘 확장"></a>쉘 확장</h3><table>
+<thead>
+<tr>
+<th>종류</th>
+<th>예</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>경로명 확장</td>
+<td><code>*</code></td>
+<td>경로내 파일명들로 확장</td>
+</tr>
+<tr>
+<td>틸드 확장</td>
+<td><code>~</code></td>
+<td>사용자 홈 디렉토리로 확장</td>
+</tr>
+<tr>
+<td>산술 확장</td>
+<td><code>$((expression))</code></td>
+<td>연산 결과로 치환</td>
+</tr>
+<tr>
+<td>중괄호 확장</td>
+<td><code>pre{opt1,opt2,...}post</code></td>
+<td>텍스트 조합</td>
+</tr>
+<tr>
+<td>중괄호 확장</td>
+<td><code>pre{range1..range2}post</code></td>
+<td>텍스트 조합(범위)</td>
+</tr>
+<tr>
+<td>매개변수 확장</td>
+<td><code>$var</code></td>
+<td>변수를 평가</td>
+</tr>
+<tr>
+<td>명령어 치환</td>
+<td><code>$(command)</code></td>
+<td>명령어를 실행한 출력 결과로 치환</td>
+</tr>
+<tr>
+<td>명령어 치환</td>
+<td><code>`command` </code></td>
+<td>명령어를 실행한 출력 결과로 치환</td>
+</tr>
+<tr>
+<td>쌍 따옴표</td>
+<td><code>&quot;command line&quot;</code></td>
+<td><code>$</code>, <code>\</code>, <code>` </code> 기호를 제외한 인용</td>
+</tr>
+<tr>
+<td>따옴표</td>
+<td><code>&#39;command line&#39;</code></td>
+<td>전체 인용</td>
+</tr>
+<tr>
+<td>이스케이프</td>
+<td><code>&quot;\n&quot;</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="히스토리"><a href="#히스토리" class="headerlink" title="히스토리"></a>히스토리</h3><ul>
+<li>자동 완성: <code>tab</code></li>
+<li><code>history</code>: 히스토리 목록</li>
+<li><code>!n</code>: n번 히스토리로 치환</li>
+<li><code>C-R</code>: 히스토리에서 역순 증분 검색</li>
+<li><code>C-J</code>: 증분 검색중 선택</li>
+<li><code>C-G</code>: 증분 검색 종료</li>
+</ul>
+<h3 id="gz-파일-보기"><a href="#gz-파일-보기" class="headerlink" title=".gz 파일 보기"></a>.gz 파일 보기</h3><ul>
+<li><code>less</code> 대신 <code>zless</code>를 사용.</li>
+</ul>
+<h2 id="권한"><a href="#권한" class="headerlink" title="권한"></a>권한</h2><h3 id="사용자-그룹"><a href="#사용자-그룹" class="headerlink" title="사용자 / 그룹"></a>사용자 / 그룹</h3><ul>
+<li><code>adduser</code>: 사용자 계정 생성 (대화식)</li>
+<li><code>useradd</code>: 사용자 계정 생성</li>
+<li><code>usermod</code>: 사용자 계정 정보 변경</li>
+<li><code>addgroup</code>: 사용자 그룹 변경 (대화식)</li>
+<li><code>groupadd</code>: 사용자 그룹 변경</li>
+<li><code>passwd</code>: 사용자 비밀번호 변경</li>
+</ul>
+<p>예)</p>
+<ul>
+<li><code>usermod -a -G www-data user-a</code>: 사용자 user-a를 그룹 www-data에 추가</li>
+</ul>
+<h3 id="권한-1"><a href="#권한-1" class="headerlink" title="권한"></a>권한</h3><ul>
+<li><code>chown</code>: 파일/디렉토리 소유자 변경</li>
+<li><code>chmod</code>: 파일/디렉토리 권한 변경</li>
+</ul>
+<h2 id="프로세스"><a href="#프로세스" class="headerlink" title="프로세스"></a>프로세스</h2><h3 id="프로세스-정보"><a href="#프로세스-정보" class="headerlink" title="프로세스 정보"></a>프로세스 정보</h3><ul>
+<li><code>ps</code>: 실행 중인 프로세스 정보</li>
+<li><code>ps -ef</code>: 실행 중인 모든 프로세스 정보 (UNIX 스타일)</li>
+<li><code>ps aux</code>: 실행 중인 모든 프로세스 정보 (BSD 스타일)</li>
+<li><code>pstree</code>: 프로세스 부모/자식 관계 트리</li>
+<li><code>vmstat</code>: 메모리, 스왑, 디스크 I/O 등 시스템 자원 사용 현황</li>
+<li><code>xload</code>: 시스템 부하 그래프 GUI</li>
+<li><code>tload</code>: 시스템 부하 그래프 터미널</li>
+</ul>
+<h3 id="프로세스-제어"><a href="#프로세스-제어" class="headerlink" title="프로세스 제어"></a>프로세스 제어</h3><ul>
+<li><code>jobs</code>: 작업 프로세스 보기</li>
+<li><code>fs %n</code>: %n번 job을 포어그라운드로 전환</li>
+<li><code>bs %n</code>: %n번 job을 백그라운드로 전환</li>
+<li><code>kill pid</code>: pid 프로세스에 TERM 신호</li>
+<li><code>kill -9 pid</code>: pid 프로세스를 KILL</li>
+</ul>
+<h2 id="환경"><a href="#환경" class="headerlink" title="환경"></a>환경</h2><h3 id="환경-변수-조작"><a href="#환경-변수-조작" class="headerlink" title="환경 변수 조작"></a>환경 변수 조작</h3><ul>
+<li><code>set</code>: 쉘 변수와 환경 변수 출력</li>
+<li><code>env</code>: 환경 변수 출력</li>
+<li><code>printenv VAR</code>: 환경 변수 VAR의 값 출력</li>
+<li><code>echo $VAR</code>: 환경 변수 VAR의 값 출력</li>
+<li><code>export VAR</code>: 쉘과 쉘에서 실행되는 프로세스들에 VAR를 정의</li>
+<li><code>alias</code>: 명령어 별칭 목록 / 생성</li>
+</ul>
+<h2 id="패키지-관리"><a href="#패키지-관리" class="headerlink" title="패키지 관리"></a>패키지 관리</h2><table>
+<thead>
+<tr>
+<th>작업</th>
+<th>rpm</th>
+<th>dpkg</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>저장소 목록 업데이트</td>
+<td></td>
+<td><code>apt-get update</code></td>
+</tr>
+<tr>
+<td>저장소 패키지 찾기</td>
+<td><code>yum search [pkg]</code></td>
+<td><code>apt-cache search [pkg]</code></td>
+</tr>
+<tr>
+<td>저장소 패키지 설치</td>
+<td><code>yum install [pkg]</code></td>
+<td><code>apt-get install [pkg]</code></td>
+</tr>
+<tr>
+<td>패키지 파일 설치</td>
+<td><code>rpm -i [file]</code></td>
+<td><code>dpkg --install [file]</code></td>
+</tr>
+<tr>
+<td>패키지 삭제</td>
+<td><code>yum erase [pkg]</code></td>
+<td><code>apt-get remove [pkg]</code></td>
+</tr>
+<tr>
+<td>저장소 패키지 업데이트</td>
+<td><code>yum update</code></td>
+<td><code>apt-get upgrade</code></td>
+</tr>
+<tr>
+<td>패키지 파일 업데이트</td>
+<td><code>rpm -U [file]</code></td>
+<td><code>dpkg --install [pkg]</code></td>
+</tr>
+<tr>
+<td>설치된 패키지 목록</td>
+<td><code>rpm -qa</code></td>
+<td><code>dpkg --list</code></td>
+</tr>
+<tr>
+<td>패키지 설치여부</td>
+<td><code>rpm -q [pkg]</code></td>
+<td><code>dpkg --status [pkg]</code></td>
+</tr>
+<tr>
+<td>설치된 패키지 정보</td>
+<td><code>yum info [pkg]</code></td>
+<td><code>apt-cache show [pkg]</code></td>
+</tr>
+<tr>
+<td>파일로 패키지 검색</td>
+<td><code>rpm -qf [file]</code></td>
+<td><code>dpkg --search [file]</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="미디어"><a href="#미디어" class="headerlink" title="미디어"></a>미디어</h2><h3 id="저장-장치-마운트"><a href="#저장-장치-마운트" class="headerlink" title="저장 장치 마운트"></a>저장 장치 마운트</h3><ul>
+<li><code>cat /etc/fstab</code>: 부팅 시 마운트된 장치 목록</li>
+<li><code>mount</code>: 현재 마운트된 장치 목록</li>
+<li><code>mount src dst</code>: 장치 마운트</li>
+<li><code>mount -t cdrom src dst</code>: CD-ROM 마운트</li>
+<li><code>umount target</code>: 마운트 해제</li>
+</ul>
+<h3 id="미디어-이미지-복사"><a href="#미디어-이미지-복사" class="headerlink" title="미디어 이미지 복사"></a>미디어 이미지 복사</h3><ul>
+<li><code>dd if=input_file of=output_file [bs=block_size [count=blocks]]</code></li>
+</ul>
+<h2 id="네트워크"><a href="#네트워크" class="headerlink" title="네트워크"></a>네트워크</h2><h3 id="네트워크-관리"><a href="#네트워크-관리" class="headerlink" title="네트워크 관리"></a>네트워크 관리</h3><ul>
+<li><code>ping host</code>: ICMP ECHO_REQUEST 전송 / 확인</li>
+<li><code>traceroute host</code>: 패킷 경로 추적</li>
+<li><code>netstat</code>: 네트워크 설정 및 통계 정보 확인</li>
+<li><code>netstat -ie</code>: 네트워크 인터페이스 정보 확인 (<code>ifconfig</code>)</li>
+<li><code>netstat -r</code>: 네트워크 라우팅 테이블 정보 확인</li>
+</ul>
+<h3 id="네트워크-사용"><a href="#네트워크-사용" class="headerlink" title="네트워크 사용"></a>네트워크 사용</h3><ul>
+<li><code>wget url</code>: 다운로드</li>
+<li><code>curl url &gt; dst</code>: 데이터 다운로드</li>
+<li><code>curl url &lt; src</code>: 데이터 업로드</li>
+<li><code>ssh -p port id@host</code> SSH 접속</li>
+<li><code>ssh -p port id@host command</code> SSH 접속, command 실행결과 반환</li>
+<li><code>ssh [-X|-Y] port id@host</code> SSH 터널링, X 클라이언트로 접속</li>
+<li><code>sftp -P port id@host</code> SSH 활용, FTP 에뮬레이트 접속</li>
+</ul>
+<h3 id="FTP-명령어"><a href="#FTP-명령어" class="headerlink" title="FTP 명령어"></a>FTP 명령어</h3><ul>
+<li><code>cd</code></li>
+<li><code>ls</code></li>
+<li><code>lcd</code>: (local) cd</li>
+<li><code>lls</code>: (local) ls</li>
+<li><code>get [-r] src [dst]</code>: remote -&gt; local</li>
+<li><code>put [-r] src [dst]</code>: local -&gt; remote</li>
+</ul>
+<h2 id="파일-검색"><a href="#파일-검색" class="headerlink" title="파일 검색"></a>파일 검색</h2><ul>
+<li><code>locate</code>: 파일 경로 찾기</li>
+<li><code>find</code>: 파일 검색 &amp; 추가 작업</li>
+<li><code>xargs</code>: 표준 입력으로 인자 목록을 만들어 실행</li>
+<li><code>grep</code>: 표준 입력에서 정규표현식으로 검색</li>
+</ul>
+<h3 id="find"><a href="#find" class="headerlink" title="find"></a>find</h3><h4 id="find-검색-옵션"><a href="#find-검색-옵션" class="headerlink" title="find 검색 옵션"></a>find 검색 옵션</h4><p>다음 옵션으로 검색할 파일/디렉토리를 지정한다.</p>
+<table>
+<thead>
+<tr>
+<th>옵션</th>
+<th>예</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-type c</code></td>
+<td><code>-type c</code></td>
+<td>c 형식의 파일 검색 (<code>b</code>, <code>c</code>, <code>d</code>, <code>f</code>, <code>l</code>)</td>
+</tr>
+<tr>
+<td><code>-size n</code></td>
+<td><code>-size +200k</code></td>
+<td>크기가 n과 같음</td>
+</tr>
+<tr>
+<td><code>-name pattern</code></td>
+<td><code>-name foobar</code></td>
+<td>이름이 와일드카드 패턴과 일치함</td>
+</tr>
+<tr>
+<td><code>-iname pattern</code></td>
+<td><code>-iname foobar</code></td>
+<td>대소문자 구별 없는 -name</td>
+</tr>
+<tr>
+<td><code>-regex pattern</code></td>
+<td><code>-regex &#39;[0-9]+&#39;</code></td>
+<td>경로명이 정규식 패턴과 일치함</td>
+</tr>
+<tr>
+<td><code>-inum n</code></td>
+<td><code>-inum 1001</code></td>
+<td>n번 inode에 해당 (하드 링크 검색)</td>
+</tr>
+<tr>
+<td><code>-samefile name</code></td>
+<td><code>-samefile foo</code></td>
+<td>이름이 foo인 파일과 inode가 같음</td>
+</tr>
+<tr>
+<td><code>-empty</code></td>
+<td><code>-empty</code></td>
+<td>비어 있음</td>
+</tr>
+<tr>
+<td><code>-mmin n</code></td>
+<td><code>-mmin -10</code></td>
+<td>n분 전에 내용 변경</td>
+</tr>
+<tr>
+<td><code>-cmin n</code></td>
+<td><code>-cmin +10</code></td>
+<td>n분 전에 내용/속성 변경</td>
+</tr>
+<tr>
+<td><code>-mtime n</code></td>
+<td><code>-mtime 3</code></td>
+<td>n*24시간 전에 내용 변경</td>
+</tr>
+<tr>
+<td><code>-ctime n</code></td>
+<td><code>-ctime 3</code></td>
+<td>n*24시간 전에 내용/속성 변경</td>
+</tr>
+<tr>
+<td><code>-newer file</code></td>
+<td><code>-newer foo</code></td>
+<td>file보다 나중에 내용 변경</td>
+</tr>
+<tr>
+<td><code>-cnewer file</code></td>
+<td><code>-cnewer foo</code></td>
+<td>file보다 나중에 내용/속성 변경</td>
+</tr>
+<tr>
+<td><code>-user name</code></td>
+<td><code>-user foo</code></td>
+<td>name 사용자에 속함</td>
+</tr>
+<tr>
+<td><code>-group name</code></td>
+<td><code>-group bar</code></td>
+<td>name 그룹에 속함</td>
+</tr>
+<tr>
+<td><code>-nouser</code></td>
+<td><code>-nouser</code></td>
+<td>유효한 사용자에 속하지 않음 (삭제된 계정 등)</td>
+</tr>
+<tr>
+<td><code>-nogroup</code></td>
+<td><code>-nogroup</code></td>
+<td>유효한 그룹에 속하지 않음</td>
+</tr>
+<tr>
+<td><code>-perm mode</code></td>
+<td><code>-perm 755</code></td>
+<td>권한이 mode와 같음</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>시간을 나타내는 인자에는 <code>+</code> 또는 <code>-</code>를 넣어, n 이후 또는 n 이전의 의미를 나타낼 수 있다.</li>
+<li>크기를 나타내는 인자에는 <code>+</code> 또는 <code>-</code>를 넣어, n 이상 또는 n 이하의 의미를 나타낼 수 있다.</li>
+</ul>
+<h4 id="find-연산자-옵션"><a href="#find-연산자-옵션" class="headerlink" title="find 연산자 옵션"></a>find 연산자 옵션</h4><p>다음 연산자로 검색 옵션을 조합하는 방법을 지정한다. (lazy 평가)</p>
+<table>
+<thead>
+<tr>
+<th>연산자</th>
+<th>약어</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-and</code></td>
+<td><code>-a</code></td>
+<td>and 연산 (기본값이므로 생략 가능)</td>
+</tr>
+<tr>
+<td><code>-or</code></td>
+<td><code>-o</code></td>
+<td>or 연산</td>
+</tr>
+<tr>
+<td><code>-not</code></td>
+<td><code>-!</code></td>
+<td>not 연산</td>
+</tr>
+<tr>
+<td><code>\(</code>, <code>\)</code></td>
+<td></td>
+<td>우선순위 지정, 조건 그룹화</td>
+</tr>
+</tbody>
+</table>
+<p>예) <code>find ~ \( -type f -not -perm 0600 \) -o \( -type d -not -perm 0700 \)</code></p>
+<p>~경로에서 권한이 0600이 아닌 파일 또는 권한이 0700이 아닌 디렉토리 검색</p>
+<h4 id="find-액션-옵션"><a href="#find-액션-옵션" class="headerlink" title="find 액션 옵션"></a>find 액션 옵션</h4><p>find 액션 옵션으로 다음과 같은 액션을 지정할 수 있다.</p>
+<table>
+<thead>
+<tr>
+<th>액션</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-print</code></td>
+<td>넘겨받은 파일들의 전체 경로명을 표준 출력 (기본 액션)</td>
+</tr>
+<tr>
+<td><code>-ls</code></td>
+<td>넘겨받은 파일들을 <code>ls -dils</code> 표준 출력</td>
+</tr>
+<tr>
+<td><code>-delete</code></td>
+<td>넘겨받은 파일들을 삭제</td>
+</tr>
+<tr>
+<td><code>-quit</code></td>
+<td>넘겨받은 파일이 하나라도 있을 경우 검색 종료</td>
+</tr>
+<tr>
+<td><code>-exec command &#39;{}&#39; &#39;;&#39;</code></td>
+<td>넘겨받은 파일들에 command 명령을 실행</td>
+</tr>
+<tr>
+<td><code>-ok command &#39;{}&#39; &#39;;&#39;</code></td>
+<td>넘겨받은 파일들에 command 명령을 실행 (실행여부 확인)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>특정 조건으로 검색된 파일에 대해 액션을 지정하려면 <code>옵션 -and 액션</code>으로 지정 (<code>-and</code>는 생략 가능)</li>
+</ul>
+<p>검색된 파일에 명령을 각각 실행하는 것이 아니라, 파일 전체에 한 명령을 넘기려면 다음 중 한 방법을 쓰면 된다.</p>
+<ul>
+<li><code>find 기능</code>: <code>find [...] -exec command &#39;{}&#39; +</code></li>
+<li><code>xargs</code>에 표준 출력 전달: <code>find [...] -print | xargs command [params]</code></li>
+</ul>
+<h4 id="find-기타-옵션"><a href="#find-기타-옵션" class="headerlink" title="find 기타 옵션"></a>find 기타 옵션</h4><p>find 액션 옵션으로 다음과 같은 액션을 지정할 수 있다.</p>
+<table>
+<thead>
+<tr>
+<th>액션</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-depth</code></td>
+<td>디렉토리보다 디렉토리내 파일에 우선 실행 (<code>-delete</code>는 자동 적용)</td>
+</tr>
+<tr>
+<td><code>-maxdepth levels</code></td>
+<td>최대 탐색 깊이</td>
+</tr>
+<tr>
+<td><code>-mindepth levels</code></td>
+<td>최소 탐색 깊이</td>
+</tr>
+<tr>
+<td><code>-mount</code></td>
+<td>다른 파일시스템에 마운트도된 디렉토리 제외</td>
+</tr>
+<tr>
+<td><code>-noleaf</code></td>
+<td>UNIX용 find 최적화 사용 안함 (DOS/Windows, CD-ROM 등)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h3><p>사용법</p>
+<table>
+<thead>
+<tr>
+<th>정규표현식 종류</th>
+<th>명령</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Posix 기본 정규표현식</td>
+<td><code>grep [options] regex [file...]</code></td>
+</tr>
+<tr>
+<td>확장 정규표현식</td>
+<td><code>grep [options] -E regex [file...]</code></td>
+</tr>
+<tr>
+<td>확장 정규표현식</td>
+<td><code>egrep [options] regex [file...]</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="grep-옵션"><a href="#grep-옵션" class="headerlink" title="grep 옵션"></a>grep 옵션</h4><table>
+<thead>
+<tr>
+<th>옵션</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-i</code></td>
+<td>대소문자 구별 안함</td>
+</tr>
+<tr>
+<td><code>-v</code></td>
+<td>반전 매치</td>
+</tr>
+<tr>
+<td><code>-c</code></td>
+<td>일치한 행의 수 출력</td>
+</tr>
+<tr>
+<td><code>-l</code></td>
+<td>일치한 행을 포함한 파일의 이름 출력</td>
+</tr>
+<tr>
+<td><code>-L</code></td>
+<td>일치한 행이 없는 파일의 이름 출력</td>
+</tr>
+<tr>
+<td><code>-n</code></td>
+<td>일치한 행 앞에 행 번호 표시</td>
+</tr>
+<tr>
+<td><code>-h</code></td>
+<td>파일명 출력 숨김</td>
+</tr>
+</tbody>
+</table>
+<h2 id="파일-관리"><a href="#파일-관리" class="headerlink" title="파일 관리"></a>파일 관리</h2><ul>
+<li><code>touch</code>: 파일 생성 / 파일 수정시간 갱신</li>
+<li><code>stat</code>: 파일 메타 데이터 출력</li>
+</ul>
+<h2 id="파일-압축"><a href="#파일-압축" class="headerlink" title="파일 압축"></a>파일 압축</h2><ul>
+<li><code>gzip</code>: <code>.gz</code> 압축</li>
+<li><code>gunzip</code>: <code>.gz</code> 압축 해제</li>
+<li><code>bzip2</code>: <code>.bz2</code> 압축 (블록 단위 고성능 압축)</li>
+<li><code>bunzip2</code>: <code>.bz2</code> 압축 해제</li>
+<li><code>zip</code>: <code>.zip</code> 압축 (비 UNIX 파일 압축)</li>
+<li><code>unzip</code>: <code>.zip</code> 압축 해제</li>
+<li><code>tar</code>: 테이프 아카이브</li>
+</ul>
+<h3 id="gzip"><a href="#gzip" class="headerlink" title="gzip"></a>gzip</h3><h4 id="gzip-옵션"><a href="#gzip-옵션" class="headerlink" title="gzip 옵션"></a>gzip 옵션</h4><table>
+<thead>
+<tr>
+<th>옵션</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-c</code></td>
+<td>압축 결과를 표준 출력에 씀. 원본 파일 유지</td>
+</tr>
+<tr>
+<td><code>-d</code></td>
+<td>압축 해제 (<code>gunzip</code>과 동일)</td>
+</tr>
+<tr>
+<td><code>-f</code></td>
+<td>압축 파일이 이미 존재해도 압축을 실행</td>
+</tr>
+<tr>
+<td><code>-h</code></td>
+<td>도움말</td>
+</tr>
+<tr>
+<td><code>-l</code></td>
+<td>압축 파일별로 압축 정보 표시</td>
+</tr>
+<tr>
+<td><code>-r</code></td>
+<td>디렉토리 내 순환 압축</td>
+</tr>
+<tr>
+<td><code>-t</code></td>
+<td>무결성 검사</td>
+</tr>
+<tr>
+<td><code>-v</code></td>
+<td>압축 과정 자세히 표시</td>
+</tr>
+<tr>
+<td><code>-1</code> ~ <code>-9</code></td>
+<td>압축률 설정. 기본값은 <code>-6</code></td>
+</tr>
+<tr>
+<td><code>--fast</code></td>
+<td><code>-1</code>와 동일</td>
+</tr>
+<tr>
+<td><code>--best</code></td>
+<td><code>-9</code>와 동일</td>
+</tr>
+</tbody>
+</table>
+<h4 id="gzip-관련-유틸리티"><a href="#gzip-관련-유틸리티" class="headerlink" title="gzip 관련 유틸리티"></a>gzip 관련 유틸리티</h4><ul>
+<li><code>zcat</code>: <code>gunzip -c file</code> (<code>.gz</code> 압축 해제 결과를 표준 출력으로 보냄)</li>
+<li><code>zless</code>: <code>zcat file | less</code> (<code>.gz</code> 압축 해제 결과를 표준 출력으로 보내고 <code>less</code>)</li>
+</ul>
+<h3 id="bzip2"><a href="#bzip2" class="headerlink" title="bzip2"></a>bzip2</h3><h4 id="bzip2-관련-유틸리티"><a href="#bzip2-관련-유틸리티" class="headerlink" title="bzip2 관련 유틸리티"></a>bzip2 관련 유틸리티</h4><ul>
+<li><code>bzcat</code>: <code>bunzip2 -c file</code> (<code>.bz2</code> 압축 해제 결과를 표준 출력으로 보냄)</li>
+<li><code>bzip2recover</code>: 손상된 <code>.bz2</code> 파일 복구</li>
+</ul>
+<h3 id="tar"><a href="#tar" class="headerlink" title="tar"></a>tar</h3><h4 id="tar-옵션"><a href="#tar-옵션" class="headerlink" title="tar 옵션"></a>tar 옵션</h4><table>
+<thead>
+<tr>
+<th>옵션</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>f name</code></td>
+<td>아카이브 이름 지정</td>
+</tr>
+<tr>
+<td><code>c</code></td>
+<td>아카이브 생성</td>
+</tr>
+<tr>
+<td><code>x</code></td>
+<td>아카이브 해제</td>
+</tr>
+<tr>
+<td><code>r</code></td>
+<td>아카이브 추가</td>
+</tr>
+<tr>
+<td><code>t</code></td>
+<td>아카이브 내용 보기</td>
+</tr>
+<tr>
+<td><code>z</code></td>
+<td>gzip으로 압축 (GNU tar 최신버전)</td>
+</tr>
+<tr>
+<td><code>j</code></td>
+<td>bzip2로 압축 (GNU tar 최신버전)</td>
+</tr>
+</tbody>
+</table>
+<p><code>tar</code> 옵션에는 <code>-</code>를 붙이지 않는다.</p>
+<p>예)</p>
+<ul>
+<li><code>tar cf files.tar .</code>: 현재 디렉토리를 files.tar로 묶기</li>
+<li><code>tar xf files.tar .</code>: 현재 디렉토리에 files.tar를 풀기</li>
+<li><code>tar tf files.tar</code>: files.tar 아카이브 내용 보기</li>
+<li><code>tar tvf files.tar</code>: files.tar 아카이브 내용 자세히 보기</li>
+</ul>
+<h4 id="tar-아카이브-생성시-파일-스트림-지정-옵션"><a href="#tar-아카이브-생성시-파일-스트림-지정-옵션" class="headerlink" title="tar 아카이브 생성시 파일 스트림 지정 옵션"></a>tar 아카이브 생성시 파일 스트림 지정 옵션</h4><table>
+<thead>
+<tr>
+<th>옵션</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--files-from=file</code></td>
+<td>입력 스트림 지정</td>
+</tr>
+<tr>
+<td><code>--files-from=-</code></td>
+<td>입력 스트림을 표준 입력으로 지정</td>
+</tr>
+<tr>
+<td><code>f file</code></td>
+<td>출력 스트림 지정</td>
+</tr>
+<tr>
+<td><code>f -</code></td>
+<td>출력 스트림을 표준 출력으로 지정</td>
+</tr>
+</tbody>
+</table>
+<p>파일 스트림에 <code>-</code>를 지정하면 표준 입출력으로 지정한다.</p>
+<p>예)</p>
+<ul>
+<li><code>find src -name &#39;*.c&#39; | tar czf src.tar.gz -T -</code>: src 디렉토리의 *.src를 src.tar.gz로 압축</li>
+<li><code>find src -name &#39;*.c&#39; | tar cjf src.tar.bz2 -T -</code>: src 디렉토리의 *.src를 src.tar.bz2로 압축</li>
+</ul>
+<h3 id="파일-동기화"><a href="#파일-동기화" class="headerlink" title="파일 동기화"></a>파일 동기화</h3><ul>
+<li><code>rsync</code>: 원격 동기화</li>
+</ul>
+<h2 id="텍스트-조작"><a href="#텍스트-조작" class="headerlink" title="텍스트 조작"></a>텍스트 조작</h2><ul>
+<li><code>cat</code>: 파일과 표준 출력을 연결</li>
+<li><code>sort</code>: 행 단위 정렬</li>
+<li><code>uniq</code>: 중복 행 제거</li>
+<li><code>cut</code>: 각 행의 부분 자르기</li>
+<li><code>paste</code>: 각 행의 부분 합치기</li>
+<li><code>join</code>: 공통 필드로 행 합치기 (RDB 관련 작업)</li>
+<li><code>comm</code>: 두 파일의 유일 행, 공통 행 비교 출력</li>
+<li><code>diff</code>: 두 파일을 행 단위 비교 (Git와 유사)</li>
+<li><code>patch</code>: diff 파일로 원본에 패치 (Git와 유사)</li>
+<li><code>tr</code>: 문자 집합 치환</li>
+<li><code>sed</code>: 텍스트 필터링, 치환 (Vim의 치환과 유사)</li>
+<li><code>aspell</code>: 맞춤법 검사</li>
+<li><code>expand</code>: 탭을 스페이스로 치환</li>
+<li><code>unexpand</code> 스페이스를 탭으로 치환</li>
+</ul>
+<h3 id="cat"><a href="#cat" class="headerlink" title="cat"></a>cat</h3><h4 id="cat-옵션"><a href="#cat-옵션" class="headerlink" title="cat 옵션"></a>cat 옵션</h4><table>
+<thead>
+<tr>
+<th>옵션</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-A</code></td>
+<td>비출력 문자 표시</td>
+</tr>
+<tr>
+<td><code>-n</code></td>
+<td>줄 번호 표시</td>
+</tr>
+<tr>
+<td><code>-s</code></td>
+<td>공백 줄 제거</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sort"><a href="#sort" class="headerlink" title="sort"></a>sort</h3><h4 id="sort-옵션"><a href="#sort-옵션" class="headerlink" title="sort 옵션"></a>sort 옵션</h4><table>
+<thead>
+<tr>
+<th>옵션</th>
+<th>Long 옵션</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-b</code></td>
+<td><code>--ignore-leading-blanks</code></td>
+<td>행 앞부분의 공백 문자 무시하고 비교</td>
+</tr>
+<tr>
+<td><code>-f</code></td>
+<td><code>--ignore-case</code></td>
+<td>대소문자 구분 무시</td>
+</tr>
+<tr>
+<td><code>-n</code></td>
+<td><code>--numeric-sort</code></td>
+<td>수치를 기준으로 정렬</td>
+</tr>
+<tr>
+<td><code>-r</code></td>
+<td><code>--reverse</code></td>
+<td>역순 정렬</td>
+</tr>
+<tr>
+<td><code>-k</code></td>
+<td><code>--key= field1[,field2]</code></td>
+<td>키 필드로 지정된 field1 ~ field2를 기준으로 정렬</td>
+</tr>
+<tr>
+<td><code>-m</code></td>
+<td><code>--merge</code></td>
+<td>정렬된 파일들을 다시 섞지 않고 묶어서 정렬하여 합침</td>
+</tr>
+<tr>
+<td><code>-o</code></td>
+<td><code>--output= file</code></td>
+<td>결과를 표준 출력이 아닌 file로 보냄</td>
+</tr>
+<tr>
+<td><code>-t</code></td>
+<td><code>--field-separator= char</code></td>
+<td>필드 구분 문자 정의 (기본값: 스페이스, 탭)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="sort-복수-키-지정"><a href="#sort-복수-키-지정" class="headerlink" title="sort 복수 키 지정"></a>sort 복수 키 지정</h4><ul>
+<li>정렬을 위한 복수 키를 지정할 수 있다.</li>
+<li>정렬 방식을 나타내는 문자 옵션(<code>-b</code>, <code>-n</code>, <code>-r</code> 등)은 키 지정자 끝에 포함될 수 있다.</li>
+</ul>
+<p>예)</p>
+<p><code>sort -k 1,1 -k 2n</code></p>
+<h3 id="uniq"><a href="#uniq" class="headerlink" title="uniq"></a>uniq</h3><h4 id="uniq-옵션"><a href="#uniq-옵션" class="headerlink" title="uniq 옵션"></a>uniq 옵션</h4><table>
+<thead>
+<tr>
+<th>옵션</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-u</code></td>
+<td>유일한 행 출력 (기본값)</td>
+</tr>
+<tr>
+<td><code>-d</code></td>
+<td>중복된 행 출력</td>
+</tr>
+<tr>
+<td><code>-c</code></td>
+<td>중복 발생 횟수, 중복 행 목록 출력</td>
+</tr>
+<tr>
+<td><code>-i</code></td>
+<td>대소문자 구별 무시</td>
+</tr>
+<tr>
+<td><code>-f n</code></td>
+<td>각 행에서 n개 필드까지 무시하고 비교 (필드 구분자 지정 불가)</td>
+</tr>
+<tr>
+<td><code>-s n</code></td>
+<td>각 행에서 n개 문자까지 무시하고 비교</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cut"><a href="#cut" class="headerlink" title="cut"></a>cut</h3><p>행에서 텍스트 일부를 추출해 표준 출력으로 출력</p>
+<h4 id="cut-옵션"><a href="#cut-옵션" class="headerlink" title="cut 옵션"></a>cut 옵션</h4><table>
+<thead>
+<tr>
+<th>옵션</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-c char_list</code></td>
+<td>char_list 정의 영역 추출 (콤마로 구분된 숫자 범위)</td>
+</tr>
+<tr>
+<td><code>-f field_list</code></td>
+<td>field_list 정의 필드 추출 (필드 또는 콤마로 구분된 필드 범위)</td>
+</tr>
+<tr>
+<td><code>-d delim_char</code></td>
+<td>delim_char를 필드 구분자로 사용 (기본값: 탭)</td>
+</tr>
+<tr>
+<td><code>--complement</code></td>
+<td><code>-c</code> 또는 <code>-f</code>로 지정된 영역을 제외한 모든 부분을 추출</td>
+</tr>
+</tbody>
+</table>
+<h3 id="diff"><a href="#diff" class="headerlink" title="diff"></a>diff</h3><ul>
+<li>소스코드 디렉토리에서 변경 사항을 재귀적으로 확인</li>
+<li>diff 파일을 만들고 패치를 생성</li>
+</ul>
+<h4 id="diff-옵션"><a href="#diff-옵션" class="headerlink" title="diff 옵션"></a>diff 옵션</h4><table>
+<thead>
+<tr>
+<th>방식</th>
+<th>옵션</th>
+<th>예</th>
+<th>추가 / 변경 / 삭제</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>기본</td>
+<td></td>
+<td><code>diff f1 f2</code></td>
+<td><code>r1ar2</code> / <code>r1cr2</code> / <code>r1dr2</code></td>
+</tr>
+<tr>
+<td>문백 방식</td>
+<td>-c</td>
+<td><code>diff -c f1 f2</code></td>
+<td><code>+</code> / <code>!</code> / <code>-</code></td>
+</tr>
+<tr>
+<td>통합 방식</td>
+<td>-u</td>
+<td><code>diff -u f1 f2</code></td>
+<td><code>+</code> / / <code>-</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="diff-파일-생성하기-patch-용"><a href="#diff-파일-생성하기-patch-용" class="headerlink" title="diff 파일 생성하기 (patch 용)"></a>diff 파일 생성하기 (patch 용)</h4><ul>
+<li>생성: <code>diff -Naur old-file new-file &gt; diff-file</code></li>
+<li>패치: <code>patch diff-file</code></li>
+</ul>
+<h3 id="tr"><a href="#tr" class="headerlink" title="tr"></a>tr</h3><h4 id="ROT13"><a href="#ROT13" class="headerlink" title="ROT13"></a>ROT13</h4><ul>
+<li><code>tr a-zA-Z n-za-mN-ZA-M</code></li>
+</ul>
+<h4 id="연속문자-제거"><a href="#연속문자-제거" class="headerlink" title="연속문자 제거"></a>연속문자 제거</h4><ul>
+<li><code>tr -s a-z</code>: 연속되는 a-z를 제거</li>
+</ul>
+<h3 id="sed-stream-editor"><a href="#sed-stream-editor" class="headerlink" title="sed (stream editor)"></a>sed (stream editor)</h3><h4 id="sed-주소-표기법"><a href="#sed-주소-표기법" class="headerlink" title="sed 주소 표기법"></a>sed 주소 표기법</h4><table>
+<thead>
+<tr>
+<th>주소</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>n</code></td>
+<td><code>n</code> 번째 행</td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td>마지막 행</td>
+</tr>
+<tr>
+<td><code>/regexp/</code></td>
+<td>POSIX 기본 정규식과 일치하는 행들</td>
+</tr>
+<tr>
+<td><code>addr1, addr2</code></td>
+<td><code>aadr</code> ~ <code>addr2</code> 범위의 행들</td>
+</tr>
+<tr>
+<td><code>first~ step</code></td>
+<td><code>first</code> 일치 행과 그 후 <code>step</code> 간격마다 모든 행</td>
+</tr>
+<tr>
+<td><code>addr1,+n</code></td>
+<td><code>addr1</code> 일치 행과 다음 n개의 행</td>
+</tr>
+<tr>
+<td><code>addr!</code></td>
+<td><code>addr</code>을 제외한 모든 행</td>
+</tr>
+</tbody>
+</table>
+<h4 id="sed-기본-편집-명령어"><a href="#sed-기본-편집-명령어" class="headerlink" title="sed 기본 편집 명령어"></a>sed 기본 편집 명령어</h4><table>
+<thead>
+<tr>
+<th>명령어</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>=</code></td>
+<td>현재 행번호 출력</td>
+</tr>
+<tr>
+<td><code>a</code></td>
+<td>현재 행 뒤에 텍스트 추가</td>
+</tr>
+<tr>
+<td><code>d</code></td>
+<td>현재 행 삭제</td>
+</tr>
+<tr>
+<td><code>i</code></td>
+<td>현재 행 앞에 텍스트 삽입</td>
+</tr>
+<tr>
+<td><code>p</code></td>
+<td>현재 행 출력</td>
+</tr>
+<tr>
+<td><code>q</code></td>
+<td>더이상 처리할 행이 없으면 종료</td>
+</tr>
+<tr>
+<td><code>Q</code></td>
+<td>더이상 처리할 행이 없으면 종료</td>
+</tr>
+<tr>
+<td><code>s/regexp/replace</code></td>
+<td><code>regexp</code>와 일치하는 부분을 <code>replace</code>로 치환</td>
+</tr>
+<tr>
+<td><code>y/set1/set2</code></td>
+<td><code>set1</code>의 문자를 <code>set2</code>의 문자로 치환</td>
+</tr>
+</tbody>
+</table>
+<h4 id="sed-옵션"><a href="#sed-옵션" class="headerlink" title="sed 옵션"></a>sed 옵션</h4><table>
+<thead>
+<tr>
+<th>옵션</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-i</td>
+<td>파일 내 수정</td>
+</tr>
+</tbody>
+</table>
+<h2 id="텍스트-출력-포맷"><a href="#텍스트-출력-포맷" class="headerlink" title="텍스트 출력 포맷"></a>텍스트 출력 포맷</h2><ul>
+<li><code>nl</code>: 줄 번호 매기기</li>
+<li><code>fold</code>: 각 줄을 지정된 길이로 나누기</li>
+<li><code>fmt</code>: 포맷 지정</li>
+<li><code>pr</code>: 인쇄용 포맷 지정</li>
+<li><code>printf</code>: 출력 및 포맷 지정</li>
+<li><code>groff</code>: 문서 포맷 시스템</li>
+</ul>
+<h2 id="컴파일"><a href="#컴파일" class="headerlink" title="컴파일"></a>컴파일</h2><h3 id="일반적인-c-프로젝트-컴파일-과정"><a href="#일반적인-c-프로젝트-컴파일-과정" class="headerlink" title="일반적인 c 프로젝트 컴파일 과정"></a>일반적인 c 프로젝트 컴파일 과정</h3><ol>
+<li><code>./configure</code></li>
+<li><code>make</code></li>
+<li><code>sudo make install</code></li>
+</ol>
+<h3 id="objdump-디스어셈블"><a href="#objdump-디스어셈블" class="headerlink" title="objdump - 디스어셈블"></a>objdump - 디스어셈블</h3><p><code>objdump -d obj</code></p>
+<h2 id="쉘-스크립트"><a href="#쉘-스크립트" class="headerlink" title="쉘 스크립트"></a>쉘 스크립트</h2><h3 id="쉘-스크립트-작성-과정"><a href="#쉘-스크립트-작성-과정" class="headerlink" title="쉘 스크립트 작성 과정"></a>쉘 스크립트 작성 과정</h3><ol>
+<li>스크립트 작성</li>
+<li>실행 권한 설정</li>
+<li>실행 경로에 저장</li>
+</ol>
+<h3 id="스크립트-파일-헤더"><a href="#스크립트-파일-헤더" class="headerlink" title="스크립트 파일 헤더"></a>스크립트 파일 헤더</h3><pre><code>#!/bin/bash
+</code></pre><p>스크립트를 실행할 인터프리터의 경로를 지정함</p>
+<h3 id="스크립트-저장-위치"><a href="#스크립트-저장-위치" class="headerlink" title="스크립트 저장 위치"></a>스크립트 저장 위치</h3><p>다음 위치는 적합하다.</p>
+<ul>
+<li><code>~/bin</code>: 개인 사용자용 실행 파일</li>
+<li><code>/usr/local</code>: 전체 사용자용</li>
+<li><code>/usr/local/bin</code>: 전체 사용자용 실행 파일</li>
+<li><code>/usr/local/sbin</code>: 시스템 관리자용 실행 파일</li>
+</ul>
+<p>다음 위치는 부적합하다. 리눅스 배포자가 제공하고 관리하는 파일을 저장하는 곳이기 떄문이다.</p>
+<ul>
+<li><code>/bin</code></li>
+<li><code>/usr/bin</code></li>
+</ul>
+<h3 id="Here-문서"><a href="#Here-문서" class="headerlink" title="Here 문서"></a>Here 문서</h3><p>아래와 같은 형식으로 스크립트 파일의 텍스트 본문을 표준 입력으로 보냄.</p>
+<pre><code>cat &lt;&lt; _EOF_
+The long and winding road
+That leads to your door
+_EOF_
+</code></pre><h3 id="쉘-함수"><a href="#쉘-함수" class="headerlink" title="쉘 함수"></a>쉘 함수</h3><p>다음과 같은 형식으로 생성</p>
+<pre><code>function name {
+  commands
+  return
+}
+
+name () {
+  commands
+  return
+}
+</code></pre><p>두 형식의 결과는 동일하다.</p>
+<h3 id="지역-변수"><a href="#지역-변수" class="headerlink" title="지역 변수"></a>지역 변수</h3><p>쉘 함수 안에서 다음과 같이 선언한다.</p>
+<pre><code>local foo
+foo=1
+</code></pre><h3 id="종료-상태-exit-status"><a href="#종료-상태-exit-status" class="headerlink" title="종료 상태 (exit status)"></a>종료 상태 (exit status)</h3><ul>
+<li>0 ~ 255 사이의 값.</li>
+<li>일반적으로 0은 성공, 그 외의 값은 실패를 나타냄.</li>
+<li>프로그램 종료시 쉘 변수 <code>$?</code>에 저장</li>
+<li><code>exit n</code>: n값을 exit status로 반환하며 스크립트 종료. (<code>n</code>의 기본값은 0)</li>
+</ul>
+<p>관련 프로그램</p>
+<ul>
+<li><code>true</code>: exit status 0을 반환하는 프로그램</li>
+<li><code>false</code>: exit status 1을 반환하는 프로그램</li>
+<li><code>test expression</code>: <code>expression</code>이 참이면 0, 거짓이면 1의 종료 상태를 반환하는 프로그램</li>
+</ul>
+<h3 id="분기"><a href="#분기" class="headerlink" title="분기"></a>분기</h3><h4 id="if"><a href="#if" class="headerlink" title="if"></a>if</h4><p>다음과 같은 구문으로 분기</p>
+<pre><code>if condition; then
+  commands
+[elif condition; then
+  commands...]
+[else
+  commands]
+fi
+</code></pre><h4 id="case"><a href="#case" class="headerlink" title="case"></a>case</h4><pre><code>case word in
+  [pattern [| pattern]...) commands ;;]...
+esac
+</code></pre><h4 id="if-또는-test에서-사용할-수-있는-조건식"><a href="#if-또는-test에서-사용할-수-있는-조건식" class="headerlink" title="if 또는 test에서 사용할 수 있는 조건식"></a>if 또는 test에서 사용할 수 있는 조건식</h4><h5 id="파일-표현식"><a href="#파일-표현식" class="headerlink" title="파일 표현식"></a>파일 표현식</h5><table>
+<thead>
+<tr>
+<th>표현식</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>file1 -ef file2</code></td>
+<td><code>file1</code>과 <code>file2</code>는 동일한 inode 번호를 가진다.</td>
+</tr>
+<tr>
+<td><code>file1 -nt file2</code></td>
+<td><code>file1</code>은 <code>file2</code>보다 최신이다.</td>
+</tr>
+<tr>
+<td><code>file1 -ot file2</code></td>
+<td><code>file1</code>은 <code>file2</code>보다 오래됐다.</td>
+</tr>
+<tr>
+<td><code>-e file</code></td>
+<td><code>file</code>이 존재한다.</td>
+</tr>
+<tr>
+<td><code>-f file</code></td>
+<td><code>file</code>이 존재하고, 이 파일은 일반 파일이다.</td>
+</tr>
+<tr>
+<td><code>-d file</code></td>
+<td><code>file</code>이 존재하고, 이 파일은 디렉토리다.</td>
+</tr>
+<tr>
+<td><code>-L file</code></td>
+<td><code>file</code>이 존재하고, 이 파일은 심볼릭 링크다.</td>
+</tr>
+<tr>
+<td><code>-b file</code></td>
+<td><code>file</code>이 존재하고, 이 파일은 블록 특수 파일이다.</td>
+</tr>
+<tr>
+<td><code>-c file</code></td>
+<td><code>file</code>이 존재하고, 이 파일은 문자 특수 파일이다.</td>
+</tr>
+<tr>
+<td><code>-s file</code></td>
+<td><code>file</code>이 존재하고, 이 파일은 크기가 0보다 크다.</td>
+</tr>
+<tr>
+<td><code>-u file</code></td>
+<td><code>file</code>이 존재하고, 이 파일은 setuid가 설정되어 있다.</td>
+</tr>
+<tr>
+<td><code>-g file</code></td>
+<td><code>file</code>이 존재하고, 이 파일은 setgid가 설정되어 있다.</td>
+</tr>
+<tr>
+<td><code>-G file</code></td>
+<td><code>file</code>이 존재하고, 이 파일은 유효 그룹 ID의 소유다.</td>
+</tr>
+<tr>
+<td><code>-r file</code></td>
+<td><code>file</code>이 존재하고, 이 파일은 읽기가 가능하다.</td>
+</tr>
+<tr>
+<td><code>-w file</code></td>
+<td><code>file</code>이 존재하고, 이 파일은 쓰기가 가능하다.</td>
+</tr>
+<tr>
+<td><code>-x file</code></td>
+<td><code>file</code>이 존재하고, 이 파일은 실행이 가능하다.</td>
+</tr>
+<tr>
+<td><code>-k file</code></td>
+<td><code>file</code>이 존재하고, 이 파일은 sticky bit를 가지고 있다.</td>
+</tr>
+<tr>
+<td><code>-O file</code></td>
+<td><code>file</code>이 존재하고, 이 파일은 유효 사용자 ID의 소유다.</td>
+</tr>
+<tr>
+<td><code>-p file</code></td>
+<td><code>file</code>이 존재하고, 이 파일은 네임드 파이프다.</td>
+</tr>
+<tr>
+<td><code>-S file</code></td>
+<td><code>file</code>이 존재하고, 이 파일은 네트워크 소켓이다.</td>
+</tr>
+<tr>
+<td><code>-t fd</code></td>
+<td><code>fd</code>는 터미널이 지정된 파일 디스크립터다. (표준 입력/출력/오류의 재지정 여부 확인)</td>
+</tr>
+</tbody>
+</table>
+<h5 id="문자열-표현식"><a href="#문자열-표현식" class="headerlink" title="문자열 표현식"></a>문자열 표현식</h5><table>
+<thead>
+<tr>
+<th>표현식</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>string</code></td>
+<td><code>string</code>은 <code>null</code>이 아니다.</td>
+</tr>
+<tr>
+<td><code>-n string</code></td>
+<td><code>string</code>의 길이는 0보다 크다.</td>
+</tr>
+<tr>
+<td><code>-z string</code></td>
+<td><code>string</code>의 길이는 0이다.</td>
+</tr>
+<tr>
+<td><code>string1 == string2</code></td>
+<td><code>string1</code>과 <code>string2</code>는 같다.</td>
+</tr>
+<tr>
+<td><code>string1 != string2</code></td>
+<td><code>string1</code>과 <code>string2</code>는 다르다.</td>
+</tr>
+<tr>
+<td><code>string1 &lt; string2</code></td>
+<td><code>string1</code>은 <code>string2</code>보다 앞에 정렬된다.</td>
+</tr>
+<tr>
+<td><code>string1 &gt; string2</code></td>
+<td><code>string1</code>은 <code>string2</code>보다 뒤에 정렬된다.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="정수-표현식"><a href="#정수-표현식" class="headerlink" title="정수 표현식"></a>정수 표현식</h5><table>
+<thead>
+<tr>
+<th>표현식</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>int1 -eq int2</code></td>
+<td><code>int1</code>은 <code>int2</code>와 같다.</td>
+</tr>
+<tr>
+<td><code>int1 -ne int2</code></td>
+<td><code>int1</code>은 <code>int2</code>와 다르다.</td>
+</tr>
+<tr>
+<td><code>int1 -lt int2</code></td>
+<td><code>int1</code>은 <code>int2</code>보다 작다.</td>
+</tr>
+<tr>
+<td><code>int1 -le int2</code></td>
+<td><code>int1</code>은 <code>int2</code>보다 작거나 같다.</td>
+</tr>
+<tr>
+<td><code>int1 -gt int2</code></td>
+<td><code>int1</code>은 <code>int2</code>보다 크다.</td>
+</tr>
+<tr>
+<td><code>int1 -ge int2</code></td>
+<td><code>int1</code>은 <code>int2</code>보다 크거나 같다.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="현대식-테스트"><a href="#현대식-테스트" class="headerlink" title="현대식 테스트"></a>현대식 테스트</h3><p>bash는 다음과 같은 구문을 지원한다.</p>
+<h4 id=""><a href="#" class="headerlink" title="[[ ]]"></a>[[ ]]</h4><pre><code>[[ expression ]]
+</code></pre><p><code>expression</code>에는 참/거짓을 판단하는 표현식을 입력한다. <code>[[ ]]</code>명령식은 <code>test</code>의 모든 표현식을 지원하고, 다음 문자열 표현식을 추가로 지원한다.</p>
+<pre><code>string1 =~ regex
+</code></pre><p>이 표현식은 <code>string1</code>이 확장 정규 표현식인 <code>regex</code>에 부합하면 참을 반환한다.</p>
+<p>예) N이 정수인지 확인</p>
+<pre><code>if [[ &quot;$N&quot; =~ ^-?[0-9]+$ ]]; then
+  echo &quot;$N is integer.&quot;
+else
+  echo &quot;$N is not integer.&quot;
+fi
+</code></pre><p>또, <code>[[ ]]</code> 명령식은 <code>==</code> 연산자가 경로명 확장과 같은 방식의 패턴 찾기를 수행하도록 지원한다.</p>
+<h4 id="정수-테스트"><a href="#정수-테스트" class="headerlink" title="(( )) - 정수 테스트"></a>(( )) - 정수 테스트</h4><p>산술식의 참 여부를 검사함: 산술식의 결과가 0이면 거짓, 0이 아니면 참을 반환.</p>
+<h4 id="표현식-조합"><a href="#표현식-조합" class="headerlink" title="표현식 조합"></a>표현식 조합</h4><table>
+<thead>
+<tr>
+<th>논리 연산</th>
+<th>test</th>
+<th>[[ ]], (( ))</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AND</td>
+<td>-a</td>
+<td>&amp;&amp;</td>
+</tr>
+<tr>
+<td>OR</td>
+<td>-o</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>NOT</td>
+<td>!</td>
+<td>!</td>
+</tr>
+</tbody>
+</table>
+<h3 id="read"><a href="#read" class="headerlink" title="read"></a>read</h3><p>다음 명령으로 표준 입력에서 값을 읽어온다.</p>
+<pre><code>read [-options] [variable...]
+</code></pre><h4 id="매개변수-개수"><a href="#매개변수-개수" class="headerlink" title="매개변수 개수"></a>매개변수 개수</h4><ul>
+<li>매개변수가 지정되지 않았을 때: REPLY 환경 변수에 값이 저장됨</li>
+<li>매개변수보다 많은 개수의 입력이 주어졌을 때: 마지막 매개변수에 나머지 값이 모두 저장됨</li>
+<li>매개변수보다 적은 개수의 입력이 주어졌을 때: 나머지 매개변수에는 값이 주어지지 않음</li>
+</ul>
+<h4 id="read-옵션"><a href="#read-옵션" class="headerlink" title="read 옵션"></a>read 옵션</h4><table>
+<thead>
+<tr>
+<th>옵션</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-a array</code></td>
+<td>입력값을 <code>array</code>에 할당. (인덱스 0부터 시작)</td>
+</tr>
+<tr>
+<td><code>-d delimiter</code></td>
+<td>개행 문자 대신 <code>delimiter</code>를 EOF로 사용</td>
+</tr>
+<tr>
+<td><code>-e</code></td>
+<td>Readline을 이용해 입력을 관리</td>
+</tr>
+<tr>
+<td><code>-n num</code></td>
+<td>입력된 행 전체 대신 <code>num</code> 개수만큼의 문자만을 읽음</td>
+</tr>
+<tr>
+<td><code>-p prompt</code></td>
+<td><code>prompt</code>를 입력 프롬프트로 출력</td>
+</tr>
+<tr>
+<td><code>-r</code></td>
+<td>Raw 모드. <code>\</code>를 이스케이프로 인식하지 않음</td>
+</tr>
+<tr>
+<td><code>-s</code></td>
+<td>묵음 모드 (패스워드 등)</td>
+</tr>
+<tr>
+<td><code>-t seconds</code></td>
+<td>입력 시간 제한. 시간 초과시 0이 아닌 종료 상태 반환</td>
+</tr>
+<tr>
+<td><code>-u fd</code></td>
+<td>표준 입력 대신 fd 디스크립터를 입력으로 사용</td>
+</tr>
+</tbody>
+</table>
+<h4 id="IFS-입력-필드-구분자-변경-기법"><a href="#IFS-입력-필드-구분자-변경-기법" class="headerlink" title="IFS(입력 필드 구분자) 변경 기법"></a>IFS(입력 필드 구분자) 변경 기법</h4><p><code>IFS</code>는 입력 필드 구분자를 설정하는 환경 변수.</p>
+<pre><code>IFS=&quot;:&quot; read
+</code></pre><p>쉘은 명령어가 처리되기 직전에 하나 이상의 변수 할당을 허용한다. 이 할당은 뒤이어 나오는 명령어에 대한 환경을 변화시킨다. 이 변화는 일시적이고 명령어의 지속 시간 동안만 환경을 변경하는 것이다. 위 스크립트의 결과는 아래의 스크립트의 결과와 같다.</p>
+<pre><code>OLD_IFS=&quot;$IFS&quot;
+IFS=&quot;:&quot;
+read
+IFS=&quot;$OLD_IFS&quot;
+</code></pre><h4 id="read와-파이프라인"><a href="#read와-파이프라인" class="headerlink" title="read와 파이프라인"></a>read와 파이프라인</h4><p>아래와 같이 파이프라인을 통해 read에 표준 입력을 전달할 수는 없다.</p>
+<pre><code>echo &quot;foo&quot; | read
+</code></pre><ul>
+<li>파이프라인은 서브쉘을 생성하며</li>
+<li>서브쉘은 부모 프로세스의 환경을 변경하지 않는다.</li>
+<li>read가 읽어들인 값은 서브쉘 안에서만 존재한다.</li>
+<li>read 종료시점에서 REPLY 값은 존재하지 않게 된다.</li>
+</ul>
+<p>따라서, 아래와 같이 해야 한다.</p>
+<pre><code>read &lt;&lt;&lt; foo
+</code></pre><p><code>&lt;&lt;&lt; [text...]</code>는 here 문자열이다.</p>
+<h3 id="반복"><a href="#반복" class="headerlink" title="반복"></a>반복</h3><h4 id="for"><a href="#for" class="headerlink" title="for"></a>for</h4><p>쉘 형식</p>
+<pre><code>for variable [in words]; do
+  commands
+done
+</code></pre><ul>
+<li>in words가 생략될 경우, 위치 매개변수를 words로 사용한다.</li>
+</ul>
+<p>C 형식</p>
+<pre><code>for (( expression1; expression2; expression3 )); do
+  commands
+done
+</code></pre><h4 id="while"><a href="#while" class="headerlink" title="while"></a>while</h4><pre><code>while condition; do
+  [commands...]
+done
+</code></pre><h4 id="until"><a href="#until" class="headerlink" title="until"></a>until</h4><pre><code>until condition; do
+  [commands...]
+done
+</code></pre><h4 id="break"><a href="#break" class="headerlink" title="break"></a>break</h4><h4 id="continue"><a href="#continue" class="headerlink" title="continue"></a>continue</h4><h3 id="위치-매개변수"><a href="#위치-매개변수" class="headerlink" title="위치 매개변수"></a>위치 매개변수</h3><p>커맨드라인 명령어에서 제공된 매개변수를 참조하는 방법.</p>
+<h4 id="변수-참조"><a href="#변수-참조" class="headerlink" title="변수 참조"></a>변수 참조</h4><table>
+<thead>
+<tr>
+<th>변수</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$0</code></td>
+<td>실행 프로그램 경로명</td>
+</tr>
+<tr>
+<td><code>$i</code></td>
+<td>i번째 인자의 값 (i는 0~9)</td>
+</tr>
+<tr>
+<td><code>${i}</code></td>
+<td>i번째 인자의 값 (i는 자연수)</td>
+</tr>
+<tr>
+<td><code>$#</code></td>
+<td>인자의 개수</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>basename</code>: 경로명의 앞 부분을 제거하고 파일의 기본 이름만을 추출</li>
+</ul>
+<h4 id="shift"><a href="#shift" class="headerlink" title="shift"></a>shift</h4><p>실행될 때마다 매개변수가 하나씩 다음으로 이동함.</p>
+<p>예) 모든 인자값 출력</p>
+<pre><code>while [[ #$ -gt 0 ]]; do
+  echo &quot;Argument $i = &quot;
+  i=$((i + 1))
+  shift
+done
+</code></pre><h4 id="쉘-함수에서의-위치-매개변수"><a href="#쉘-함수에서의-위치-매개변수" class="headerlink" title="쉘 함수에서의 위치 매개변수"></a>쉘 함수에서의 위치 매개변수</h4><p>쉘 함수에 인자를 넘겨 호출할 수 있다.</p>
+<ul>
+<li><code>$1</code> ~ <code>$n</code>은 함수에 넘겨진 인자의 값을 참조</li>
+<li><code>$0</code>은 쉘 함수명이 아닌 프로그램명을 참조</li>
+<li>쉘 함수명 참조: <code>$FUNCNAME</code></li>
+</ul>
+<h4 id="위치-매개변수-전체-전달"><a href="#위치-매개변수-전체-전달" class="headerlink" title="위치 매개변수 전체 전달"></a>위치 매개변수 전체 전달</h4><p>네 가지 방법이 있다.</p>
+<ul>
+<li><code>$*</code></li>
+<li><code>$@</code>: i번째 매개변수가 <code>$i</code>로 각각 바인딩된다. 이걸 써라.</li>
+<li><code>&quot;$*&quot;</code></li>
+<li><code>&quot;$@&quot;</code></li>
+</ul>
+<h3 id="변수-확장"><a href="#변수-확장" class="headerlink" title="변수 확장"></a>변수 확장</h3><h4 id="기본"><a href="#기본" class="headerlink" title="기본"></a>기본</h4><table>
+<thead>
+<tr>
+<th>구문</th>
+<th>예</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$v</code></td>
+<td><code>$foo</code></td>
+<td><code>v</code>의 값</td>
+</tr>
+<tr>
+<td><code>${v}</code></td>
+<td><code>${foo}</code></td>
+<td><code>v</code>의 값</td>
+</tr>
+<tr>
+<td><code>$n</code></td>
+<td><code>$1</code></td>
+<td>n번째 매개변수의 값</td>
+</tr>
+<tr>
+<td><code>${n}</code></td>
+<td><code>${32}</code></td>
+<td>n번째 매개변수의 값</td>
+</tr>
+</tbody>
+</table>
+<h4 id="빈-변수-관련"><a href="#빈-변수-관련" class="headerlink" title="빈 변수 관련"></a>빈 변수 관련</h4><blockquote>
+<p>블로그 파서 오류 때문에 이 내용은 삭제했다. 오류가 해결되면 복구할 것이다.</p>
+</blockquote>
+<h4 id="변수명으로-확장"><a href="#변수명으로-확장" class="headerlink" title="변수명으로 확장"></a>변수명으로 확장</h4><blockquote>
+<p>블로그 파서 오류 때문에 이 내용은 삭제했다. 오류가 해결되면 복구할 것이다.</p>
+</blockquote>
+<h4 id="문자열-연산"><a href="#문자열-연산" class="headerlink" title="문자열 연산"></a>문자열 연산</h4><blockquote>
+<p>블로그 파서 오류 때문에 이 내용은 삭제했다. 오류가 해결되면 복구할 것이다.</p>
+</blockquote>
+<h3 id="산술-연산-확장"><a href="#산술-연산-확장" class="headerlink" title="산술 연산 확장"></a>산술 연산 확장</h3><p>아래 구문에 표현식을 넣어 확장한다.</p>
+<pre><code>$((expression))
+</code></pre><h4 id="기수"><a href="#기수" class="headerlink" title="기수"></a>기수</h4><table>
+<thead>
+<tr>
+<th>표현</th>
+<th>예</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>n</code></td>
+<td><code>99</code></td>
+<td>10진법 표현</td>
+</tr>
+<tr>
+<td><code>0n</code></td>
+<td><code>0777</code></td>
+<td>8진법 표현</td>
+</tr>
+<tr>
+<td><code>0xn</code></td>
+<td><code>0xff</code></td>
+<td>16진법 표현</td>
+</tr>
+<tr>
+<td><code>base#n</code></td>
+<td><code>2#1111</code></td>
+<td><code>base</code>진법 표현</td>
+</tr>
+</tbody>
+</table>
+<h4 id="단항-연산자"><a href="#단항-연산자" class="headerlink" title="단항 연산자"></a>단항 연산자</h4><table>
+<thead>
+<tr>
+<th>연산자</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>+</code></td>
+<td>덧셈</td>
+</tr>
+<tr>
+<td><code>-</code></td>
+<td>뺄셈</td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>곱셈</td>
+</tr>
+<tr>
+<td><code>/</code></td>
+<td>정수 나눗셈</td>
+</tr>
+<tr>
+<td><code>**</code></td>
+<td>거듭제곱</td>
+</tr>
+<tr>
+<td><code>%</code></td>
+<td>나머지</td>
+</tr>
+</tbody>
+</table>
+<h4 id="대입"><a href="#대입" class="headerlink" title="대입"></a>대입</h4><table>
+<thead>
+<tr>
+<th>연산자</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>v = value</code></td>
+<td><code>p</code>에 <code>v</code>대입. <code>[[ a = b ]]</code> 와 혼동 주의</td>
+</tr>
+<tr>
+<td><code>v += value</code></td>
+<td>덧셈 대입</td>
+</tr>
+<tr>
+<td><code>v -= value</code></td>
+<td>뺄셈 대입</td>
+</tr>
+<tr>
+<td><code>v *= value</code></td>
+<td>곱셈 대입</td>
+</tr>
+<tr>
+<td><code>v /= value</code></td>
+<td>나눗셈 대입</td>
+</tr>
+<tr>
+<td><code>v++</code></td>
+<td>후치 증가</td>
+</tr>
+<tr>
+<td><code>v--</code></td>
+<td>후치 감소</td>
+</tr>
+<tr>
+<td><code>++v</code></td>
+<td>전치 증가</td>
+</tr>
+<tr>
+<td><code>--v</code></td>
+<td>전치 감소</td>
+</tr>
+</tbody>
+</table>
+<h4 id="비트-연산"><a href="#비트-연산" class="headerlink" title="비트 연산"></a>비트 연산</h4><table>
+<thead>
+<tr>
+<th>연산자</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>~</code></td>
+<td>비트 NOT. 모든 비트에 부정 연산</td>
+</tr>
+<tr>
+<td><code>&lt;&lt;</code></td>
+<td>비트 시프트. 모든 비트를 좌로 이동</td>
+</tr>
+<tr>
+<td><code>&gt;&gt;</code></td>
+<td>비트 시프트. 모든 비트를 우로 이동</td>
+</tr>
+<tr>
+<td><code>&amp;</code></td>
+<td>비트 AND. 둘 모두가 참</td>
+</tr>
+<tr>
+<td>`</td>
+<td>`</td>
+<td>비트 OR. 둘 중 하나 이상이 참</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>비트 XOR. 둘 중 하나만 참</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>~</code>을 제외한 모든 비트 연산은 그에 상응하는 대입 연산자가 있음. (예: <code>&lt;&lt;=</code>, <code>&amp;=</code> 등)</li>
+</ul>
+<h4 id="산술-논리-연산"><a href="#산술-논리-연산" class="headerlink" title="산술 논리 연산"></a>산술 논리 연산</h4><table>
+<thead>
+<tr>
+<th>연산자</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;=</code></td>
+<td>보다 작거나 같다</td>
+</tr>
+<tr>
+<td><code>&gt;=</code></td>
+<td>보다 크거나 같다</td>
+</tr>
+<tr>
+<td><code>&lt;</code></td>
+<td>보다 작다</td>
+</tr>
+<tr>
+<td><code>&gt;</code></td>
+<td>보다 크다</td>
+</tr>
+<tr>
+<td><code>==</code></td>
+<td>같다</td>
+</tr>
+<tr>
+<td><code>!=</code></td>
+<td>다르다</td>
+</tr>
+<tr>
+<td><code>&amp;&amp;</code></td>
+<td>논리 AND</td>
+</tr>
+<tr>
+<td>`</td>
+<td></td>
+<td>`</td>
+<td>논리 OR</td>
+</tr>
+<tr>
+<td><code>c? a:b</code></td>
+<td><code>c</code>가 참이면 <code>a</code>, 거짓이면 <code>b</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>산술 논리식에서는 0은 거짓, 다른 수는 참이다.</li>
+</ul>
+<h3 id="기타-확장"><a href="#기타-확장" class="headerlink" title="기타 확장"></a>기타 확장</h3><table>
+<thead>
+<tr>
+<th>표현</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$$</code></td>
+<td>프로세스 ID (PID)</td>
+</tr>
+<tr>
+<td><code>$!</code></td>
+<td>마지막으로 백그라운드에 실행된 작업의 PID</td>
+</tr>
+<tr>
+<td><code>$RANDOM</code></td>
+<td>1 ~ 32767 사이의 난수</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bash-배열"><a href="#bash-배열" class="headerlink" title="bash 배열"></a>bash 배열</h3><blockquote>
+<p>블로그 파서 오류 때문에 이 내용은 삭제했다. 오류가 해결되면 복구할 것이다.</p>
+</blockquote>
+<h3 id="그룹-명령과-서브쉘"><a href="#그룹-명령과-서브쉘" class="headerlink" title="그룹 명령과 서브쉘"></a>그룹 명령과 서브쉘</h3><ul>
+<li>그룹 명령: <code>{ command1; command2; [ command3; ...] }</code></li>
+<li>서브쉘: <code>(command1; command2; [ command3;...])</code></li>
+</ul>
+<p>그룹 명령은 현재 쉘에서, 서브쉘은 자식 쉘에서 실행됨. 따라서 그룹 명령이 선호됨.</p>
+<p>주로 리다이렉션을 조절하기 위해 사용됨.</p>
+<p>예)</p>
+<pre><code>{ ls -al; ps -ef; } &gt; output1.txt
+(ls -al; ps -ef) &gt; output2.txt
+</code></pre><h3 id="프로세스-치환"><a href="#프로세스-치환" class="headerlink" title="프로세스 치환"></a>프로세스 치환</h3><ul>
+<li>표준 출력 생성 프로세스: <code>&lt;(command_list)</code></li>
+<li>표준 입력 생성 프로세스: <code>&gt;(command_list)</code></li>
+</ul>
+<p>예)</p>
+<pre><code>read &lt; &lt;(echo &quot;foo&quot;)
+echo $REPLY
+</code></pre><h3 id="트랩"><a href="#트랩" class="headerlink" title="트랩"></a>트랩</h3><p>시그널 처리 등록</p>
+<ul>
+<li><code>trap command signal [signal...]</code>: <code>signal</code> 신호를 받았을 때 <code>command</code>를 실행하도록 등록.</li>
+</ul>
+<h3 id="임시-파일"><a href="#임시-파일" class="headerlink" title="임시 파일"></a>임시 파일</h3><p>위치</p>
+<ul>
+<li>기본적으로 <code>/tep</code> 디렉토리에 생성.</li>
+<li>일반 사용자 실행 스크립트의 경우 <code>/tmp</code> 디렉토리보다 <code>$Home/tmp</code> 추천.</li>
+</ul>
+<p>예) $HOME/tmp가 없으면 생성.</p>
+<pre><code>[[ -d $HOME/tmp ]] || mkdir $HOME/tmp
+</code></pre><p>temp race attack을 방지하려면, 예측할 수 없는 이름을 만들어야 함.</p>
+<ul>
+<li><code>temp=/tmp/$(basename $0).$$.$RANDOM</code>: /tmp/프로그램명.PID.난수로 생성. 안전성 불충분.</li>
+<li><code>temp=$(mktemp /tmp/$(basename $0).$$.XXXXXXXX)</code>: <code>mktemp</code> 프로그램 이용. <code>X</code>의 개수만큼 랜덤 문자 추가.</li>
+</ul>
+</div><!-- comment system--><div class="container"><hr></div></article><footer id="footer"><div class="container"><div class="bar"><div class="social"><a href="mailto:bakyeono@gmail.com" target="_blank"><i class="fa fa-envelope-o"></i></a><a href="https://github.com/bakyeono" target="_blank"><i class="fa fa-github"></i></a><a href="/atom.xml" target="_blank"><i class="fa fa-rss"></i></a></div><div class="footer">© 2016 <a href="/" rel="nofollow">박연오</a>. Powered by <a rel="nofollow" target="_blank" href="https://hexo.io">Hexo</a>. Theme <a target="_blank" href="https://github.com/lotabout/very-simple">very-simple</a>.</div></div></div></footer><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+    $(".fancybox").fancybox();
+});</script></body></html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="박연오의 개인 웹 페이지. 컴퓨터 프로그래밍 등."><title>새 우편번호 검색을 위한 간단한 스크립트 | 박연오</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/very-simple.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><!-- include the sidebar--><!-- include ./includes/sidebar.jade--><!-- Blog title and subtitle--><header><div class="container header"><a id="logo" href="/." class="title">박연오</a><span class="subtitle">bakyeono.net</span><label id="toggle-menu" for="menu" onclick><i class="fa fa-bars"></i></label></div></header><!-- use checkbox hack for toggle nav-bar on small screens--><input id="menu" type="checkbox"><!-- Navigation Links--><nav id="nav"><div class="container"><a href="/" class="sidebar-nav-item active">home</a><a href="/archive" class="sidebar-nav-item">archive</a></div></nav><div id="header-margin-bar"></div><!-- gallery that comes before the header--><div class="wrapper"><div class="container post-header"><h1>새 우편번호 검색을 위한 간단한 스크립트</h1></div></div><div class="wrapper"><div class="container meta"><div class="post-time">2015-08-09</div><div class="post-tags"><a class="post-tag-link" href="/tag/bash/">bash</a>/<a class="post-tag-link" href="/tag/linux/">linux</a>/<a class="post-tag-link" href="/tag/우편번호/">우편번호</a></div></div></div><article><div class="container post"><p>우편번호 체계가 바뀌어서 데이터를 갱신해야 하는 작업이 많다. 한국 포털 검색 엔진에 주소를 검색하면 새 우편번호를 쉽게 찾을 수 있다. 반복잡업을 피하고 싶다면 w3m 브라우저를 이용해 우편번호를 찾는 스크립트를 만들어 쓰면 편하다.</p>
+<p>이 글은 개인적 용도로 만든 스크립트를 소개한다.</p>
+<blockquote>
+<p>주의: 스크립트를 이용하는 방법은 해석하기에 따라 포털 사이트의 이용약관에 위배될 수 있다. 이 스크립트를 사용하는 사람은 그에 따르는 책임을 지도록 하자. 나는 책임을 지지 않는다.</p>
+<p>참고: 새 우편번호를 찾으려면 기존 우편번호로 검색하면 안 되고 지번주소 또는 도로명주소로 검색해야 한다. 기존 우편번호와 새 우편번호는 1:1 대응관계가 아니다.</p>
+</blockquote>
+<h2 id="새-우편번호-검색-스크립트"><a href="#새-우편번호-검색-스크립트" class="headerlink" title="새 우편번호 검색 스크립트"></a>새 우편번호 검색 스크립트</h2><p>이 스크립트를 사용하려면 w3m과 sed가 필요하다. 설치하자.</p>
+<pre><code>$ sudo apt-get install w3m sed
+</code></pre><p>에디터를 열어 스크립트 파일을 만든다. 파일명은 <code>q-postcode.sh</code> 로 했다.</p>
+<pre><code>$ vi q-postcode.sh
+</code></pre><p>스크립트 내용은 아래와 같다. 이 내용을 위의 파일에 넣는다.</p>
+<pre><code>#!/bin/bash
+
+# environment
+LANG=&quot;ko_KR.utf-8&quot; 
+
+# temp file
+tmp_dir=&quot;/tmp&quot; # dirs for temporary files
+tmp_prefix=&quot;postcode-conv&quot; # prefix for temporary filename
+clear_tmp=true # clear temporary files after the job?
+time_stamp=`date +%s%N`
+tmp_file=$tmp_dir/$tmp_prefix$time_stamp
+
+# parameter check
+if [ -z $1 ]; then
+  &gt;&amp;2 echo &quot;ERROR: No search string supplied.&quot;
+  exit 1
+fi
+
+# request
+function url_encode() { echo -n $@ | perl -pe&apos;s/([^-+_.~A-Za-z0-9])/sprintf(&quot;%%%02X&quot;, ord($1))/seg&apos;; }
+address=`url_encode $@`
+q_url=&quot;http://search.daum.net/search?nil_suggest=btn&amp;w=tot&amp;DA=SBC&amp;q=$address&quot;
+w3m -dump -cols 65536 -ppl 65536 $q_url &gt; $tmp_file 2&gt; /dev/null
+
+# parse
+sedexp=&apos;s/\ +([0-9]{5})$/\1\n/p&apos;
+result=`sed -n -r &quot;$sedexp&quot; $tmp_file`
+echo &quot;$result&quot;
+
+# clear temp files
+if [[ $clear_tmp == true ]]; then
+  rm $tmp_file
+fi
+
+exit
+</code></pre><p>실행 권한을 지정한다.</p>
+<pre><code>$ chmod u+x q-postcode.sh
+</code></pre><p>스크립트를 시험해 보자.</p>
+<pre><code>$ ./q-postcode 서울시 영등포구 버드나루로 100
+07230
+</code></pre><p>우편번호가 정상적으로 출력된다.</p>
+<blockquote>
+<p>주의: 소스를 보면 알곘지만 이건 급하게 만든 임시 스크립트다. html을 구조적으로 해석하지 않고 정규표현식으로 게으르게 읽는다. 따라서 잘못된 결과가 나올 경우가 있을 수 있으며, 포탈 사이트의 출력 방식이 바뀌면 sed 정규표현식을 수정해야 한다.</p>
+</blockquote>
+<h2 id="대량의-우편번호-찾기"><a href="#대량의-우편번호-찾기" class="headerlink" title="대량의 우편번호 찾기"></a>대량의 우편번호 찾기</h2><p>찾아야 할 우편번호가 많다면 파일에서 주소 목록을 읽어 처리하도록 하면 된다. 한 줄에 주소가 하나씩 있는 파일을 처리하는 스크립트를 만들어 보자. 파일명은 <code>convert.sh</code> 로 했다.</p>
+<pre><code>$ vi convert.sh
+</code></pre><p>아래 내용을 입력한다.</p>
+<pre><code>#!/bin/bash
+
+while read line; do
+  result=$(./q-postcode.sh $line | head -n 1)
+  echo $result
+done
+</code></pre><p>이 스크립트에도 실행 권한을 지정한다.</p>
+<pre><code>$ chmod u+x convert.sh
+</code></pre><p>이 스크립트는 한 줄에 주소 하나씩 입력받아 우편번호를 출력해준다.</p>
+<p>스크립트를 시험해보기 위한 데이터 파일을 준비하자. 터미널에 아래와 같이 입력한다. 주소 리스트가 있는 스프레드시트 문서에서 복사해 넣어도 된다.</p>
+<pre><code>$ cat &gt; data.txt &lt;&lt; _EOF_
+서울특별시 중구 세종대로 110
+부산 영도구 태종로 423
+율도국 홍길동 7878
+경기도 광주시 행정타운로 50
+_EOF_
+</code></pre><p>찾을 수 없는 주소가 데이터에 있으면 어떻게 출력되는지 확인하기 위해 중간에 <strong>율도국 홍길동 7878</strong>을 넣었다.</p>
+<p>이제 시험해보자.</p>
+<pre><code>$ ./convert.sh &lt; data.txt
+04524
+49011
+
+12738
+</code></pre><p>우편번호를 찾을 수 있는 경우 우편번호가 출력됐고, 찾을 수 없는 <strong>율도국 홍길동 7878</strong>의 우편번호는 빈 줄로 출력됐다.</p>
+<p>사용해보면 처리 속도가 느리다는 것을 알 수 있을 것이다. 수천 개 이상의 대량의 데이터를 작업해야 한다면 멀티쓰레딩을 해야 할 것이다. 이 글에서는 거기까지는 다루지 않는다.</p>
+</div><!-- comment system--><div class="container"><hr></div></article><footer id="footer"><div class="container"><div class="bar"><div class="social"><a href="mailto:bakyeono@gmail.com" target="_blank"><i class="fa fa-envelope-o"></i></a><a href="https://github.com/bakyeono" target="_blank"><i class="fa fa-github"></i></a><a href="/atom.xml" target="_blank"><i class="fa fa-rss"></i></a></div><div class="footer">© 2016 <a href="/" rel="nofollow">박연오</a>. Powered by <a rel="nofollow" target="_blank" href="https://hexo.io">Hexo</a>. Theme <a target="_blank" href="https://github.com/lotabout/very-simple">very-simple</a>.</div></div></div></footer><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+    $(".fancybox").fancybox();
+});</script></body></html>

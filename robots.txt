@@ -1,0 +1,7 @@
+# robots.txt for http://bakyeono.net
+
+Sitemap: http://bakyeono.net/sitemap.xml
+
+User-agent: *
+# Disallow: /tmp/
+

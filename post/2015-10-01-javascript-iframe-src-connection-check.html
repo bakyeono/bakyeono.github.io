@@ -1,0 +1,25 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="박연오의 개인 웹 페이지. 컴퓨터 프로그래밍 등."><title>자바스크립트 - iframe이 경로(src)에 접속할 수 없을 때 예외 처리하기 | 박연오</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/very-simple.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><!-- include the sidebar--><!-- include ./includes/sidebar.jade--><!-- Blog title and subtitle--><header><div class="container header"><a id="logo" href="/." class="title">박연오</a><span class="subtitle">bakyeono.net</span><label id="toggle-menu" for="menu" onclick><i class="fa fa-bars"></i></label></div></header><!-- use checkbox hack for toggle nav-bar on small screens--><input id="menu" type="checkbox"><!-- Navigation Links--><nav id="nav"><div class="container"><a href="/" class="sidebar-nav-item active">home</a><a href="/archive" class="sidebar-nav-item">archive</a></div></nav><div id="header-margin-bar"></div><!-- gallery that comes before the header--><div class="wrapper"><div class="container post-header"><h1>자바스크립트 - iframe이 경로(src)에 접속할 수 없을 때 예외 처리하기</h1></div></div><div class="wrapper"><div class="container meta"><div class="post-time">2015-10-01</div><div class="post-tags"><a class="post-tag-link" href="/tag/iframe/">iframe</a>/<a class="post-tag-link" href="/tag/javascript/">javascript</a></div></div></div><article><div class="container post"><h2 id="iframe의-특정-경로-접속이-실패할-때"><a href="#iframe의-특정-경로-접속이-실패할-때" class="headerlink" title="iframe의 특정 경로 접속이 실패할 때"></a>iframe의 특정 경로 접속이 실패할 때</h2><p>iframe 노드의 src 속성을 수정하여 iframe이 출력할 페이지의 경로를 지정할 수 있다. jQuery를 쓴다고 하면, 아래 명령으로 iframe의 페이지를 바꿀 수 있다.</p>
+<pre><code>$(&apos;iframe&apos;).attr(&apos;src&apos;, &apos;http://wrong.location.somewhere/&apos;);
+</code></pre><p>그런데 지정한 경로에 접속할 수 없는 경우 콘솔에 다음과 같은 예외만 남기고 실패한다.</p>
+<pre><code>GET http://wrong.location.somewhere/ net::ERR_NAME_NOT_RESOLVED
+</code></pre><p>골치 아픈 것은 이 예외를 캐치할 수 없다는 것이다. jQuery를 쓰든 DOM 객체를 직접 건드리든 마찬가지다. 이걸 잡을 수 있는 이벤트도 찾지 못했는데, 아마 없는 것 같다.</p>
+<h2 id="예외는-못-잡지만…-꼼수로-처리하기"><a href="#예외는-못-잡지만…-꼼수로-처리하기" class="headerlink" title="예외는 못 잡지만… 꼼수로 처리하기"></a>예외는 못 잡지만… 꼼수로 처리하기</h2><p>접속할 경로를 미리 테스트해 본 후 성공/실패를 구분하면 간단하다. jQuery를 쓴다고 하면, get 메소드로 테스트하면 된다.</p>
+<pre><code>var location = &apos;http://wrong.location.somewhere/&apos;;
+$.get(location, function() {
+  alert(&apos;성공&apos;);
+  $(&apos;iframe&apos;).attr(&apos;src&apos;, location);
+}).done(function() {
+  alert(&apos;두 번째 성공&apos;);
+}).fail(function(e) {
+  alert(&apos;접속 실패&apos;);
+}).always(function() {
+  alert(&apos;완료&apos;);
+});
+</code></pre><p>이렇게 하면 접속이 가능한 경로만 iframe에 지정해줄 수 있고, 접속할 수 없는 경우 사용자에게 알리는 것도 가능하다.</p>
+<h3 id="주의사항"><a href="#주의사항" class="headerlink" title="주의사항"></a>주의사항</h3><p>해당 경로에 요청을 한 번이 아니라 두 번 보내게 된다는 점에 유의해야 한다.</p>
+<h3 id="참고"><a href="#참고" class="headerlink" title="참고"></a>참고</h3><p>jQuery의 get 메소드에 관한 자세한 명세는 이 공식 문서에 나와 있다.</p>
+<p><a href="https://api.jquery.com/jquery.get" target="_blank" rel="external">https://api.jquery.com/jquery.get</a></p>
+<p>이런 꼼수 말고 제대로 예외 처리하는 방법을 아는 분이 계시면… 가르침을 구합니다.</p>
+</div><!-- comment system--><div class="container"><hr></div></article><footer id="footer"><div class="container"><div class="bar"><div class="social"><a href="mailto:bakyeono@gmail.com" target="_blank"><i class="fa fa-envelope-o"></i></a><a href="https://github.com/bakyeono" target="_blank"><i class="fa fa-github"></i></a><a href="/atom.xml" target="_blank"><i class="fa fa-rss"></i></a></div><div class="footer">© 2016 <a href="/" rel="nofollow">박연오</a>. Powered by <a rel="nofollow" target="_blank" href="https://hexo.io">Hexo</a>. Theme <a target="_blank" href="https://github.com/lotabout/very-simple">very-simple</a>.</div></div></div></footer><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+    $(".fancybox").fancybox();
+});</script></body></html>

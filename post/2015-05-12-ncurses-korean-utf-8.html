@@ -1,0 +1,26 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="박연오의 개인 웹 페이지. 컴퓨터 프로그래밍 등."><title>ncurses 라이브러리에서 한글(utf-8) 출력하기 | 박연오</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/very-simple.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><!-- include the sidebar--><!-- include ./includes/sidebar.jade--><!-- Blog title and subtitle--><header><div class="container header"><a id="logo" href="/." class="title">박연오</a><span class="subtitle">bakyeono.net</span><label id="toggle-menu" for="menu" onclick><i class="fa fa-bars"></i></label></div></header><!-- use checkbox hack for toggle nav-bar on small screens--><input id="menu" type="checkbox"><!-- Navigation Links--><nav id="nav"><div class="container"><a href="/" class="sidebar-nav-item active">home</a><a href="/archive" class="sidebar-nav-item">archive</a></div></nav><div id="header-margin-bar"></div><!-- gallery that comes before the header--><div class="wrapper"><div class="container post-header"><h1>ncurses 라이브러리에서 한글(utf-8) 출력하기</h1></div></div><div class="wrapper"><div class="container meta"><div class="post-time">2015-05-12</div><div class="post-tags"><a class="post-tag-link" href="/tag/c/">c</a>/<a class="post-tag-link" href="/tag/curses/">curses</a>/<a class="post-tag-link" href="/tag/linux/">linux</a>/<a class="post-tag-link" href="/tag/유니코드/">유니코드</a>/<a class="post-tag-link" href="/tag/한글/">한글</a></div></div></div><article><div class="container post"><h2 id="ncurses-라이브러리에서-한글이-깨질-때"><a href="#ncurses-라이브러리에서-한글이-깨질-때" class="headerlink" title="ncurses 라이브러리에서 한글이 깨질 때"></a>ncurses 라이브러리에서 한글이 깨질 때</h2><p>ncurses 라이브러리를 쓸 때, 로케일 설정을 올바로 했는데도 한글이 깨지는 문제가 있다.</p>
+<pre><code>#include &lt;locale.h&gt;
+#include &lt;curses.h&gt;
+
+int main() {
+  setlocale(LC_CTYPE, &quot;ko_KR.utf-8&quot;); /* 로케일 설정을 했는데도 */
+  initscr();
+  printw(&quot;%s&quot;, &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ\n&quot;);
+  printw(&quot;%s&quot;, &quot;가나다라마바사아자차카타파하\n&quot;);
+  refresh();
+  sleep(1);
+  endwin();
+  return 0;
+}
+</code></pre><p>이 코드를 컴파일해 실행하면 한글이 깨져서 출력된다. ncurses 라이브러리가 유니코드를 지원하지 않기 떄문이다.</p>
+<h2 id="유니코드를-지원하는-버전"><a href="#유니코드를-지원하는-버전" class="headerlink" title="유니코드를 지원하는 버전"></a>유니코드를 지원하는 버전</h2><p>ncurses 라이브러리 배포판 중에 데비안 패키지인 <code>libncurses5-dev</code>는 유니코드를 지원하지 않는다. 한글을 제대로 출력하려면 유니코드를 지원하는 버전인 <code>libncursesw5-dev</code>를 사용해야 한다.</p>
+<h3 id="설치"><a href="#설치" class="headerlink" title="설치"></a>설치</h3><p>데비안 기반 배포판인 경우 아래와 같이 설치한다.</p>
+<pre><code>$ sudo apt-get install libncursesw5-dev
+</code></pre><h3 id="헤더-인클루드"><a href="#헤더-인클루드" class="headerlink" title="헤더 인클루드"></a>헤더 인클루드</h3><p>다른 라이브러리를 쓰는 것이므로 <code>curses.h</code> 대신 <code>ncursesw/curses.h</code>를 인클루드해야 한다. 위의 예제 코드를 예로 들면 두 번째 줄을 아래와 같이 고쳐야 한다.</p>
+<pre><code>#include &lt;ncursesw/curses.h&gt;
+</code></pre><h3 id="링크"><a href="#링크" class="headerlink" title="링크"></a>링크</h3><p><code>-lncurses</code> 대신 <code>-lncursesw</code> 옵션으로 링크하면 된다.</p>
+<pre><code>$gcc SOURCE.c -o APP -lncursesw
+</code></pre><p>결과물을 실행해 보면 이제 ncurses에서 한글이 잘 출력된다는 것을 알 수 있다.</p>
+</div><!-- comment system--><div class="container"><hr></div></article><footer id="footer"><div class="container"><div class="bar"><div class="social"><a href="mailto:bakyeono@gmail.com" target="_blank"><i class="fa fa-envelope-o"></i></a><a href="https://github.com/bakyeono" target="_blank"><i class="fa fa-github"></i></a><a href="/atom.xml" target="_blank"><i class="fa fa-rss"></i></a></div><div class="footer">© 2016 <a href="/" rel="nofollow">박연오</a>. Powered by <a rel="nofollow" target="_blank" href="https://hexo.io">Hexo</a>. Theme <a target="_blank" href="https://github.com/lotabout/very-simple">very-simple</a>.</div></div></div></footer><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+    $(".fancybox").fancybox();
+});</script></body></html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="박연오의 개인 웹 페이지. 컴퓨터 프로그래밍 등."><title>html-xml-utils - 커맨드라인에서 HTML 문서 탐색하기 | 박연오</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/very-simple.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><!-- include the sidebar--><!-- include ./includes/sidebar.jade--><!-- Blog title and subtitle--><header><div class="container header"><a id="logo" href="/." class="title">박연오</a><span class="subtitle">bakyeono.net</span><label id="toggle-menu" for="menu" onclick><i class="fa fa-bars"></i></label></div></header><!-- use checkbox hack for toggle nav-bar on small screens--><input id="menu" type="checkbox"><!-- Navigation Links--><nav id="nav"><div class="container"><a href="/" class="sidebar-nav-item active">home</a><a href="/archive" class="sidebar-nav-item">archive</a></div></nav><div id="header-margin-bar"></div><!-- gallery that comes before the header--><div class="wrapper"><div class="container post-header"><h1>html-xml-utils - 커맨드라인에서 HTML 문서 탐색하기</h1></div></div><div class="wrapper"><div class="container meta"><div class="post-time">2015-06-11</div><div class="post-tags"><a class="post-tag-link" href="/tag/bash/">bash</a>/<a class="post-tag-link" href="/tag/html/">html</a>/<a class="post-tag-link" href="/tag/linux/">linux</a></div></div></div><article><div class="container post"><p>스택 오버플로의 <a href="http://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags/1732454#1732454" target="_blank" rel="external">이 글</a>에 따르면 정규표현식으로 HTML 문서를 파싱하면 좋지 않다고 한다. 프로그래밍 환경에서 제공되는 적절한 HTML(XML) 문서 탐색기를 이용하는 것이 바람직하다. 리눅스 커맨드라인에서는 어떻게 해야 할까? html-xml-utils를 사용하면 CSS 선택자로 HTML 문서를 탐색할 수 있다.</p>
+<h2 id="설치"><a href="#설치" class="headerlink" title="설치"></a>설치</h2><p>데비안 기반 리눅스:</p>
+<pre><code>$ sudo apt-get install html-xml-utils
+</code></pre><p>레드햇 기반 리눅스:</p>
+<pre><code>$ sudo yum install html-xml-utils
+</code></pre><p>패키지 직접 다운로드: <a href="http://www.w3.org/Tools/HTML-XML-utils" target="_blank" rel="external">w3.org</a></p>
+<h2 id="사용"><a href="#사용" class="headerlink" title="사용"></a>사용</h2><h3 id="hxnormalize-x"><a href="#hxnormalize-x" class="headerlink" title="hxnormalize -x"></a>hxnormalize -x</h3><p>HTML 문서를 탐색하기 전에 먼저 HTML 문서를 Well-formed XML 양식으로 변환해야 한다. HTML 정의는 XML보다 약간 느슨하기 때문에 Well-formed XML 문서가 아닌 HTML 문서가 거의 대부분이다. 이를 수행하는 프로그램은 <code>hxnormalize -x</code> 다. <code>hxnormalize</code>는 HTML 문서 출력기이며 <code>-x</code> 옵션을 주면 문서를 닫는 태그(<code>&lt;img /&gt;</code>, <code>&lt;/li&gt;</code> 등)가 없는 노드에 닫는 태그를 추가해 Well-formed XML 문서로 만들어준다.</p>
+<p>아쉽게도 HTML 문서 내용에 따라 이것이 불가능한 경우도 있다. 이 때는 이 유틸리티만으로 탐색하는 것은 안되는 듯하다.</p>
+<p>변환 명령은 다음과 같다.</p>
+<pre><code>$ hxnormalize -x 원본파일명 &gt; 출력파일명
+</code></pre><p>물론, 출력파일 스트림을 지정하지 않으면 STDOUT(콘솔)으로 출력한다.</p>
+<h3 id="hxselect"><a href="#hxselect" class="headerlink" title="hxselect"></a>hxselect</h3><p>HTML 문서를 Well-formed XML 양식으로 변환했으면 <code>hxselect</code> 명령으로 원하는 노드를 탐색할 수 있다.</p>
+<p>명령은 다음과 같다.</p>
+<pre><code>$ hxselect &apos;CSS선택자&apos; &lt; 파일명
+</code></pre><p>선택한 노드 자체는 빼고 노드가 포함한 내용물만 추출하고 싶다면 <code>-c</code> 옵션을 준다.</p>
+<pre><code>$ hxselect -c &apos;CSS선택자&apos; &lt; 파일명
+</code></pre><p>선택자로 여러 개의 노드가 선택되는 경우에, 각 노드 사이에 구분자를 출력하고 싶다면 <code>-s</code> 옵션으로 구분자를 지정한다.</p>
+<pre><code>$ hxselect -s &apos;구분자&apos; &apos;CSS선택자&apos; &lt; 파일명
+</code></pre><h3 id="예"><a href="#예" class="headerlink" title="예"></a>예</h3><p>위키피디아의 한 문서를 탐색해 보자.</p>
+<p>문서 다운로드</p>
+<pre><code>$ curl &quot;https://en.wikipedia.org/wiki/Lisp&quot; &gt; source.html
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 53551    0 53551    0     0  58206      0 --:--:-- --:--:-- --:--:-- 69909
+</code></pre><p>Well-formed XML 문서로 변환</p>
+<pre><code>$ hxnormalize -x source.html &gt; normalized.html
+</code></pre><p>원하는 노드 선택</p>
+<pre><code>$ hxselect &apos;#Types&apos; &lt; normalized.html
+&lt;span class=&quot;mw-headline&quot; id=&quot;Types&quot;&gt;Types&lt;/span&gt;
+
+$ hxselect &apos;#mw-content-text &gt; ul:nth-child(8) &gt; li:nth-child(3)&apos; &lt; normalized.html
+&lt;li&gt;A &quot;nasal lisp&quot; occurs when part or the entire air stream is directed through the nasal cavity.&lt;/li&gt;
+
+$ hxselect -c &apos;#mw-content-text &gt; ul:nth-child(8) &gt; li:nth-child(3)&apos; &lt; normalized.html
+A &quot;nasal lisp&quot; occurs when part or the entire air stream is directed through the nasal cavity.
+
+$ hxselect -s &apos;\n----\n&apos; &quot;#mw-content-text &gt; ul:nth-child(8) &gt; li&quot; &lt; normalized.html
+&lt;li&gt;&quot;Interdental&quot; lisping is produced (...중략...) it is expected.&lt;/li&gt;
+----
+&lt;li&gt;The &quot;lateral&quot; lisp is where the (...중략...) &lt;/li&gt;
+----
+&lt;li&gt;A &quot;nasal lisp&quot; occurs when part (...중략...) the nasal cavity.&lt;/li&gt;
+----
+&lt;li&gt;A &quot;strident lisp&quot; results in a (...중략...) hard surface.&lt;/li&gt;
+----
+&lt;li&gt;A &quot;dentalized lisp&quot; does not have (...중략...) and alveolar ridge.&lt;/li&gt;
+----
+&lt;li&gt;A &quot;palatal lisp&quot; is where the speaker attempts (...중략...) &lt;/li&gt;
+----
+</code></pre><p>복잡한 문서에서 노드 추출을 위한 CSS 선택자 표현식을 작성하는 것은 간단하지는 않다. 여러 웹 브라우저들이 제공하는 개발자 도구를 활용하면 도움이 된다.</p>
+</div><!-- comment system--><div class="container"><hr></div></article><footer id="footer"><div class="container"><div class="bar"><div class="social"><a href="mailto:bakyeono@gmail.com" target="_blank"><i class="fa fa-envelope-o"></i></a><a href="https://github.com/bakyeono" target="_blank"><i class="fa fa-github"></i></a><a href="/atom.xml" target="_blank"><i class="fa fa-rss"></i></a></div><div class="footer">© 2016 <a href="/" rel="nofollow">박연오</a>. Powered by <a rel="nofollow" target="_blank" href="https://hexo.io">Hexo</a>. Theme <a target="_blank" href="https://github.com/lotabout/very-simple">very-simple</a>.</div></div></div></footer><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+    $(".fancybox").fancybox();
+});</script></body></html>
