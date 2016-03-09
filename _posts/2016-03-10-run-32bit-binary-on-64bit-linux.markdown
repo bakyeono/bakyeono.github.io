@@ -37,6 +37,6 @@ tags: 리눅스
 
 ## 참고문서
 
-* [http://askubuntu.com/questions/133389/no-such-file-or-directory-but-the-file-exists](Stack Overflow 문서)
-* [http://developer.android.com/sdk/installing/index.html?pkg=tools](Android SDK 문서)
+* [Stack Overflow 문서](http://askubuntu.com/questions/133389/no-such-file-or-directory-but-the-file-exists)
+* [Android SDK 문서](http://developer.android.com/sdk/installing/index.html?pkg=tools)
 
