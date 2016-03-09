@@ -2,7 +2,7 @@
 layout: post
 title: xmllint --xpath 로 XML 문서 탐색하기
 author: 박연오(bakyeono@gmail.com)
-date: 2015-06-01 10:10
+date: 2015-06-01 10:10 +0900
 tags: xml xmllint xpath 리눅스 bash
 ---
 * table of contents

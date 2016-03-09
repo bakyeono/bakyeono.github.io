@@ -2,7 +2,7 @@
 layout: post
 title: html-xml-utils - 커맨드라인에서 HTML 문서 탐색하기
 author: 박연오(bakyeono@gmail.com)
-date: 2015-06-11 14:50
+date: 2015-06-11 14:50 +0900
 tags: html 리눅스 bash
 ---
 * table of contents

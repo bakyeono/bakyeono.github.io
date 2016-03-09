@@ -2,7 +2,7 @@
 layout: post
 title: 무료 다국어 사전 Glosbe API 사용하기
 author: 박연오(bakyeono@gmail.com)
-date: 2015-08-27 02:30
+date: 2015-08-27 02:30 +0900
 tags: glosbe 사전 파이썬
 ---
 * table of contents

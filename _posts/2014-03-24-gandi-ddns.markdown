@@ -2,7 +2,7 @@
 layout: post
 title: "간디 도메인(gandi.net) DDNS 설정"
 author: 박연오(bakyeono@gmail.com)
-date: 2014-03-24 20:29
+date: 2014-03-24 20:29 +0900
 tags: 네트워크 도메인
 ---
 * table of contents

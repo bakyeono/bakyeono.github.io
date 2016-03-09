@@ -2,7 +2,7 @@
 layout: post
 title: 텔레그램 로봇, 공식 API로 만들기 (파이썬, 구글 앱 엔진)
 author: 박연오(bakyeono@gmail.com)
-date: 2015-08-24 12:21
+date: 2015-08-24 12:21 +0900
 tags: 텔레그램 봇 파이썬 구글-앱-엔진
 ---
 * table of contents

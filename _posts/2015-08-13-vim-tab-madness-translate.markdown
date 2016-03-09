@@ -2,7 +2,7 @@
 layout: post
 title: (번역) Vim의 탭은 그렇게 쓰는 게 아니다. 버퍼와 탭의 사용법
 author: 박연오(bakyeono@gmail.com)
-date: 2015-08-13 01:01
+date: 2015-08-13 01:01 +0900
 tags: vim
 ---
 * table of contents

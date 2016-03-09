@@ -2,7 +2,7 @@
 layout: post
 title: 리눅스 쉘 학습 노트
 author: 박연오(bakyeono@gmail.com)
-date: 2014-05-19 12:48
+date: 2014-05-19 12:48 +0900
 tags: 리눅스 bash
 ---
 리눅스 쉘 학습하면서 남긴 노트다.

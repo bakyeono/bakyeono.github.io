@@ -2,7 +2,7 @@
 layout: post
 title: 《건강한 프로그래머》 서평
 author: 박연오(bakyeono@gmail.com)
-date: 2015-05-02 15:10
+date: 2015-05-02 15:10 +0900
 tags: 서평
 ---
 

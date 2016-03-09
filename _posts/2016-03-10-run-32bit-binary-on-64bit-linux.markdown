@@ -2,7 +2,7 @@
 layout: post
 title: 64비트 리눅스에서 32비트 프로그램이 실행되지 않을 때
 author: 박연오(bakyeono@gmail.com)
-date: 2016-03-10 03:21
+date: 2016-03-10 03:21 +0900
 tags: 리눅스
 ---
 * table of contents

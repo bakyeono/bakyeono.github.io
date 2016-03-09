@@ -2,7 +2,7 @@
 layout: post
 title: 자바스크립트 - 여러 페이지 사이에 데이터를 저장, 교환하기
 author: 박연오(bakyeono@gmail.com)
-date: 2015-09-25 02:10
+date: 2015-09-25 02:10 +0900
 tags: 자바스크립트 웹킷
 ---
 * table of contents

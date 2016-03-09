@@ -2,7 +2,7 @@
 layout: post
 title: R 학습 노트
 author: 박연오(bakyeono@gmail.com)
-date: 2014-04-03 10:10
+date: 2014-04-03 10:10 +0900
 tags: r 통계분석
 ---
 R 다운로드: [http://www.r-project.org][r-project]

@@ -2,7 +2,7 @@
 layout: post
 title: "한글 비트맵 폰트 출력"
 author: 박연오(bakyeono@gmail.com)
-date: 2013-12-03 21:55
+date: 2013-12-03 21:55 +0900
 tags: 클로저 유니코드 한글
 ---
 * table of contents

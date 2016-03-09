@@ -2,7 +2,7 @@
 layout: post
 title: 리눅스 콘솔(X-window 말고 진짜 콘솔!)에서 한글 보기
 author: 박연오(bakyeono@gmail.com)
-date: 2015-12-31 02:26
+date: 2015-12-31 02:26 +0900
 tags: 리눅스 한글 콘솔 터미널
 ---
 * table of contents

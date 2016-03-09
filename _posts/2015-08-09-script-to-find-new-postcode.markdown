@@ -2,7 +2,7 @@
 layout: post
 title: 새 우편번호 검색을 위한 간단한 스크립트
 author: 박연오(bakyeono@gmail.com)
-date: 2015-08-09 21:03
+date: 2015-08-09 21:03 +0900
 tags: 리눅스 bash 우편번호
 ---
 * table of contents

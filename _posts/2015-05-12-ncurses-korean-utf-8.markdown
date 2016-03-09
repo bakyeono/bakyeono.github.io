@@ -2,7 +2,7 @@
 layout: post
 title: ncurses 라이브러리에서 한글(utf-8) 출력하기
 author: 박연오(bakyeono@gmail.com)
-date: 2015-05-12 21:12
+date: 2015-05-12 21:12 +0900
 tags: c 리눅스 유니코드 한글 curses
 ---
 * table of contents

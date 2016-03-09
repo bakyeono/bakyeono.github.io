@@ -2,7 +2,7 @@
 layout: post
 title: 엣지 케이스(edge case)와 코너 케이스(corner case)
 author: 박연오(bakyeono@gmail.com)
-date: 2015-05-02 19:13
+date: 2015-05-02 19:13 +0900
 tags: 용어 디버그 테스트
 ---
 [엣지 케이스(edge case)][edge-case-wikipedia]와 [코너 케이스(corner case)][corner-case-wikipedia]는 프로그래밍, 디버깅, 단위 테스트 등에서 사용되는 비슷하지만 다른 용어다.

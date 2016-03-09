@@ -2,7 +2,7 @@
 layout: post
 title: "클로저(Clojure)를 위한 Vim 플러그인"
 author: 박연오(bakyeono@gmail.com)
-date: 2013-10-08 19:12
+date: 2013-10-08 19:12 +0900
 tags: 클로저 vim
 ---
 * table of contents

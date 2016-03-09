@@ -2,7 +2,7 @@
 layout: post
 title: NEXT-201N(rtl8192cu) 무선 랜 카드가 리눅스에서 오작동할 때
 author: 박연오(bakyeono@gmail.com)
-date: 2015-08-08 11:09
+date: 2015-08-08 11:09 +0900
 tags: 리눅스 네트워크
 ---
 * table of contents

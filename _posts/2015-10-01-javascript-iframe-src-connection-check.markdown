@@ -2,7 +2,7 @@
 layout: post
 title: 자바스크립트 - iframe이 경로(src)에 접속할 수 없을 때 예외 처리하기
 author: 박연오(bakyeono@gmail.com)
-date: 2015-10-01 23:30
+date: 2015-10-01 23:30 +0900
 tags: 자바스크립트 iframe
 ---
 * table of contents

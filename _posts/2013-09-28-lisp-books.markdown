@@ -2,7 +2,7 @@
 layout: post
 title: "리스프 입문자를 위한 학습서"
 author: 박연오(bakyeono@gmail.com)
-date: 2013-09-28 18:46
+date: 2013-09-28 18:46 +0900
 tags: 함수형-프로그래밍 커먼-리스프 클로저 스킴 서평
 ---
 * table of contents

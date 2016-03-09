@@ -2,7 +2,7 @@
 layout: post
 title: "레드햇 오픈시프트에 클로저(Clojure) 올리기"
 author: 박연오(bakyeono@gmail.com)
-date: 2014-03-20 02:38
+date: 2014-03-20 02:38 +0900
 tags: 클로저 네트워크 paas
 ---
 * table of contents

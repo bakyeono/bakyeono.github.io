@@ -2,7 +2,7 @@
 layout: post
 title: "클로저(Clojure) 프로젝트 관리 도구 Leiningen"
 author: 박연오(bakyeono@gmail.com)
-date: 2013-10-02 18:44
+date: 2013-10-02 18:44 +0900
 tags: 클로저 leiningen
 ---
 * table of contents

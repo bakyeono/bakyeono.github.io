@@ -2,7 +2,7 @@
 layout: post
 title: .profile에 설정한 내용이 터미널 에뮬레이터에서 안 먹힐 때
 author: 박연오(bakyeono@gmail.com)
-date: 2015-09-05 21:49
+date: 2015-09-05 21:49 +0900
 tags: 리눅스 X-윈도우 bash
 ---
 * table of contents

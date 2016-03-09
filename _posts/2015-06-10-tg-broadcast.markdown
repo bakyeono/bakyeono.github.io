@@ -2,7 +2,7 @@
 layout: post
 title: telegram-cli로 텔레그램 봇 만들기 (tg-broadcast)
 author: 박연오(bakyeono@gmail.com)
-date: 2015-06-10 15:30
+date: 2015-06-10 15:30 +0900
 tags: 텔레그램 봇 루아 bash
 ---
 * table of contents

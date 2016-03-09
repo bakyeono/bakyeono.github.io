@@ -2,7 +2,7 @@
 layout: post
 title: "라즈베리 파이 머신으로 배우는 리눅스"
 author: 박연오(bakyeono@gmail.com)
-date: 2014-03-13 01:31
+date: 2014-03-13 01:31 +0900
 tags: 라즈베리-파이 리눅스 서평
 ---
 * table of contents

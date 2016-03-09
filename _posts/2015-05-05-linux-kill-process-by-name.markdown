@@ -2,7 +2,7 @@
 layout: post
 title: 프로세스를 이름으로 단번에 종료하기
 author: 박연오(bakyeono@gmail.com)
-date: 2015-05-05 00:43
+date: 2015-05-05 00:43 +0900
 tags: 리눅스 bash grep
 ---
 * table of contents

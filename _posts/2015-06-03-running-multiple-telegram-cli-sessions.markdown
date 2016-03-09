@@ -2,7 +2,7 @@
 layout: post
 title: telegram-cli 여러 세션을 동시에 실행하기
 author: 박연오(bakyeono@gmail.com)
-date: 2015-06-03 10:56
+date: 2015-06-03 10:56 +0900
 tags: 텔레그램 sudo
 ---
 * table of contents
