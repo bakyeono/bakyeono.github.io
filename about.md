@@ -15,7 +15,7 @@ Basic, HTML, C, C++, Java, Python, Lua, Common Lisp, Clojure, Scheme, Bash, SQL,
 
 결벽증이 약간 있는 편인데, 코드에도 그게 반영되기도 한다.
 
-![](http://bakyeono.net/img/bakyeono-working.png)
+![](http://bakyeono.net/img/bakyeono-working.jpg)
 
 주식회사 플러스이십일에서 개발팀장으로 일하고 있고, 사회 운동 단체인 ['노동자 연대'](http://wspaper.org)의 개발팀에 기여하고 있다.
 
