@@ -1,7 +1,7 @@
 ---
 layout: post
-title: 개인 프로젝트
-label: 개인 프로젝트
+title: 취미 프로젝트
+label: 취미 프로젝트
 permalink: /project.html
 ---
 * table of contents
