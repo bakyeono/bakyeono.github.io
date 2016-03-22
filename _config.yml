@@ -1,10 +1,10 @@
 # Site Settings
 title: 박연오
 email: bakyeono@gmail.com
-description: "박연오의 개인 웹 페이지"
+description: "주말은 해킹과 함께"
 url: "http://bakyeono.net"
 github_username: bakyeono 
-license_url: "http://www.freeuse.or.kr/license/2.0/yg/index.htm"
+license_url: "http://bakyeono.net/LICENSE"
 
 # Handling Reading
 safe:         false
