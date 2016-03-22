@@ -7,11 +7,11 @@ permalink: /project.html
 * table of contents
 {:toc}
 
+업무 외에 취미로 진행한 *내 새끼* 프로젝트들.
+
 ## 2015년
 
 ### 텔레그램 로봇 - 공식 API 버전
-
-![](http://bakyeono.net/img/telegram-bot-test-echo.png)
 
 * 개발환경: Python, Google App Engine
 * 주요기능: 구독자 관리, 구독자에게 메시지 자동 방송 기능 등
@@ -20,6 +20,8 @@ permalink: /project.html
 텔레그램 공식 API로 만든 로봇. '노동자 연대' 신문사의 기사 알림 프로그램으로도 사용되고 있다. [(관련 글)](http://webmaster.wspaper.org/archives/485)
 
 ### 텔레그램 로봇 - telegram-cli 버전
+
+![](https://github.com/bakyeono/tg-broadcast/screenshot.png)
 
 * 개발환경: telegram-cli, Lua
 * 주요기능: 구독자 관리, 구독자에게 메시지 자동 방송 기능 등
@@ -109,6 +111,8 @@ Unix IPC 통신을 학습하면서 만든 3인용 멀티플레이어 게임
 C++을 배운 뒤 만들어 본 테트리스
 
 ### 제노사이드 한국어 패치
+
+![](https://raw.githubusercontent/bakyeono/xenocide-korean-patch/master/screenshot/xenocide4.png)
 
 * 개발환경: C++
 * GitHub: <https://github.com/bakyeono/xenocide-korean-patch>
