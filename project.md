@@ -21,7 +21,7 @@ permalink: /project.html
 
 ### 텔레그램 로봇 - telegram-cli 버전
 
-![](https://github.com/bakyeono/tg-broadcast/screenshot.png)
+![](https://github.com/bakyeono/tg-broadcast/blob/master/screenshot.png)
 
 * 개발환경: telegram-cli, Lua
 * 주요기능: 구독자 관리, 구독자에게 메시지 자동 방송 기능 등
@@ -112,7 +112,7 @@ C++을 배운 뒤 만들어 본 테트리스
 
 ### 제노사이드 한국어 패치
 
-![](https://raw.githubusercontent/bakyeono/xenocide-korean-patch/master/screenshot/xenocide4.png)
+![](https://raw.githubusercontent.com/bakyeono/xenocide-korean-patch/master/screenshot/xenocide4.png)
 
 * 개발환경: C++
 * GitHub: <https://github.com/bakyeono/xenocide-korean-patch>
