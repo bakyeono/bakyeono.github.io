@@ -70,8 +70,12 @@ permalink: /project.html
 
 ### 도트홀릭 - 네모네모로직 게임
 
+![](https://github.com/bakyeono/dotholic/blob/master/dotholic.png)
+
 * 개발환경: C++, SDL
 * GitHub: <https://github.com/bakyeono/dotholic>
+
+하루만에 만든 게임.
 
 ### Clojure 테트리스
 
