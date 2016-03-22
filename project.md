@@ -70,7 +70,7 @@ permalink: /project.html
 
 ### 도트홀릭 - 네모네모로직 게임
 
-![](https://github.com/bakyeono/dotholic/blob/master/dotholic.png)
+![](https://raw.githubusercontent.com/bakyeono/dotholic/master/dotholic.png)
 
 * 개발환경: C++, SDL
 * GitHub: <https://github.com/bakyeono/dotholic>
