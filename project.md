@@ -76,7 +76,7 @@ permalink: /project.html
 * 개발환경: Clojure, Swing
 * GitHub: <https://github.com/bakyeono/clojure-tetris>
 
-함수형 프로그래밍으로 제작한 테트리스
+Clojure를 배우고 처음 만들어 본 프로그램. 함수형 프로그래밍으로 제작한 테트리스.
 
 
 ## 2011년
@@ -100,20 +100,20 @@ Unix IPC 통신을 학습하면서 만든 3인용 멀티플레이어 게임
 
 ## 2009년
 
-### 제노사이드 한국어 패치
-
-* 개발환경: C++
-* GitHub: <https://github.com/bakyeono/xenocide-korean-patch>
-
-SF 로그라이크 게임인 제노사이드의 한국어화 패치. 모든 데이터를 번역했다. 다만 게임 자체가 완성된 버전은 아니었다.
-
-
-### SDL 테트리스 (2009년)
+### SDL 테트리스
 
 ![](https://raw.githubusercontent.com/bakyeono/sdl-tetris/master/screenshot/screenshot-tetris2.png)
 
 * 개발환경: C++, SDL
 * Github: <https://github.com/bakyeono/sdl-tetris>
 
+C++을 배운 뒤 만들어 본 테트리스
 
+
+### 제노사이드 한국어 패치
+
+* 개발환경: C++
+* GitHub: <https://github.com/bakyeono/xenocide-korean-patch>
+
+SF 로그라이크 게임인 제노사이드의 한국어화 패치. 모든 데이터를 번역했다. 다만 게임 자체가 완성된 버전은 아니었다.
 
