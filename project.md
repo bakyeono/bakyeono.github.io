@@ -21,7 +21,7 @@ permalink: /project.html
 
 ### 텔레그램 로봇 - telegram-cli 버전
 
-![](https://github.com/bakyeono/tg-broadcast/blob/master/screenshot.png)
+![](https://raw.githubusercontent.com/bakyeono/tg-broadcast/master/screenshot.png)
 
 * 개발환경: telegram-cli, Lua
 * 주요기능: 구독자 관리, 구독자에게 메시지 자동 방송 기능 등
