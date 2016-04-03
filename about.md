@@ -9,13 +9,11 @@ permalink: /about.html
 
 ![](http://bakyeono.net/img/bakyeono-working.jpg)
 
-1994년에 외삼촌이 쓰다 주신 IBM XT(8086) 호환 PC로 컴퓨터를 접했고 1998년에 모뎀으로 인터넷에 접속했다.
+1994년에 IBM XT(8086) 호환 PC로 컴퓨터를 접했고 1998년에 모뎀으로 인터넷에 접속했다.
 
 Basic, HTML, C, C++, Java, Python, Lua, Common Lisp, Clojure, Scheme, Bash, SQL, CSS, Javascript를 차례로 익히며 프로그램을 배웠다.
 
 프로그래머의 생각을 간결하게 표현할 수 있는 함수형 패러다임을 좋아한다. 저수준의 기계적 구조에도 흥미가 있다. 게임 애플리케이션 개발을 위해 프로그래밍을 배웠고 요즘은 웹 기술(프론트엔드, 백엔드 둘 다)에도 관심이 많다.
-
-결벽증이 약간 있는 편인데, 코드에도 그게 반영되기도 한다.
 
 주식회사 플러스이십일에서 개발팀장으로 일하고 있고, 사회 운동 단체인 ['노동자 연대'](http://wspaper.org)의 개발팀에 기여하고 있다.
 
