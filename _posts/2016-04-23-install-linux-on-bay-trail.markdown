@@ -50,13 +50,13 @@ tags: 리눅스
 
 내가 유일하게 (사용이 가능한 수준으로) 설치에 성공한 배포판이다. 아래 주소에서 다운로드할 수 있다.
 
-https://plus.google.com/+IanMORRISON/posts/UNWdwRMqy3j
+<https://plus.google.com/+IanMORRISON/posts/UNWdwRMqy3j>
 
 ### Fedlet
 
 베타 버전이어서 완성도가 낮다. 아래 주소에서 다운로드할 수 있다.
 
-https://www.happyassassin.net/fedlet-a-fedora-remix-for-bay-trail-tablets
+<https://www.happyassassin.net/fedlet-a-fedora-remix-for-bay-trail-tablets>
 
 
 ## Ubuntu 14.04.3 설치 과정
@@ -127,4 +127,8 @@ GRUB 설정도 조금 고쳐야 한다. 편집기로 /etc/default/grub 파일을
 
 이 정도면 휴대용 코딩 노트북으로 나쁘지 않다. 하루 빨리 완벽한 지원이 이뤄지길 기대해본다.
 
+
+## 참고문서
+
+* [Installing Ubuntu 15.04 on BayTrail tablets](https://sturmflut.github.io/linux/ubuntu/2015/01/21/installing-ubuntu-15.04-on-baytrail-tablets): 가장 큰 도움이 된 글이다.
 
