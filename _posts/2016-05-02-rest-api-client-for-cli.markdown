@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 커맨드라인 환경에서 REST API (HTTP) 요청 보내기 (curl, resty, httpie, vim-rest-control)
+title: 커맨드라인 환경에서 REST API (HTTP) 요청 보내기 (cURL, resty, httpie, Vim REST Control)
 author: 박연오(bakyeono@gmail.com)
 date: 2016-05-02 22:34 +0900
 tags: http rest-api 리눅스 bash vim
@@ -13,13 +13,13 @@ tags: http rest-api 리눅스 bash vim
 이 글은 리눅스 커맨드라인 사용법과 [HTTP](https://ko.wikipedia.org/wiki/HTTP)에 대한 기본 사항을 알고 있음을 전제로 한다.
 
 
-## curl
+## cURL
 
-가장 쉽게 쓰이는 방법은 curl을 이용하는 것이다. 
+가장 쉽게 쓰이는 방법은 cURL을 이용하는 것이다. 
 
 ### 설치
 
-curl은 리눅스 배포판에 대부분 기본으로 포함돼 있다. 보통은 리눅스 커뮤니티가 관리하는 패키지 관리 시스템을 이용해 간단히 설치할 수 있다. 아래 명령으로 설치한다.
+cURL은 리눅스 배포판에 대부분 기본으로 포함돼 있다. 보통은 리눅스 커뮤니티가 관리하는 패키지 관리 시스템을 이용해 간단히 설치할 수 있다. 아래 명령으로 설치한다.
 
     $ sudo apt-get install curl
 
@@ -27,7 +27,7 @@ curl은 리눅스 배포판에 대부분 기본으로 포함돼 있다. 보통�
 
 ### 요청 보내기
 
-REST API를 사용할 때는 curl 옵션 중 몇 가지를 꼭 알아두는 것이 좋다.
+REST API를 사용할 때는 cURL 옵션 중 몇 가지를 꼭 알아두는 것이 좋다.
 
 * `-i`: 응답 헤더 출력 (옵션 없으면 응답 본문만 출력함)
 * `-v`: 중간 처리 과정, 오류 메시지, 요청 메시지와 응답 메시지를 헤더와 본문을 포함해 전체 출력
@@ -41,7 +41,7 @@ REST API를 사용할 때는 curl 옵션 중 몇 가지를 꼭 알아두는 것�
     $ curl -X POST http://127.0.0.1:3000/api/languages/ansi-common-lisp
     $ curl -X PUT http://127.0.0.1:3000/api/resources/1789
 
-위 명령은 curl을 이용해 각각 다음과 같은 요청을 보낸다.
+위 명령은 cURL을 이용해 각각 다음과 같은 요청을 보낸다.
 
 * `http://127.0.0.1:3000/api/users/bakyeono` 리소스를 GET
 * `http://127.0.0.1:3000/api/languages/ansi-common-lisp` 리소스를 POST
@@ -49,7 +49,7 @@ REST API를 사용할 때는 curl 옵션 중 몇 가지를 꼭 알아두는 것�
 
 ### URL 인코드(퍼센트 인코드)
 
-URL에 사용할 수 없는 문자가 포함될 경우 [URL 인코드(퍼센트 인코드)](https://ko.wikipedia.org/wiki/%ED%8D%BC%EC%84%BC%ED%8A%B8_%EC%9D%B8%EC%BD%94%EB%94%A9)를 해 줘야 한다는 걸 알 것이다. curl 자체 기능으로는 URL 인코드를 제공하지 않으므로 알아서 URL 인코드 한 주소를 매개변수로 넘겨야 한다. 그 대신 URL 쿼리 부분은 `--data-urlencode`를 옵션을 이용해 URL 인코딩하여 요청할 수 있다.
+URL에 사용할 수 없는 문자가 포함될 경우 [URL 인코드(퍼센트 인코드)](https://ko.wikipedia.org/wiki/%ED%8D%BC%EC%84%BC%ED%8A%B8_%EC%9D%B8%EC%BD%94%EB%94%A9)를 해 줘야 한다는 걸 알 것이다. cURL 자체 기능으로는 URL 인코드를 제공하지 않으므로 알아서 URL 인코드 한 주소를 매개변수로 넘겨야 한다. 그 대신 URL 쿼리 부분은 `--data-urlencode`를 옵션을 이용해 URL 인코딩하여 요청할 수 있다.
 
     $ curl -X GET --data-urlencode "id=1000&category=post" http://127.0.0.1:3000/api/data
 
@@ -66,11 +66,11 @@ URL에 사용할 수 없는 문자가 포함될 경우 [URL 인코드(퍼센트 
 
 * resty: <https://github.com/micha/resty>
 
-resty는 curl을 이용해 REST API 테스트를 쉽게 할 수 있도록 도와주는 스크립트다.
+resty는 cURL을 이용해 REST API 테스트를 쉽게 할 수 있도록 도와주는 스크립트다.
 
 ### 설치
 
-resty는 curl을 이용한다. 따라서 시스템에 curl이 설치되어 있어야 한다. curl이 설치된 상태에서 아래 명령을 실행해 스크립트를 다운로드한다.
+resty는 cURL을 이용한다. 따라서 시스템에 cURL이 설치되어 있어야 한다. cURL이 설치된 상태에서 아래 명령을 실행해 스크립트를 다운로드한다.
 
     $ curl -L http://github.com/micha/resty/raw/master/resty > resty
 
@@ -100,7 +100,7 @@ URL을 설정했으면 `GET`, `POST`, `PUT`, `DELETE` 같은 HTTP 메소드를 �
 
 ### 본문을 포함해 요청 보내기
 
-`-d` 옵션으로 본문을 지정할 수 있다. 요청 헤더 지정은 `-H` 옵션으로 한다. curl 스크립트이기 때문에 사용법이 거의 똑같다.
+`-d` 옵션으로 본문을 지정할 수 있다. 요청 헤더 지정은 `-H` 옵션으로 한다. cURL 스크립트이기 때문에 사용법이 거의 똑같다.
 
     $ PUT -H 'Content-Type: application/json; charset=utf-8' -d '{"message":"hello"}' /chat
 
