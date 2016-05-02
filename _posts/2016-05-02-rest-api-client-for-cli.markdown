@@ -156,11 +156,11 @@ httpie는 내가 가장 추천하는 HTTP 클라이언트다. REST API를 이용
 이 외에도 생각할 수 있는 필요한 기능들이 대부분 있으니 설명서를 읽어보는 게 좋다.
 
 
-## vim-rest-control (vim 플러그인)
+## Vim REST Control (vim 플러그인)
 
-Vim 사용자라면 편리하게 이용할 수 있는 플러그인들이 있다. 그 중 vim-rest-control이 쓸만했다.
+Vim 사용자라면 편리하게 이용할 수 있는 플러그인들이 있다. 그 중 Vim REST Control이 쓸만했다.
 
-* vim-rest-control: <https://github.com/diepm/vim-rest-console>
+* Vim REST Control: <https://github.com/diepm/vim-rest-console>
 
 ### 사용법
 
