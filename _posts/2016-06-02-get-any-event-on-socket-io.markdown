@@ -3,7 +3,7 @@ layout: post
 title: Socket.io 통신에서 이벤트명을 모를 때
 author: 박연오(bakyeono@gmail.com)
 date: 2016-06-02 23:09 +0900
-tags: socket javascript
+tags: 자바스크립트 소켓
 ---
 * table of contents
 {:toc}
