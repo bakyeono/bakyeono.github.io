@@ -46,7 +46,7 @@ tags: 엘라스틱서치 검색 은전한닢
 
 엘라스틱서치에서 사용되는 용어다. 엘라스틱서치를 색인 기능이 추가된 NoSQL DBMS라고 생각하면 이해하기 쉬울 수도 있다.
 
-* 인덱스/타입/문서(index/type/document): 엘라스틱서치의 데이터 계층이다. MySQL로 치면 database/table/row에 대응하는 개념이다. REST API 에서 문서를 표현할 때는 `/wspaper/article/10000` 과 같이 표현한다. 이 때 `wspaper`가 인덱스, `article`이 타입, `10000`이 문서다.
+* 인덱스/타입/문서(index/type/document): 엘라스틱서치의 데이터 계층이다. MySQL로 치면 database/table/row에 대응하는 개념이다. REST API 에서 문서를 표현할 때는 `/news/article/10000` 과 같이 표현한다. 이 때 `news`가 인덱스, `article`이 타입, `10000`이 문서다.
 
 * 필드(field): 엘라스틱서치 문서는 JSON이다. JSON의 각 프로퍼티를 엘라스틱서치에서 필드라고 부른다. MySQL로 치면 column에 대응하는 개념이다.
 
