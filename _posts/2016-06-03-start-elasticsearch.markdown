@@ -162,7 +162,7 @@ RDBMS의 스키마 설계에 대응하는 과정이다.
           "analyzer": {
             "korean": {
               "type": "custom",
-              "tokenizer": "seunjeon_default_tokenizer",
+              "tokenizer": "seunjeon_default_tokenizer"
             }
           }
         }
@@ -183,8 +183,8 @@ MySQL에서 table을 위한 스키마를 만들어 두는 것처럼 엘라스틱
     {
       "properties": {
         "urn":          {"type": "string", "index": "not_analyzed"},
-        "title":        {"type": "string", "analyzer": "korean_index"},
-        "content":      {"type": "string", "analyzer": "korean_index"},
+        "title":        {"type": "string", "analyzer": "korean"},
+        "content":      {"type": "string", "analyzer": "korean"},
         "writer":       {
           "type": "nested",
           "properties": {
