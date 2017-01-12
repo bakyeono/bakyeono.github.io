@@ -3,7 +3,7 @@ layout: post
 title: 낡은 PHP 환경에서 쓸 만한 프레임워크 / 그리고 PHP 7에서 mysql.so 확장 사용하기
 author: 박연오(bakyeono@gmail.com)
 date: 2017-01-12 23:58 +0900
-tags: PHP MySQL CodeIgniter
+tags: php mysql codeigniter laravel
 ---
 * table of contents
 {:toc}
