@@ -15,7 +15,7 @@ permalink: /project.html
 
 ### 반려동물 돌봄 앱 CMS
 
-* 개발환경: Python, Django, PostgreSQL
+* 개발환경: Python, Django, PostgreSQL, Elasticsearch
 * 주요기능: 콘텐츠 관리, 콘텐츠 큐레이션, 앱 서비스
 
 반려동물 돌봄 앱은 사내 주력 프로젝트였다. 모바일 앱은 별도로 개발했고 나는 CMS 서버를 개발했다. 앱에 데이터를 제공하기 위한 인터페이스, 에디터가 콘텐츠를 관리하기 위한 웹 인터페이스, 사용자 상황별 콘텐츠 큐레이션, 기상/대기 정보 수집 등을 제공했다.
