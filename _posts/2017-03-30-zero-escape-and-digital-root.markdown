@@ -3,7 +3,7 @@ layout: post
 title: 극한탈출 9시간 9명 9의 문을 플레이하며
 author: 박연오(bakyeono@gmail.com)
 date: 2017-03-30 03:45 +0900
-tags: game 파이썬
+tags: 게임 파이썬
 ---
 * table of contents
 {:toc}
