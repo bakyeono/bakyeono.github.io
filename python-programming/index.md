@@ -23,4 +23,5 @@ permalink: /python-programming/index.html
 * 12장 실전 프로그래밍
 * 앞으로의 공부
 * 부록
+* 연습문제 정답
 
