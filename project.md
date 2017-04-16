@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title: 프로젝트 이력
 label: 프로젝트 이력
 permalink: /project.html

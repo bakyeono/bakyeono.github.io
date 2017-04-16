@@ -27,7 +27,6 @@ gems:
 - jekyll-redirect-from
 - jekyll-sitemap
 - jekyll-feed
-- jekyll-paginate
 
 # Conversion
 markdown:    kramdown
@@ -42,8 +41,6 @@ baseurl: "" # does not include hostname
 
 # Outputting
 permalink:     /post/:year-:month-:day-:title.html
-paginate:      100
-paginate_path: "/page:num"
 timezone:      "Asia/Seoul"
 quiet:         true
 defaults:      []

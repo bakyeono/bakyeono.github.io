@@ -2,27 +2,21 @@
 layout: default
 ---
 <div class="home">
-  <h1 class="page-heading">글</h1>
-  <ul class="post-list">
-    {% for post in paginator.posts %}
-      <li>
-        <span class="post-meta">{{ post.date | date: "%Y-%m-%d" }}</span>
-        <h2><a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></h2>
-      </li>
-    {% endfor %}
-  </ul>
-  {% if paginator.total_pages > 1 %}
-  <div class="pagination">
-    <h2 class="pagination-heading">다음 페이지</h2>
-    {% for page in (1..paginator.total_pages) %}
-    {% if page == paginator.page %}
-    <span class="pagination-item pagination-current">{{ page }}</span>
-    {% elsif page == 1 %}
-    <a href="{{ '/' | prepend: site.baseurl | replace: '//', '/' }}"><span class="pagination-item">{{ page }}</span></a></li>
-    {% else %}
-    <a href="{{ site.paginate_path | prepend: site.baseurl | replace: '//', '/' | replace: ':num', page }}"><span class="pagination-item">{{ page }}</span></a>
-    {% endif %}
-    {% endfor %}
+  <div class="section">
+    <h1 class="page-heading">파이썬 프로그래밍 입문서</h1>
+    <p><a href="{{ "/python-programming/index.html" | prepend: site.baseurl }}">파이썬을 이용한 프로그래밍 입문서</a>를 쓰고 있습니다. 작성 중인 원고에 대한 독자 여러분의 의견을 받고 있습니다. 파이썬을 공부하시는 분이시라면 원고를 읽고 의견 보내주세요. 책을 쓰는 데 도움이 됩니다.</p>
+    <p>&gt;&gt;&nbsp;<a href="{{ "/python-programming/index.html" | prepend: site.baseurl }}">원고 보기</a></p>
   </div>
-  {% endif %}
+  <div class="section">
+    <h1 class="page-heading">최근 글</h1>
+    <ul class="post-list">
+      {% for post in site.posts limit:4 %}
+        <li>
+          <span class="post-meta">{{ post.date | date: "%Y-%m-%d" }}</span>
+          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+    <p>&gt;&gt;&nbsp;<a href="{{ "/post/index.html" | prepend: site.baseurl }}">전체 글 목록 보기</></p>
+  </div>
 </div>
