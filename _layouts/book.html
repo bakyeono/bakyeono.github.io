@@ -13,10 +13,10 @@
             <p>도서출판 인사이트와 함께 파이썬을 이용한 프로그래밍 입문서를 쓰고 있습니다. 쉽고 친절한 책을 위해 원고 내용 일부를 공개하고 독자의 의견을 받습니다. 글을 읽고 모르겠는 점, 어려운 점, 또는 틀린 점을 알려주시면 도움을 주실 수 있습니다.</p>
             <p>질문과 의견은 페이지 하단의 댓글란에 남겨주시거나 이메일(<a href="mailto:bakyeono@gmail.com">bakyeono@gmail.com</a>)로 보내주세요.</p>
             <div class="post-content">{{ content }}</div>
+            {% include disqus.html %}
           </article>
         </div>
       </div>
-      {% include disqus.html %}
     </div>
     {% include footer.html %}
   </body>
