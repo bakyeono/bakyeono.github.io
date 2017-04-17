@@ -1,7 +1,7 @@
 ---
 layout: page
-title: 프로젝트 이력
-label: 프로젝트 이력
+title: 프로젝트
+label: 프로젝트
 permalink: /project.html
 ---
 * table of contents
