@@ -25,7 +25,13 @@ permalink: /python-programming/index.html
     - [3.5 매개변수를 좀 더 유연하게](/python-programming/chapter-3-5.html)
     - [3.6 이름이 없는 함수](/python-programming/chapter-3-6.html)
     - [3장 내용 요약](/python-programming/chapter-3-summary.html)
-* 4장 데이터
+* [4장 데이터](/python-programming/chapter-4.html)
+    - [4.1 값과 유형](/python-programming/chapter-4-1.html)
+    - [4.2 수](/python-programming/chapter-4-2.html)
+    - [4.3 텍스트](/python-programming/chapter-4-3.html)
+    - [4.4 참과 거짓](/python-programming/chapter-4-4.html)
+    - [4.5 데이터 유형의 확인과 변환](/python-programming/chapter-4-5.html)
+    - [4장 내용 요약](/python-programming/chapter-4-summary.html)
 * 5장 조건과 반복
 * 6장 데이터 구조
 * 7장 데이터 구조 조합하고 순회하기
