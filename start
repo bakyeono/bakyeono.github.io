@@ -1,7 +1,0 @@
-#!/bin/bash
-JEKYLL_PID=`pgrep -f jekyll`
-if [[ "$JEKYLL_PID" ]]; then
-  echo jekyll is already running. PID: $JEKYLL_PID
-else
-  bundle exec jekyll serve
-fi
